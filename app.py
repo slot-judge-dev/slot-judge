@@ -41,8 +41,8 @@ with st.sidebar:
     st.caption("© 2026 Protocol ZERO Development Team")
 
 # --- 3. メイン画面レイアウト ---
-# ロゴの表示
-st.image("https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg", use_column_width=True) 
+# ロゴの表示（パスを直接指定）
+st.image("logo.jpg", use_column_width=True) 
 st.title("🎯 Protocol ZERO")
 st.markdown("#### **Strategic Prediction Engine for Professional**")
 
