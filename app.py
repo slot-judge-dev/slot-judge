@@ -37,7 +37,7 @@ with st.sidebar:
     investment_type = st.radio("現在の投資ステータス", ["貯メダル/持ちメダル", "現金投資（追加投資）"])
     st.info("※現金投資時は換金ギャップを考慮し、自動的に期待値を下方補正、ボーダーを上方修正します。")
     st.divider()
-    st.caption("ZERO-PROTOCOL v7.4.2")
+    st.caption("ZERO-PROTOCOL v7.4.3")
     st.caption("© 2026 Protocol ZERO Development Team")
 
 # --- 3. メイン画面レイアウト ---
@@ -62,7 +62,13 @@ if target_machine == "北斗の拳 転生2":
         last_status = st.selectbox("前回AT終了後の状態", ["通常", "伝承モード示唆", "★上位AT(天撃)終了後"])
         time_slider = st.slider("現在の時刻 (閉店欠損計算用)", 9, 23, 12)
 
-    mode_hint = st.selectbox("モード・前兆示唆状況", ["示唆なし", "通常B以上濃厚 (256超前兆発生)", "通常C以上濃厚", "天国濃厚"])
+    # モードとフェイク前兆（シャッター）を独立して配置
+    col3, col4 = st.columns(2)
+    with col3:
+        mode_hint = st.selectbox("モード示唆状況", ["示唆なし", "通常C以上濃厚", "天国濃厚"])
+    with col4:
+        shutter_hint = st.selectbox("フェイク前兆 (シャッター演出等)", ["発生なし", "特定区間で発生(1~64, 129~192等) ※B以上", "256超で前兆発生 ※B以上"])
+
     trophy = st.selectbox("サミートロフィー (設定判別)", ["なし", "銅", "金", "キリン", "虹"])
 
     # 💎 VIP専用：メイン画面プロハック
@@ -123,9 +129,10 @@ if target_machine == "北斗の拳 転生2":
         elif 480 <= current_abe <= 576 or mode_hint == "通常C以上濃厚":
             ev = calc_ev(1000)
             st.success(f"⚡ 【判定：ゾーン狙い】通常C(576あべし)天井ターゲット 💰期待値: ￥{ev}前後")
-        elif (750 <= current_abe <= 896) or (mode_hint == "通常B以上濃厚 (256超前兆発生)" and current_abe >= 550):
+        elif (750 <= current_abe <= 896) or (shutter_hint != "発生なし" and current_abe >= 550):
+            # モードB以上が確定している場合、550あべし付近から通常B天井(896)を狙うロジック
             ev = calc_ev(1400)
-            st.success(f"⚡ 【判定：ゾーン狙い】通常B(896あべし)天井ターゲット 💰期待値: ￥{ev}前後")
+            st.success(f"⚡ 【判定：ゾーン狙い】通常B濃厚(896あべし)天井ターゲット 💰期待値: ￥{ev}前後")
         else:
             st.error(f"❄️ 【判定：撤収】💰期待値: マイナス圏内 | 次のボーダーライン: {current_border}あべし")
 
@@ -158,4 +165,4 @@ elif target_machine == "甲鉄城のカバネリ":
 # 6. 注釈・法的リスク回避
 st.markdown("---")
 st.caption("⚠️ **DISCLAIMER**: 本アプリが表示する期待値は市場解析データに基づくシミュレーション値です。収益を保証するものではありません。")
-st.caption("© 2026 Protocol ZERO | Daisuke Custom Build v7.4.2 Professional Ultimate")
+st.caption("© 2026 Protocol ZERO | Daisuke Custom Build v7.4.3 Professional Ultimate")
