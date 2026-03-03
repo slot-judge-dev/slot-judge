@@ -3,7 +3,7 @@ import streamlit as st
 # --- 1. アプリ基本設定 ---
 st.set_page_config(
     page_title="Protocol ZERO | Professional Ultimate", 
-    page_icon="🎯", 
+    page_icon="logo.jpg",
     layout="centered"
 )
 
