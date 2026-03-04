@@ -143,7 +143,23 @@ if target_machine == "北斗の拳 転生2":
             ev = calc_ev(500)
             st.success(f"⚡ 【判定：ゾーン狙い】天国(128あべし)付近 💰期待値: ￥{ev}前後")
         else:
-            st.error(f"❄️ 【判定：撤収】💰期待値: マイナス圏内 | 次のボーダーライン: {current_border}あべし")
+            # 現在のあべし数から「最も近い次の狙い目」を動的に算出
+            if current_abe < 100:
+                next_target = "100あべし (天国128狙い)"
+            elif current_abe < 200:
+                next_target = "200あべし (通常A/B共通 256ゾーン狙い)"
+            elif current_abe < 480:
+                # モードC示唆が出ている場合は早めから打てる旨を追記
+                c_sug = " ※通常C濃厚なら350〜GO" if mode_hint == "通常C以上濃厚" else ""
+                next_target = f"480あべし (通常C 576天井狙い){c_sug}"
+            elif current_abe < 750:
+                # モードB示唆が出ている場合は早めから打てる旨を追記
+                b_sug = " ※フェイク前兆あり(B以上)なら550〜GO" if shutter_hint != "発生なし" else ""
+                next_target = f"750あべし (通常B 896天井狙い){b_sug}"
+            else:
+                next_target = f"{current_border}あべし (最大天井狙い)"
+
+            st.error(f"❄️ 【判定：撤収】💰期待値: マイナス | 🎯次のハイエナ目安: {next_target} まで待機推奨")
 
         # --- 5. ヤメ時プロトコル (聖域) ---
         st.markdown("---")
