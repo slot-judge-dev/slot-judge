@@ -7,8 +7,10 @@ st.set_page_config(
     layout="centered"
 )
 
-# カスタムCSS (視認性最大化)
+# スマホのホーム画面アイコン（Web Clip）を強制指定するハック
 st.markdown("""
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg">
+    <link rel="icon" href="https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg">
     <style>
     .main { background-color: #0e1117; }
     .stButton>button { width: 100%; border-radius: 12px; height: 3.5em; font-weight: bold; font-size: 1.1em; border: 2px solid #4A90E2; }
@@ -37,7 +39,7 @@ with st.sidebar:
     investment_type = st.radio("現在の投資ステータス", ["貯メダル/持ちメダル", "現金投資（追加投資）"])
     st.info("※現金投資時は換金ギャップを考慮し、自動的に期待値を下方補正、ボーダーを上方修正します。")
     st.divider()
-    st.caption("ZERO-PROTOCOL v7.4.3")
+    st.caption("ZERO-PROTOCOL v7.5.1")
     st.caption("© 2026 Protocol ZERO Development Team")
 
 # --- 3. メイン画面レイアウト ---
@@ -89,6 +91,8 @@ if target_machine == "北斗の拳 転生2":
             base_h -= 1200 # 換金ギャップペナルティ
         
         st.metric(label="⏱️ 現状の想定時給予測", value=f"￥{max(0, base_h)}", delta=f"{investment_type} / {rate}")
+        
+        # 【復元完了】既存のフリーテキスト入力を保持
         st.text_area("💬 AI Bro コンサル (現場の違和感・メモ)", placeholder="例：256抜けで前兆なし、特定キャラ出現など...")
 
     # --- 4. 判定ロジック実行 ---
@@ -126,13 +130,18 @@ if target_machine == "北斗の拳 転生2":
             tsuranuki_tag = " | 💎 つらぬき期待度:高" if is_tsuranuki_chance else ""
             st.success(f"🔥 【判定：GO】💰推定期待値: ￥{ev}前後{tsuranuki_tag} | 天井まで残り{max_ceiling - current_abe}あべし")
             if current_abe >= 1473: st.warning("⚠️ PREMIUM AREA: ATレベル3以上濃厚恩恵。")
+        elif (750 <= current_abe <= 896) or (shutter_hint != "発生なし" and current_abe >= 550):
+            ev = calc_ev(1400)
+            st.success(f"⚡ 【判定：ゾーン狙い】通常B濃厚(896あべし)天井ターゲット 💰期待値: ￥{ev}前後")
         elif 480 <= current_abe <= 576 or mode_hint == "通常C以上濃厚":
             ev = calc_ev(1000)
             st.success(f"⚡ 【判定：ゾーン狙い】通常C(576あべし)天井ターゲット 💰期待値: ￥{ev}前後")
-        elif (750 <= current_abe <= 896) or (shutter_hint != "発生なし" and current_abe >= 550):
-            # モードB以上が確定している場合、550あべし付近から通常B天井(896)を狙うロジック
-            ev = calc_ev(1400)
-            st.success(f"⚡ 【判定：ゾーン狙い】通常B濃厚(896あべし)天井ターゲット 💰期待値: ￥{ev}前後")
+        elif 200 <= current_abe <= 256:
+            ev = calc_ev(800)
+            st.success(f"⚡ 【判定：ゾーン狙い】通常A/B合算高期待(256あべし)付近 💰期待値: ￥{ev}前後")
+        elif 100 <= current_abe <= 128:
+            ev = calc_ev(500)
+            st.success(f"⚡ 【判定：ゾーン狙い】天国(128あべし)付近 💰期待値: ￥{ev}前後")
         else:
             st.error(f"❄️ 【判定：撤収】💰期待値: マイナス圏内 | 次のボーダーライン: {current_border}あべし")
 
@@ -151,6 +160,19 @@ if target_machine == "北斗の拳 転生2":
         else:
             st.info("【通常】AT終了後、高確・前兆がないことを確認して1あべし即ヤメ。天国追いは不要。")
 
+    # --- 6. 🤖 前兆・ヤメ時AIコンサル (NEW) ---
+    st.markdown("---")
+    st.markdown("#### 🤖 前兆・ヤメ時AIコンサル (現場の違和感分析)")
+    zencho_type = st.selectbox("AT後やゾーン抜け後の前兆挙動を教えてください", ["選択してください", "ざわざわのみ（弱前兆）", "天命の刻移行（強前兆）", "特定キャラの頻出", "レア役直後（中チェ等）"])
+    if zencho_type == "ざわざわのみ（弱前兆）":
+        st.warning("💡 【AI助言】フェイク前兆の可能性が高いです。規定あべし（128/256等）到達後の発展ハズレで即ヤメを推奨します。")
+    elif zencho_type == "天命の刻移行（強前兆）":
+        st.success("💡 【AI助言】本前兆期待度大幅アップ。演出失敗後も、復活や即引き戻しに備え数あべし様子を見てください。")
+    elif zencho_type == "特定キャラの頻出":
+        st.info("💡 【AI助言】通常B以上の滞在を示唆している可能性があります。次回ゾーン（256や576）まで追うか、現在あべし数と相談してください。")
+    elif zencho_type == "レア役直後（中チェ等）":
+        st.error("💡 【AI助言】絶対にヤメてはいけません。32あべし間は完全フォローし、天破の刻やAT直撃を確認してください。")
+
 elif target_machine == "甲鉄城のカバネリ":
     st.subheader("🚂 甲鉄城のカバネリ：解析モード")
     status = st.selectbox("現在の天井短縮状況", ["通常 (1000G天井)", "設定変更 (650G天井)", "美馬ST後 (650G天井)", "駆け抜け後 (650G天井)"])
@@ -162,7 +184,25 @@ elif target_machine == "甲鉄城のカバネリ":
         elif 180 <= g_count <= 250: st.info("✅ 【判定：ゾーン狙い】250Gの予兆を確認してください。")
         else: st.error("❌ 【判定：待機】期待値が足りません。")
 
-# 6. 注釈・法的リスク回避
+# --- 7. 本日の収支・集計ログ (全機種共通) ---
+st.markdown("---")
+st.markdown("#### 📝 本日の収支・集計ログ")
+col_in, col_out = st.columns(2)
+with col_in:
+    invest_medals = st.number_input("投資枚数", min_value=0, step=50, value=0)
+with col_out:
+    recover_medals = st.number_input("回収枚数", min_value=0, step=50, value=0)
+
+if st.button("収支を計算する"):
+    profit = recover_medals - invest_medals
+    if profit > 0:
+        st.success(f"🎉 勝利！ 最終収支: +{profit}枚 (期待値を勝ち取りました)")
+    elif profit < 0:
+        st.error(f"💦 撤収！ 最終収支: {profit}枚 (欠損は次回の糧になります)")
+    else:
+        st.info("⚖️ 引き分け！ 最終収支: ±0枚")
+
+# 8. 注釈・法的リスク回避
 st.markdown("---")
 st.caption("⚠️ **DISCLAIMER**: 本アプリが表示する期待値は市場解析データに基づくシミュレーション値です。収益を保証するものではありません。")
-st.caption("© 2026 Protocol ZERO | Daisuke Custom Build v7.4.3 Professional Ultimate")
+st.caption("© 2026 Protocol ZERO | Daisuke Custom Build v7.5.1 Professional Ultimate")
