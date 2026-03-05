@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v24.0.0 THE FINAL OVERRIDE</title>
+    <title>Protocol ZERO v24.1.0 THE FINAL OVERRIDE DYNAMIC</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -49,12 +49,14 @@
 
         .guide-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; text-align: center; }
         .guide-table th { background: #21262d; color: #8b949e; padding: 10px 5px; border: 1px solid #30363d; }
-        .guide-table td { padding: 12px 5px; border: 1px solid #30363d; background: #0d1117; }
+        .guide-table td { padding: 12px 5px; border: 1px solid #30363d; background: #0d1117; transition: background-color 0.3s; }
         .guide-table tr:nth-child(even) td { background: #161b22; }
         .mark-go { color: var(--success); font-weight: bold; }
         .mark-warn { color: var(--warning); font-weight: bold; }
         .mark-ng { color: #8b949e; }
         .mark-star { color: #d29922; font-weight: bold; font-size: 1.2em; }
+        .backup-btn { background: #21262d; border: 1px solid #30363d; padding: 12px; font-size: 0.9em; width: 100%; margin-top: 5px; }
+        .backup-btn:hover { background: #30363d; }
     </style>
 </head>
 <body>
@@ -62,13 +64,13 @@
     <div class="sticky-header">
         <div class="tabs" style="margin-bottom:0; gap:8px; padding:0 10px;">
             <div class="tab active" style="padding:10px;">👊 北斗の拳 転生2</div>
-            <div class="tab" style="padding:10px;" onclick="alert('甲鉄城のカバネリ：FINAL OVERRIDE 適用完了')">🚂 カバネリ</div>
+            <div class="tab" style="padding:10px;" onclick="alert('甲鉄城のカバネリ：カバネリ専用ロジック、指示待機中')">🚂 カバネリ</div>
         </div>
     </div>
 
     <div style="text-align: center; margin: 15px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 4px;">PROTOCOL ZERO v24.0.0 FINAL OVERRIDE</div>
+        <div style="margin-top: 10px; font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 4px;">PROTOCOL ZERO v24.1.0 DYNAMIC</div>
     </div>
 
     <div class="card">
@@ -155,7 +157,7 @@
     <div id="tab-guide" class="tab-content">
         <div class="card">
             <h3>📋 徘徊用 期待値カンペ</h3>
-            <p style="font-size:0.8em; color:#8b949e; line-height:1.4;">※等価・持ちメダル・時間不問のベース目安です。現場では必ず「判定」タブで正確な数値を算出してください。</p>
+            <p style="font-size:0.8em; color:#8b949e; line-height:1.4;">※上部の「換金率」と「投資タイプ」の設定にリアルタイムで連動し、現場のボーダーが動的に変化します。</p>
             
             <table class="guide-table">
                 <tr>
@@ -166,56 +168,56 @@
                 </tr>
                 <tr>
                     <td>150〜</td>
-                    <td class="mark-ng">スルー</td>
-                    <td class="mark-ng">スルー</td>
-                    <td class="mark-go">B:特攻</td>
+                    <td class="mark-ng">✕ スルー</td>
+                    <td class="mark-ng">✕ スルー</td>
+                    <td id="g-150-m" class="mark-go">B:特攻</td>
                 </tr>
                 <tr>
                     <td>200〜</td>
-                    <td class="mark-warn">△ ゾーン</td>
-                    <td class="mark-warn">△ ゾーン</td>
+                    <td id="g-200-n" class="mark-warn">△ ゾーン</td>
+                    <td id="g-200-r" class="mark-warn">△ ゾーン</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
                     <td>350〜</td>
-                    <td class="mark-ng">スルー</td>
-                    <td class="mark-ng">スルー</td>
-                    <td class="mark-go">C:特攻</td>
+                    <td class="mark-ng">✕ スルー</td>
+                    <td class="mark-ng">✕ スルー</td>
+                    <td id="g-350-m" class="mark-go">C:特攻</td>
                 </tr>
                 <tr>
                     <td>450〜</td>
-                    <td class="mark-ng">スルー</td>
-                    <td class="mark-warn">△ ゾーン</td>
+                    <td class="mark-ng">✕ スルー</td>
+                    <td id="g-450-r" class="mark-warn">△ ゾーン</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
                     <td>480〜</td>
-                    <td class="mark-warn">△ ゾーン</td>
+                    <td id="g-480-n" class="mark-warn">△ ゾーン</td>
                     <td class="mark-ng">-</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
                     <td>700〜</td>
-                    <td class="mark-ng">スルー</td>
-                    <td class="mark-go">〇 特攻</td>
+                    <td class="mark-ng">✕ スルー</td>
+                    <td id="g-700-r" class="mark-go">〇 特攻</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
                     <td>750〜</td>
-                    <td class="mark-go">〇 ゾーン</td>
-                    <td class="mark-go">◎</td>
+                    <td id="g-750-n" class="mark-go">〇 ゾーン</td>
+                    <td id="g-750-r" class="mark-go">◎ 特攻</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
                     <td>950〜</td>
-                    <td class="mark-go">◎ 特攻</td>
-                    <td class="mark-go">◎</td>
+                    <td id="g-950-n" class="mark-go">◎ 特攻</td>
+                    <td id="g-950-r" class="mark-go">◎ 特攻</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
                     <td>1100〜</td>
                     <td class="mark-star">★ 極限</td>
-                    <td class="mark-star">★</td>
+                    <td class="mark-star">★ 極限</td>
                     <td class="mark-ng">-</td>
                 </tr>
                 <tr>
@@ -227,7 +229,7 @@
             </table>
             
             <div style="margin-top:15px; padding:10px; background:#21262d; border-radius:8px; font-size:0.8em;">
-                <span style="color:var(--success); font-weight:bold;">💡 特殊狙い目</span><br>
+                <span style="color:var(--success); font-weight:bold;">💡 特殊狙い目 (状況不問)</span><br>
                 ・【天国】128あべしまで絶対フォロー<br>
                 ・【伝承】天破ループ中はヤメ厳禁<br>
                 ・【上位AT後】128あべしまで絶対フォロー
@@ -279,6 +281,16 @@
                 </div>
             
             <button class="clear-btn" onclick="clearHistory()">🚨 全履歴データを完全に消去する</button>
+        </div>
+
+        <div class="card" style="margin-top: 15px; border: 1px solid var(--accent);">
+            <h3 style="color:var(--accent);">💾 データ管理 (インポート/エクスポート)</h3>
+            <p style="font-size:0.75em; color:#8b949e; line-height:1.4;">※キャッシュクリアや機種変更の前に「データを出力」し、文字列をメモ帳等に保存してください。その文字列を貼り付けて「データを復元」を押すと、収支と現場メモが完全に復元されます。</p>
+            <textarea id="backup_data" rows="3" placeholder="バックアップ暗号文字列がここに出力されます..."></textarea>
+            <div style="display:flex; gap:8px;">
+                <button class="backup-btn" onclick="exportData()">📤 データを出力</button>
+                <button class="backup-btn" onclick="importData()" style="color:var(--warning);">📥 データを復元</button>
+            </div>
         </div>
     </div>
 
@@ -380,6 +392,7 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
+    // --- 【完全保護】期待値算出ロジック（Math.max統合・ペナルティ重複減算） ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -489,14 +502,37 @@
         };
     }
 
+    // --- 新規実装：早見表の動的連動ロジック ---
+    function updateGuideTable() {
+        const inv = document.getElementById('invest_type').value;
+        const rate = document.getElementById('rate').value;
+        const isPenalty = (inv === 'cash' && rate !== '5.0');
+        
+        document.getElementById('g-150-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">B:特攻</span>';
+        document.getElementById('g-200-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-200-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-350-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">C:特攻</span>';
+        document.getElementById('g-450-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-480-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-700-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 特攻</span>';
+        document.getElementById('g-750-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-go">〇 ゾーン</span>';
+        document.getElementById('g-750-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        document.getElementById('g-950-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        document.getElementById('g-950-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+    }
+
     function updateUI() { 
         if(!isVip) return; 
         const stats = getLogicStats();
         const wageElem = document.getElementById('wage-display');
         wageElem.innerText = `想定時給: ￥${stats.wage}`; 
         wageElem.style.color = stats.wage >= 0 ? "var(--success)" : "var(--danger)"; 
+        
+        // 環境設定の変更を早見表にリアルタイム連動させる
+        updateGuideTable();
     }
 
+    // --- 【完全保護】ヒエラルキー判定・ヤメ時ナビ出力ロジック ---
     function executeAnalysis() {
         const s = getLogicStats();
         let res = `<h3>📊 最終戦略分析報告</h3>`;
@@ -564,6 +600,7 @@
         document.getElementById('result-area').innerHTML = res;
     }
 
+    // --- カレンダー・年間収支ロジック ---
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
@@ -666,6 +703,42 @@
         }
     }
 
+    // --- 新規実装：データ管理（インポート/エクスポート）ロジック ---
+    function exportData() {
+        try {
+            let h = localStorage.getItem('zero_h') || "[]";
+            let m = localStorage.getItem('zero_memo') || "";
+            let data = { history: JSON.parse(h), memo: m };
+            // Base64エンコードしてJSONを隠蔽化（コピペ用）
+            let str = btoa(encodeURIComponent(JSON.stringify(data)));
+            document.getElementById('backup_data').value = str;
+            alert("バックアップ文字列を出力しました。全選択してコピーし、メモ帳等に保存してください。");
+        } catch(e) {
+            alert("データ出力に失敗しました。");
+        }
+    }
+
+    function importData() {
+        let str = document.getElementById('backup_data').value;
+        if(!str) { alert("復元する文字列をテキストエリアに貼り付けてください。"); return; }
+        if(confirm("現在のデータは上書きされます。復元してよろしいですか？")) {
+            try {
+                let data = JSON.parse(decodeURIComponent(atob(str)));
+                if(data.history !== undefined) localStorage.setItem('zero_h', JSON.stringify(data.history));
+                if(data.memo !== undefined) {
+                    localStorage.setItem('zero_memo', data.memo);
+                    document.getElementById('vip_memo').value = data.memo;
+                }
+                renderCalendar();
+                alert("データの復元が完了しました。");
+                document.getElementById('backup_data').value = "";
+            } catch(e) {
+                alert("不正な文字列です。復元に失敗しました。");
+            }
+        }
+    }
+
+    // --- デジタル小役カウンター＆設定推測 ---
     function changeCounter(type, val) {
         if (type === 'suika') countSuika = Math.max(0, countSuika + val);
         if (type === 'wcherry') countWCherry = Math.max(0, countWCherry + val);
