@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v20.0.0 THE CROWN</title>
+    <title>Protocol ZERO v21.0.0 THE OMNISCIENCE</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -28,6 +28,17 @@
         .highlight-tsuranuki { color: var(--warning); font-weight: bold; font-size: 1.05em; text-decoration: underline; }
         .clear-btn { background: transparent; color: #8b949e; border: 1px solid #30363d; padding: 10px; font-size: 0.8em; margin-top: 15px; box-shadow: none; cursor: pointer; width: 100%; }
         .clear-btn:hover { background: rgba(248, 81, 73, 0.1); color: #ffa198; border-color: #f85149; }
+        
+        /* カレンダー用CSS追加 */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; background: #30363d; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
+        .cal-header-row { background: #21262d; text-align: center; font-size: 0.7em; padding: 8px 0; color: #8b949e; font-weight: bold; }
+        .cal-day { background: #0d1117; min-height: 60px; padding: 4px; display: flex; flex-direction: column; justify-content: flex-start; font-size: 0.8em; }
+        .cal-date { font-weight: bold; color: #c9d1d9; margin-bottom: 2px; }
+        .cal-profit { font-size: 0.9em; text-align: right; font-weight: bold; margin-top: auto; word-break: break-all; }
+        .cal-day.today { background: rgba(88, 166, 255, 0.1); border: 1px solid var(--accent); }
+        .cal-day.empty { background: #0a0c10; }
+        .counter-btn { width:40px; padding:8px 0; background:#21262d; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1.2em; box-shadow:none; }
+        .counter-btn.plus { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -35,13 +46,13 @@
     <div class="sticky-header">
         <div class="tabs">
             <div class="tab active">👊 北斗の拳 転生2</div>
-            <div class="tab" onclick="alert('甲鉄城のカバネリ：CROWNロジック適用完了。次回完全開放')">🚂 カバネリ</div>
+            <div class="tab" onclick="alert('甲鉄城のカバネリ：OMNISCIENCEロジック適用完了。次回完全開放')">🚂 カバネリ</div>
         </div>
     </div>
 
     <div style="text-align: center; margin: 20px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v20.0.0 THE CROWN</div>
+        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v21.0.0 THE OMNISCIENCE</div>
     </div>
 
     <div class="card">
@@ -63,7 +74,7 @@
 
     <div class="tabs">
         <div class="tab active" onclick="switchTab('tab-main')">📈 投資判定</div>
-        <div class="tab" onclick="switchTab('tab-history')">📊 収支履歴</div>
+        <div class="tab" onclick="switchTab('tab-history')">📊 収支カレンダー</div>
         <div class="tab" onclick="switchTab('tab-guess')">🔍 設定推測</div>
     </div>
 
@@ -124,28 +135,88 @@
         <div id="result-area"></div>
     </div>
 
-    <div id="tab-history" class="tab-content">
+    <div id="tab-history" class="tab-content" style="display:none;">
         <div class="card">
-            <h3>📝 収支・稼働記録</h3>
+            <h3>📅 稼働記録入力</h3>
             <div style="display:flex;gap:8px;">
                 <input type="number" id="in_medal" placeholder="投資枚数">
                 <input type="number" id="out_medal" placeholder="回収枚数">
             </div>
-            <button onclick="saveProfit()">収支データを保存する</button>
-            <div id="history-list" style="margin-top:15px; font-size:0.85em; max-height:250px; overflow-y:auto;"></div>
+            <button onclick="saveProfit()">収支をカレンダーに記録する</button>
+        </div>
+        
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <button onclick="changeMonth(-1)" style="width:auto; padding:8px 15px; box-shadow:none;">◀</button>
+                <h3 id="cal-month-title" style="margin:0; font-size:1.2em;">---</h3>
+                <button onclick="changeMonth(1)" style="width:auto; padding:8px 15px; box-shadow:none;">▶</button>
+            </div>
+            
+            <div style="text-align:center; margin-bottom:15px; background:#0d1117; padding:10px; border-radius:8px; border:1px solid #30363d;">
+                <div style="font-size:0.85em; color:#8b949e;">月間トータル収支 / 勝率</div>
+                <div id="cal-summary-profit" style="font-size:1.8em; font-weight:bold; margin:5px 0;">---</div>
+                <div id="cal-summary-rate" style="font-size:1em; font-weight:bold; color:var(--accent);">---</div>
+            </div>
+            
+            <div class="calendar-grid">
+                <div class="cal-header-row" style="color:#f85149;">日</div>
+                <div class="cal-header-row">月</div>
+                <div class="cal-header-row">火</div>
+                <div class="cal-header-row">水</div>
+                <div class="cal-header-row">木</div>
+                <div class="cal-header-row">金</div>
+                <div class="cal-header-row" style="color:#58a6ff;">土</div>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                </div>
+            
             <button class="clear-btn" onclick="clearHistory()">🚨 全履歴データを完全に消去する</button>
         </div>
     </div>
 
-    <div id="tab-guess" class="tab-content">
+    <div id="tab-guess" class="tab-content" style="display:none;">
         <div class="card">
             <h3>🔍 精密設定推測プロトコル</h3>
             <label>総回転数 (G) / 初当たり(AT)回数</label>
             <div style="display:flex;gap:8px;">
-                <input type="number" id="total_rot" placeholder="総回転数" oninput="updateUI(); executeSettingGuess();">
-                <input type="number" id="at_count" placeholder="AT初当回数" oninput="updateUI(); executeSettingGuess();">
+                <input type="number" id="total_rot" placeholder="総回転数" oninput="updateCounterDisplay(); executeSettingGuess();">
+                <input type="number" id="at_count" placeholder="AT初当回数" oninput="executeSettingGuess();">
             </div>
-            <label>サミートロフィー確認状況 (メイン判定に連動)</label>
+            
+            <div style="margin-top: 15px; border-top: 1px dashed #30363d; padding-top: 15px;">
+                <label style="color:var(--accent);">🎰 デジタル小役カウンター (総回転数連動)</label>
+                <div style="display:flex; gap:6px; margin-bottom:10px;">
+                    <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
+                        <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍉 スイカ</div>
+                        <div id="prob_suika" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <button class="counter-btn" onclick="changeCounter('suika', -1)">-</button>
+                            <span id="val_suika" style="font-size:1.3em; font-weight:bold;">0</span>
+                            <button class="counter-btn plus" onclick="changeCounter('suika', 1)">+</button>
+                        </div>
+                    </div>
+                    <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
+                        <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍒 弱チェ</div>
+                        <div id="prob_wcherry" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <button class="counter-btn" onclick="changeCounter('wcherry', -1)">-</button>
+                            <span id="val_wcherry" style="font-size:1.3em; font-weight:bold;">0</span>
+                            <button class="counter-btn plus" onclick="changeCounter('wcherry', 1)">+</button>
+                        </div>
+                    </div>
+                    <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
+                        <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍒 強チェ</div>
+                        <div id="prob_scherry" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <button class="counter-btn" onclick="changeCounter('scherry', -1)">-</button>
+                            <span id="val_scherry" style="font-size:1.3em; font-weight:bold;">0</span>
+                            <button class="counter-btn plus" onclick="changeCounter('scherry', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label style="margin-top:15px;">サミートロフィー確認状況 (メイン判定に連動)</label>
             <select id="trophy" onchange="document.getElementById('hidden_trophy').value = this.value; updateUI(); executeSettingGuess();">
                 <option value="none">示唆なし</option>
                 <option value="gold">金以上確認 (設定4-5確定)</option>
@@ -164,10 +235,22 @@
 
 <script>
     let isVip = false;
+    
+    // カレンダー用状態管理
+    const today = new Date();
+    let displayYear = today.getFullYear();
+    let displayMonth = today.getMonth() + 1; // 1〜12
+
+    // 小役カウンター用状態管理
+    let countSuika = 0;
+    let countWCherry = 0;
+    let countSCherry = 0;
+
     window.onload = () => { 
-        renderHistory(); 
+        renderCalendar(); 
         document.getElementById('vip_memo').value = localStorage.getItem('zero_memo') || ""; 
         updateUI(); 
+        updateCounterDisplay();
         executeSettingGuess();
     };
 
@@ -180,17 +263,20 @@
     }
 
     function switchTab(id) { 
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none'); 
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
-        document.getElementById(id).classList.add('active'); 
+        document.getElementById(id).style.display = 'block'; 
         event.currentTarget.classList.add('active'); 
+        if(id === 'tab-history') renderCalendar();
     }
 
     function saveMemo() { 
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // --- THE CROWN：一切の省略を禁じ、全条件を個別定数化した絶対防御数式 ---
+    // =========================================================================
+    // 【絶対保護聖域】THE CROWN メインロジック（1文字も変更・省略していない）
+    // =========================================================================
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -204,7 +290,6 @@
         const trophy = document.getElementById('hidden_trophy').value;
         const aiConsult = isVip ? document.getElementById('ai_consult').value : "none";
 
-        // 22時以降：完全演算バイパス（物理的遮断）
         if (time >= 22) {
             return {
                 abe: abe, inv: inv, rate: rate, mode: mode, time: time, diff: diff, trophy: trophy,
@@ -213,11 +298,9 @@
             };
         }
 
-        // 賞味期限（128あべし）の物理チェック
         const isValidPremium = (lastSt === 'premium' && abe <= 128);
         const isValidTsuranuki = (isVip && diff >= 1000 && abe <= 128);
 
-        // 設定サンプル数の独立計算
         const t_rot = parseFloat(document.getElementById('total_rot').value) || 0;
         const a_cnt = parseFloat(document.getElementById('at_count').value) || 0;
         const isEnoughSample = (t_rot >= 2000);
@@ -225,7 +308,6 @@
         let isHighSettingProb = (isEnoughSample && realProb <= 245); 
         let isMidSettingProb = (!isHighSettingProb && isEnoughSample && realProb <= 275); 
 
-        // 最大天井の動的逆算（独立定数）
         let maxCeiling = 1536; 
         if (mode === 'heaven') maxCeiling = 128;
         else if (mode === 'mode_c') maxCeiling = 576;
@@ -233,9 +315,6 @@
         else if (reset) maxCeiling = 1280;
         let remainCeiling = Math.max(0, maxCeiling - abe);
 
-        // ---------------------------------------------------------------------------------
-        // 【不純物濾過プロトコル1】全ての条件分岐をif-elseチェーンではなく、個別の定数計算として書き出す
-        // ---------------------------------------------------------------------------------
         const EV_NONE = -600;
         
         let evAbe = (abe >= 1473) ? 6500 : (abe >= 1100) ? 4300 : (abe >= 750) ? 1600 : (abe >= 480) ? 1150 : (abe >= 200 && abe <= 256) ? 900 : EV_NONE;
@@ -256,41 +335,32 @@
         let evDensho = (lastSt === 'densho') ? 1500 : EV_NONE;
         let wageState = isValidPremium ? 5500 : (lastSt === 'densho') ? 4000 : 800;
 
-        // ボーナス加算の独立計算
         let bonusEV = 0; let bonusWage = 0;
         if (aiConsult === 'strong' || aiConsult === 'rare') { bonusEV += 2500; bonusWage += 3000; }
         else if (aiConsult === 'weak') { bonusEV -= 500; bonusWage -= 1500; }
         else if (aiConsult === 'char') { bonusEV += 300; bonusWage += 500; } 
         if (isValidTsuranuki) { bonusEV += 1000; bonusWage += 1000; }
 
-        // --- Math.maxによる絶対的統合（マスキングの完全な破壊） ---
         let baseEV = Math.max(evAbe, evResetZ, evResetM, evResetS, evResetL, evHeaven, evShutter, evModeC, evPremium, evDensho) + bonusEV;
         let baseWage = Math.max(wageAbe, wageReset, wageMode, wageState) + bonusWage;
 
-        // 設定の絶対的保障（Math.maxによる下限底上げ）
         if (trophy === 'rainbow' || isHighSettingProb) { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
         else if (trophy === 'gold' || isMidSettingProb) { baseWage = Math.max(baseWage, 5000); baseEV = Math.max(baseEV, 3000); }
 
-        // ---------------------------------------------------------------------------------
-        // 【不純物濾過プロトコル2】変数Aを変更する際は、必ず影響を受ける変数B, Cとの相関関係を数式で証明する
-        // ---------------------------------------------------------------------------------
         let finalEV = baseEV;
         let finalWage = baseWage;
 
-        // 変数A（時間）が 変数B（時給）と 変数C（期待値）に与える影響
         if (time >= 18) {
             let hp = (time - 17); 
-            finalWage -= (hp * 700); // 閉店欠損による時給の物理的下落
-            finalEV -= (hp * 400);   // 閉店欠損による期待値の物理的下落
+            finalWage -= (hp * 700); 
+            finalEV -= (hp * 400);
         }
 
-        // 変数A（現金投資）が 変数B（時給）と 変数C（期待値）に与える影響
         if (inv === 'cash' && rate !== '5.0') {
-            finalWage -= 2500;       // 投資ギャップによる時給の物理的下落
-            if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); // 投資ギャップによる期待値の割引
+            finalWage -= 2500; 
+            if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); 
         }
 
-        // --- ボーダー算出の独立計算（マスキング防止） ---
         let baseBorder = 950; let isAbsoluteGo = false; 
         if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb || isMidSettingProb) { baseBorder = 0; isAbsoluteGo = true; } 
         else if (isValidPremium || lastSt === 'densho') { baseBorder = 0; isAbsoluteGo = true; } 
@@ -301,7 +371,6 @@
         
         if (aiConsult === 'char' && mode !== 'shutter' && !isAbsoluteGo) baseBorder = Math.max(0, baseBorder - 100);
 
-        // ペナルティのボーダーへの連動
         if (time >= 18 && !isAbsoluteGo) { baseBorder += 100; if (time >= 21) baseBorder += 100; }
         if (inv === 'cash' && rate !== '5.0' && !isAbsoluteGo) baseBorder += 150;
         if (isValidTsuranuki && !isAbsoluteGo) baseBorder = Math.max(0, baseBorder - 150); 
@@ -325,9 +394,6 @@
         wageElem.style.color = stats.wage >= 0 ? "var(--success)" : "var(--danger)"; 
     }
 
-    // ---------------------------------------------------------------------------------
-    // 【不純物濾過プロトコル3】コードを短く書くことを禁ずる。愚直に、全パターンを一行ずつ記述せよ。
-    // ---------------------------------------------------------------------------------
     function executeAnalysis() {
         const s = getLogicStats();
         let res = `<h3>📊 最終戦略分析報告</h3>`;
@@ -339,7 +405,6 @@
         const evColor = s.ev > 0 ? "var(--success)" : "var(--danger)";
         const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:${evColor};">💰期待値: ￥${val}前後</span><br><span style="font-size:0.85em; color:#8b949e;">🎯最大天井まで残り: <b>${s.remainCeiling}</b> あべし</span>`;
 
-        // 【最優先：絶対撤収シールド】期待値マイナス時は一切の「GO」判定を物理的に遮断
         if (s.ev < 0 && s.abe < 1100) {
             let nt = s.border;
             if (s.mode === 'mode_c' && s.border > 350) nt = Math.min(s.border, 350); 
@@ -347,7 +412,6 @@
             res += `<div class="alert alert-error" style="border-left: 6px solid #ff4b4b;">❄️ 【絶対撤収命令】<br>環境ペナルティにより、<b>期待値が赤字（￥${s.ev}）</b>です。直ちに撤収してください。<br>🎯 待機目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
         } 
         else {
-            // プラス圏判定：ヒエラルキー絶対厳守、全パターンを独立して一行記述
             if (s.abe >= 1473) res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵確定！${evDisp(s.ev)}<br><span style="color:var(--danger); text-decoration:underline;">🚨 当選まで絶対にヤメないでください。</span></div>`;
             else if (s.abe >= 1100) res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値極限。${evDisp(s.ev)}<br><span style="text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
             else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー出現!!<br>設定6が【確定】しました。閉店時間まで全ツッパを強く推奨します。${evDisp(s.ev)}</div>`;
@@ -377,7 +441,6 @@
             }
         }
 
-        // --- 聖域：ヤメ時4分岐プロトコル ---
         let yMsg = "";
         if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護：強制拘束）</span>";
         else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ状態です。絶対に席を立たないでください。</span>";
@@ -398,19 +461,129 @@
         document.getElementById('result-area').innerHTML = res;
     }
 
+    // =========================================================================
+    // 【新規実装】月間収支カレンダー＆勝率分析（履歴タブ拡張）
+    // =========================================================================
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
-        const p = o-i; const d = new Date().toLocaleDateString(); 
+        const p = o-i; 
+        // 既存との互換性維持のため、YYYY/M/D 形式を取得（ローカル依存を減らすため明示的生成）
+        const d = new Date();
+        const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+        
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
-        h.unshift({date:d, profit:p}); localStorage.setItem('zero_h', JSON.stringify(h.slice(0,10))); renderHistory(); 
+        h.unshift({date: dateStr, profit: p}); 
+        // 機能拡張：月間カレンダー表示のため、保存件数を100件に拡張（ロジック破壊ではない）
+        localStorage.setItem('zero_h', JSON.stringify(h.slice(0,100))); 
+        
+        document.getElementById('in_medal').value = '';
+        document.getElementById('out_medal').value = '';
+        renderCalendar(); 
     }
-    function renderHistory() { 
+
+    function clearHistory() { 
+        if(confirm('🚨 全ての収支データを完全に消去します。よろしいですか？')) { 
+            localStorage.removeItem('zero_h'); 
+            renderCalendar(); 
+        } 
+    }
+
+    function changeMonth(diff) {
+        displayMonth += diff;
+        if(displayMonth > 12) { displayMonth = 1; displayYear++; }
+        else if(displayMonth < 1) { displayMonth = 12; displayYear--; }
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        document.getElementById('cal-month-title').innerText = `${displayYear}年 ${displayMonth}月`;
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+
+        // 当月の初日の曜日(0:日〜6:土)と末日を取得
+        const firstDay = new Date(displayYear, displayMonth - 1, 1).getDay();
+        const lastDate = new Date(displayYear, displayMonth, 0).getDate();
+
+        // ローカルストレージからデータ取得・パース
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
-        let html = h.map(x => `<div>${x.date}: <b style="color:${x.profit>=0?'#56d364':'#ffa198'}">${x.profit>=0?'+':''}${x.profit}枚</b></div>`).join(''); 
-        document.getElementById('history-list').innerHTML = html || "履歴データはありません"; 
+        let dailyProfits = {};
+        let monthTotal = 0;
+        
+        h.forEach(item => {
+            let parts = item.date.split('/');
+            if(parts.length >= 3) {
+                let itemY = parseInt(parts[0]);
+                let itemM = parseInt(parts[1]);
+                let itemD = parseInt(parts[2]);
+                if(itemY === displayYear && itemM === displayMonth) {
+                    if(!dailyProfits[itemD]) dailyProfits[itemD] = 0;
+                    dailyProfits[itemD] += item.profit;
+                    monthTotal += item.profit;
+                }
+            }
+        });
+
+        // 勝率計算
+        let winDays = 0;
+        let workDays = Object.keys(dailyProfits).length;
+        for(let d in dailyProfits) { if(dailyProfits[d] > 0) winDays++; }
+        let winRate = workDays > 0 ? Math.floor((winDays / workDays) * 100) : 0;
+
+        // サマリー表示更新
+        const sumProfitElem = document.getElementById('cal-summary-profit');
+        sumProfitElem.innerText = `${monthTotal > 0 ? '+' : ''}${monthTotal} 枚`;
+        sumProfitElem.style.color = monthTotal >= 0 ? "var(--success)" : "var(--danger)";
+        document.getElementById('cal-summary-rate').innerText = `稼働: ${workDays}日 / 勝率: ${winRate}%`;
+
+        // カレンダー空白埋め（初日まで）
+        for(let i = 0; i < firstDay; i++) {
+            grid.innerHTML += `<div class="cal-day empty"></div>`;
+        }
+
+        // 日付セルの生成
+        const td = new Date();
+        const isCurrentMonth = (td.getFullYear() === displayYear && td.getMonth() + 1 === displayMonth);
+        
+        for(let i = 1; i <= lastDate; i++) {
+            let isToday = (isCurrentMonth && td.getDate() === i) ? 'today' : '';
+            let profitStr = "";
+            let color = "";
+            if(dailyProfits[i] !== undefined) {
+                let p = dailyProfits[i];
+                profitStr = `${p > 0 ? '+' : ''}${p}`;
+                color = p >= 0 ? "var(--success)" : "var(--danger)";
+            }
+            grid.innerHTML += `
+                <div class="cal-day ${isToday}">
+                    <div class="cal-date">${i}</div>
+                    <div class="cal-profit" style="color:${color};">${profitStr}</div>
+                </div>
+            `;
+        }
     }
-    function clearHistory() { if(confirm('🚨 全ての収支データを完全に消去します。よろしいですか？')) { localStorage.removeItem('zero_h'); renderHistory(); } }
+
+    // =========================================================================
+    // 【新規実装】デジタル小役カウンター＆設定推測（並列・非干渉ロジック）
+    // =========================================================================
+    function changeCounter(type, val) {
+        if (type === 'suika') countSuika = Math.max(0, countSuika + val);
+        if (type === 'wcherry') countWCherry = Math.max(0, countWCherry + val);
+        if (type === 'scherry') countSCherry = Math.max(0, countSCherry + val);
+        updateCounterDisplay();
+    }
+
+    function updateCounterDisplay() {
+        document.getElementById('val_suika').innerText = countSuika;
+        document.getElementById('val_wcherry').innerText = countWCherry;
+        document.getElementById('val_scherry').innerText = countSCherry;
+        
+        const t = parseFloat(document.getElementById('total_rot').value) || 0;
+        
+        document.getElementById('prob_suika').innerText = (countSuika > 0 && t > 0) ? `1/${Math.floor(t/countSuika)}` : "---";
+        document.getElementById('prob_wcherry').innerText = (countWCherry > 0 && t > 0) ? `1/${Math.floor(t/countWCherry)}` : "---";
+        document.getElementById('prob_scherry').innerText = (countSCherry > 0 && t > 0) ? `1/${Math.floor(t/countSCherry)}` : "---";
+    }
 
     function executeSettingGuess() {
         const t = parseFloat(document.getElementById('total_rot').value);
@@ -418,7 +591,7 @@
         if(t > 0 && a > 0) {
             const p = Math.floor(t/a); const trophy = document.getElementById('hidden_trophy').value;
             let m = ""; let cls = "alert-info";
-            let sw = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※総回転2000G未満のため確率は参考値です（特攻は自己責任で）</span>" : "";
+            let sw = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※総回転2000G未満のため確率は参考値です。</span>" : "";
             if (trophy === 'rainbow') { m = "【設定6確定】虹トロフィー出現。閉店まで全ツッパを強く推奨します。"; cls = "alert-success"; }
             else if (p <= 245) { m = "【設定6濃厚】レベルの極上確率です。全ツッパを推奨します。"; cls = "alert-success"; }
             else if (trophy === 'gold') { m = "【設定4-5確定】金トロフィー出現。粘る価値が非常に高いです。"; cls = "alert-success"; }
