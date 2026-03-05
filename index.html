@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v25.3.0 THE TRUE DUAL CORE</title>
+    <title>Protocol ZERO v25.4.0 THE TRUE DUAL CORE</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --kabaneri: #ff7b72; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -52,8 +52,9 @@
         .cal-day.today { background: rgba(88, 166, 255, 0.1); border: 1px solid var(--accent); }
         .cal-day.empty { background: #0a0c10; }
         
-        .counter-btn { width:40px; padding:8px 0; background:#21262d; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1.2em; box-shadow:none; }
+        .counter-btn { width:35px; padding:6px 0; background:#21262d; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1.1em; box-shadow:none; }
         .counter-btn.plus { background: var(--accent); }
+        .btn-k-plus { background: var(--kabaneri); }
 
         .guide-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; text-align: center; }
         .guide-table th { background: #21262d; color: #8b949e; padding: 10px 5px; border: 1px solid #30363d; }
@@ -77,7 +78,7 @@
     </div>
 
     <div style="text-align: center; margin: 15px 0;">
-        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.3.0</div>
+        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.4.0</div>
         <div id="title-accent" style="font-size: 0.7em; color: var(--accent); letter-spacing: 2px;">THE TRUE DUAL CORE</div>
     </div>
 
@@ -259,7 +260,7 @@
                 <input type="number" id="in_medal" placeholder="投資枚数">
                 <input type="number" id="out_medal" placeholder="回収枚数">
             </div>
-            <button onclick="saveProfit()">収支をカレンダーに記録する</button>
+            <button onclick="saveProfit()">収支を記録する</button>
         </div>
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
@@ -282,7 +283,6 @@
         </div>
         <div class="card" style="margin-top: 15px; border: 1px solid var(--accent);">
             <h3 style="color:var(--accent);">💾 データ管理 (インポート/エクスポート)</h3>
-            <p style="font-size:0.75em; color:#8b949e; line-height:1.4;">※キャッシュクリアや機種変更の前に「データを出力」し文字列を保存してください。</p>
             <textarea id="backup_data" rows="3" placeholder="バックアップ暗号文字列がここに出力されます..."></textarea>
             <div style="display:flex; gap:8px;">
                 <button class="backup-btn" onclick="exportData()">📤 データを出力</button>
@@ -292,60 +292,154 @@
     </div>
 
     <div id="tab-guess" class="tab-content">
-        <div class="card">
-            <h3>🔍 精密設定推測プロトコル</h3>
-            <label>総回転数 (G) / 初当たり(AT)回数</label>
-            <div style="display:flex;gap:8px;">
-                <input type="number" id="total_rot" placeholder="総回転数" oninput="updateCounterDisplay(); updateUI(); executeSettingGuess();">
-                <input type="number" id="at_count" placeholder="AT初当回数" oninput="updateUI(); executeSettingGuess();">
-            </div>
-            <div style="margin-top: 15px; border-top: 1px dashed #30363d; padding-top: 15px;">
-                <label style="color:var(--accent);">🎰 汎用デジタル小役カウンター (総回転数連動)</label>
-                <div style="display:flex; gap:6px; margin-bottom:10px;">
-                    <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
-                        <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍉 左 / スイカ</div>
-                        <div id="prob_suika" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <button class="counter-btn" onclick="changeCounter('suika', -1)">-</button>
-                            <span id="val_suika" style="font-size:1.3em; font-weight:bold;">0</span>
-                            <button class="counter-btn plus" onclick="changeCounter('suika', 1)">+</button>
+        
+        <div id="guess-hokuto" style="display:block;">
+            <div class="card">
+                <h3>🔍 北斗 精密設定推測</h3>
+                <label>総回転数 (G) / 初当たり(AT)回数</label>
+                <div style="display:flex;gap:8px;">
+                    <input type="number" id="total_rot" placeholder="総回転数" oninput="updateHokutoCounter(); updateUI(); executeHokutoGuess();">
+                    <input type="number" id="at_count" placeholder="AT初当回数" oninput="updateUI(); executeHokutoGuess();">
+                </div>
+                <div style="margin-top: 15px; border-top: 1px dashed #30363d; padding-top: 15px;">
+                    <label style="color:var(--accent);">🎰 デジタル小役カウンター (確率自動計算)</label>
+                    <div style="display:flex; gap:6px; margin-bottom:10px;">
+                        <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
+                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍉 スイカ</div>
+                            <div id="prob_suika" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeHCounter('suika', -1)">-</button>
+                                <span id="val_suika" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn plus" onclick="changeHCounter('suika', 1)">+</button>
+                            </div>
                         </div>
-                    </div>
-                    <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
-                        <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍒 中 / 弱チェ</div>
-                        <div id="prob_wcherry" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <button class="counter-btn" onclick="changeCounter('wcherry', -1)">-</button>
-                            <span id="val_wcherry" style="font-size:1.3em; font-weight:bold;">0</span>
-                            <button class="counter-btn plus" onclick="changeCounter('wcherry', 1)">+</button>
+                        <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
+                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍒 弱チェ</div>
+                            <div id="prob_wcherry" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeHCounter('wcherry', -1)">-</button>
+                                <span id="val_wcherry" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn plus" onclick="changeHCounter('wcherry', 1)">+</button>
+                            </div>
                         </div>
-                    </div>
-                    <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
-                        <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍒 右 / 強チェ</div>
-                        <div id="prob_scherry" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <button class="counter-btn" onclick="changeCounter('scherry', -1)">-</button>
-                            <span id="val_scherry" style="font-size:1.3em; font-weight:bold;">0</span>
-                            <button class="counter-btn plus" onclick="changeCounter('scherry', 1)">+</button>
+                        <div style="flex:1; background:#0d1117; padding:8px; border-radius:8px; border:1px solid #30363d; text-align:center;">
+                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">🍒 強チェ</div>
+                            <div id="prob_scherry" style="font-weight:bold; font-size:0.9em; color:var(--success); margin-bottom:5px;">---</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeHCounter('scherry', -1)">-</button>
+                                <span id="val_scherry" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn plus" onclick="changeHCounter('scherry', 1)">+</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <label style="margin-top:15px;">サミートロフィー確認 (判定に連動)</label>
+                <select id="trophy_h" onchange="document.getElementById('hidden_trophy').value = this.value; updateUI(); executeHokutoGuess();">
+                    <option value="none">示唆なし</option>
+                    <option value="gold">金以上確認 (設定4-5確定)</option>
+                    <option value="rainbow">虹/キリン確認 (設定6確定)</option>
+                </select>
+                <button onclick="executeHokutoGuess()" style="background:var(--success);">AI推測プロトコルを実行</button>
+                <div id="setting-result-h"></div>
             </div>
-            <label style="margin-top:15px;">サミートロフィー確認状況 (メイン判定に連動)</label>
-            <select id="trophy" onchange="document.getElementById('hidden_trophy').value = this.value; updateUI(); executeSettingGuess();">
-                <option value="none">示唆なし</option>
-                <option value="gold">金以上確認 (設定4-5確定)</option>
-                <option value="rainbow">虹/キリン確認 (設定6確定)</option>
-            </select>
-            <button onclick="executeSettingGuess()" style="background:var(--success);">AI推測プロトコルを実行</button>
-            <div id="setting-result"></div>
+        </div>
+
+        <div id="guess-kabaneri" style="display:none;">
+            <div class="card" style="border-top: 3px solid var(--kabaneri);">
+                <h3 style="color:var(--kabaneri);">🔍 海門 精密設定推測 (CZ突破率)</h3>
+                <p style="font-size:0.75em; color:#8b949e; line-height:1.4;">※カバネリはチャンス目確率に設定差がありません。各C目からの「CZ当選率」で推測します。複合C目は両方に+1してください。</p>
+                
+                <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="color:#8b949e; font-weight:bold; font-size:0.9em;">🔴 無名チャンス目 (左)</span>
+                        <span id="rate_mumei" style="color:var(--kabaneri); font-weight:bold;">突破率: ---%</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">成立回数</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeKCounter('mumei', 'tot', -1)">-</button>
+                                <span id="val_mumei_tot" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('mumei', 'tot', 1)">+</button>
+                            </div>
+                        </div>
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-size:0.7em; color:var(--success); margin-bottom:5px;">CZ当選回数</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeKCounter('mumei', 'win', -1)">-</button>
+                                <span id="val_mumei_win" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('mumei', 'win', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="color:#8b949e; font-weight:bold; font-size:0.9em;">🟢 生駒チャンス目 (右)</span>
+                        <span id="rate_ikoma" style="color:var(--kabaneri); font-weight:bold;">突破率: ---%</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">成立回数</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeKCounter('ikoma', 'tot', -1)">-</button>
+                                <span id="val_ikoma_tot" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('ikoma', 'tot', 1)">+</button>
+                            </div>
+                        </div>
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-size:0.7em; color:var(--success); margin-bottom:5px;">CZ当選回数</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeKCounter('ikoma', 'win', -1)">-</button>
+                                <span id="val_ikoma_win" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('ikoma', 'win', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <span style="color:#8b949e; font-weight:bold; font-size:0.9em;">🟣 カバネC目 (中)</span>
+                        <span id="rate_kaba" style="color:var(--kabaneri); font-weight:bold;">前兆移行率: ---%</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">成立回数</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeKCounter('kaba', 'tot', -1)">-</button>
+                                <span id="val_kaba_tot" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('kaba', 'tot', 1)">+</button>
+                            </div>
+                        </div>
+                        <div style="flex:1; text-align:center;">
+                            <div style="font-size:0.7em; color:var(--success); margin-bottom:5px;">前兆移行回数</div>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <button class="counter-btn" onclick="changeKCounter('kaba', 'win', -1)">-</button>
+                                <span id="val_kaba_win" style="font-size:1.2em; font-weight:bold;">0</span>
+                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('kaba', 'win', 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <label style="margin-top:15px;">サミートロフィー確認 (判定に連動)</label>
+                <select id="trophy_k" onchange="document.getElementById('hidden_trophy').value = this.value; updateUI();">
+                    <option value="none">示唆なし</option>
+                    <option value="gold">金以上確認 (設定4-5確定)</option>
+                    <option value="rainbow">虹/キリン確認 (設定6確定)</option>
+                </select>
+                <button class="btn-kabaneri" onclick="executeKabaneriGuess()" style="margin-top:10px;">AI推測プロトコルを実行</button>
+                <div id="setting-result-k"></div>
+            </div>
         </div>
     </div>
 
     <input type="hidden" id="hidden_trophy" value="none">
 
     <div class="legal-footer">
-        ※本アプリは独自解析データに基づく期待値シミュレーターであり、収益を完全に保証するものではありません。投資判断は自己責任でお願いします。法的リスク回避：遊技機メーカー様・版権元様とは一切関係ありません。© 2026 Protocol ZERO
+        ※本アプリは独自解析データに基づく期待値シミュレーターであり、収益を完全に保証するものではありません。法的リスク回避：遊技機メーカー様・版権元様とは一切関係ありません。© 2026 Protocol ZERO
     </div>
 
 <script>
@@ -356,16 +450,18 @@
     let displayYear = today.getFullYear();
     let displayMonth = today.getMonth() + 1;
 
-    let countSuika = 0;
-    let countWCherry = 0;
-    let countSCherry = 0;
+    // 北斗用カウンター変数
+    let countSuika = 0; let countWCherry = 0; let countSCherry = 0;
+    
+    // カバネリ用カウンター変数 (tot=成立回数, win=当選回数)
+    let k_cnt = { mumei:{tot:0, win:0}, ikoma:{tot:0, win:0}, kaba:{tot:0, win:0} };
 
     window.onload = () => { 
         renderCalendar(); 
         document.getElementById('vip_memo').value = localStorage.getItem('zero_memo') || ""; 
         updateUI(); 
-        updateCounterDisplay();
-        executeSettingGuess();
+        updateHokutoCounter();
+        updateKabaneriCounter();
     };
 
     function checkVIP() { 
@@ -378,6 +474,7 @@
         } 
     }
 
+    // --- 機種切り替え（完全分離UI） ---
     function switchMachine(machine) {
         currentMachine = machine;
         document.getElementById('btn-hokuto').classList.remove('active-h');
@@ -389,18 +486,24 @@
             document.getElementById('title-accent').style.color = "var(--accent)";
             
             document.getElementById('hokuto-inputs').style.display = 'block';
-            document.getElementById('kabaneri-inputs').style.display = 'none';
             document.getElementById('hokuto-guide').style.display = 'block';
+            document.getElementById('guess-hokuto').style.display = 'block';
+            
+            document.getElementById('kabaneri-inputs').style.display = 'none';
             document.getElementById('kabaneri-guide').style.display = 'none';
+            document.getElementById('guess-kabaneri').style.display = 'none';
         } else {
             document.getElementById('btn-kabaneri').classList.add('active-k');
             document.getElementById('title-accent').innerText = "THE TRUE DUAL CORE : KABANERI";
             document.getElementById('title-accent').style.color = "var(--kabaneri)";
             
             document.getElementById('hokuto-inputs').style.display = 'none';
-            document.getElementById('kabaneri-inputs').style.display = 'block';
             document.getElementById('hokuto-guide').style.display = 'none';
+            document.getElementById('guess-hokuto').style.display = 'none';
+            
+            document.getElementById('kabaneri-inputs').style.display = 'block';
             document.getElementById('kabaneri-guide').style.display = 'block';
+            document.getElementById('guess-kabaneri').style.display = 'block';
         }
         updateUI();
     }
@@ -413,11 +516,11 @@
         if(id === 'tab-history') renderCalendar();
     }
 
-    function saveMemo() { 
-        localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
-    }
+    function saveMemo() { localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); }
 
-    // --- 【絶対保護】北斗の拳 転生2 ロジック ---
+    // ==========================================
+    // 北斗 期待値・判定ロジック (変更なし・保護)
+    // ==========================================
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -435,7 +538,6 @@
 
         const isValidPremium = (lastSt === 'premium' && abe <= 128);
         const isValidTsuranuki = (isVip && diff >= 1000 && abe <= 128);
-
         const t_rot = parseFloat(document.getElementById('total_rot').value) || 0;
         const a_cnt = parseFloat(document.getElementById('at_count').value) || 0;
         const isEnoughSample = (t_rot >= 2000);
@@ -451,21 +553,17 @@
         let remainCeiling = Math.max(0, maxCeiling - abe);
 
         const EV_NONE = -600;
-        
         let evAbe = (abe >= 1473) ? 6500 : (abe >= 1100) ? 4300 : (abe >= 750) ? 1600 : (abe >= 480) ? 1150 : (abe >= 200 && abe <= 256) ? 900 : EV_NONE;
         let wageAbe = (abe >= 1100) ? 5500 : (abe > 700) ? 3100 : (abe > 400) ? 1600 : 800;
-
         let evResetZ = (reset && abe >= 700) ? 1900 : EV_NONE;
         let evResetM = (reset && mode === 'mode_c' && abe >= 350) ? 1350 : EV_NONE;
         let evResetS = (reset && abe >= 450 && abe <= 576) ? 1400 : EV_NONE;
         let evResetL = (reset && abe >= 200 && abe <= 256) ? 1200 : EV_NONE;
         let wageReset = reset ? ((abe >= 400) ? 3300 : 800) : 800;
-
         let evHeaven = (mode === 'heaven') ? 650 : EV_NONE;
         let evShutter = (mode === 'shutter' && abe >= 150) ? 1400 : EV_NONE;
         let evModeC = (mode === 'mode_c' && abe >= 350) ? 1200 : EV_NONE;
         let wageMode = (mode === 'heaven') ? 5500 : (mode === 'mode_c' || mode === 'shutter') ? 3900 : 800;
-
         let evPremium = isValidPremium ? 2500 : EV_NONE;
         let evDensho = (lastSt === 'densho') ? 1500 : EV_NONE;
         let wageState = isValidPremium ? 5500 : (lastSt === 'densho') ? 4000 : 800;
@@ -482,19 +580,15 @@
         if (trophy === 'rainbow' || isHighSettingProb) { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
         else if (trophy === 'gold' || isMidSettingProb) { baseWage = Math.max(baseWage, 5000); baseEV = Math.max(baseEV, 3000); }
 
-        let finalEV = baseEV;
-        let finalWage = baseWage;
-
+        let finalEV = baseEV; let finalWage = baseWage;
         if (time >= 18) { let hp = (time - 17); finalWage -= (hp * 700); finalEV -= (hp * 400); }
         if (inv === 'cash' && rate !== '5.0') { finalWage -= 2500; if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); }
 
         let baseBorder = 950; let isAbsoluteGo = false; 
         if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb || isMidSettingProb) { baseBorder = 0; isAbsoluteGo = true; } 
-        else if (isValidPremium || lastSt === 'densho') { baseBorder = 0; isAbsoluteGo = true; } 
-        else if (aiConsult === 'strong' || aiConsult === 'rare' || mode === 'heaven') { baseBorder = 0; isAbsoluteGo = true; } 
-        else if (mode === 'shutter') baseBorder = 150; 
-        else if (mode === 'mode_c') baseBorder = 350; 
-        else if (reset) baseBorder = 700; 
+        else if (isValidPremium || lastSt === 'densho' || aiConsult === 'strong' || aiConsult === 'rare' || mode === 'heaven') { baseBorder = 0; isAbsoluteGo = true; } 
+        else if (mode === 'shutter') baseBorder = 150; else if (mode === 'mode_c') baseBorder = 350; else if (reset) baseBorder = 700; 
+        
         if (aiConsult === 'char' && mode !== 'shutter' && !isAbsoluteGo) baseBorder = Math.max(0, baseBorder - 100);
         if (time >= 18 && !isAbsoluteGo) { baseBorder += 100; if (time >= 21) baseBorder += 100; }
         if (inv === 'cash' && rate !== '5.0' && !isAbsoluteGo) baseBorder += 150;
@@ -509,7 +603,57 @@
         };
     }
 
-    // --- カバネリ 海門決戦 周期依存ロジック ---
+    function executeAnalysis() {
+        const s = getLogicStats();
+        let res = `<h3>📊 北斗 最終戦略分析</h3>`;
+        if (s.isTimeOver) { document.getElementById('result-area-h').innerHTML = res + `<div class="alert alert-error">🚨 【致命的警告】22時を過ぎています。即時帰宅してください。</div>`; return; }
+
+        const evColor = s.ev > 0 ? "var(--success)" : "var(--danger)";
+        const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:${evColor};">💰期待値: ￥${val}前後</span><br><span style="font-size:0.85em; color:#8b949e;">🎯最大天井まで残り: <b>${s.remainCeiling}</b> あべし</span>`;
+
+        if (s.ev < 0 && s.abe < 1100) {
+            let nt = s.border;
+            if (s.mode === 'mode_c' && s.border > 350) nt = Math.min(s.border, 350); 
+            else if ((s.mode === 'shutter' || s.aiConsult === 'char') && s.border > 150) nt = Math.min(s.border, 150);
+            res += `<div class="alert alert-error">❄️ 【絶対撤収命令】<br>環境ペナルティにより期待値が赤字（￥${s.ev}）です。撤収してください。<br>🎯 待機目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
+        } else {
+            if (s.abe >= 1473) res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵確定！${evDisp(s.ev)}<br><span style="color:var(--danger); text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
+            else if (s.abe >= 1100) res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値極限。${evDisp(s.ev)}<br><span style="text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
+            else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー!! 設定6確定。閉店まで全ツッパ。${evDisp(s.ev)}</div>`;
+            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ!! 設定6濃厚。全ツッパ推奨。${evDisp(s.ev)}</div>`;
+            else if (s.trophy === 'gold') res += `<div class="alert alert-success">🏅 金トロフィー!! 設定4-5確定。粘り。${evDisp(s.ev)}</div>`;
+            else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') res += `<div class="alert alert-success">🔥 【前兆特攻】激アツ。即確保！${evDisp(s.ev)}</div>`;
+            else if (s.isValidPremium) res += `<div class="alert alert-success">🔥 【上位AT後・特攻】天国期待度極大。128まで。${evDisp(s.ev)}</div>`;
+            else if (s.lastSt === 'densho') res += `<div class="alert alert-success">🔥 【伝承モード中】天破ループ。${evDisp(s.ev)}</div>`;
+            else if (s.isValidTsuranuki) res += `<div class="alert alert-success">💎 【VIP特攻】差枚恩恵。128までフォロー。${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'heaven') res += `<div class="alert alert-success">✨ 【天国濃厚】128当選濃厚。${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'shutter' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】896天井狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット×通常C：特攻GO】${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】576天井狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット天井：特攻GO】1280天井狙い。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= s.border) res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破。期待値十分。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 750 && s.abe <= 896) res += `<div class="alert alert-info">⚡ 【ゾーン】通常B狙い。896天井まで。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= 450 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【リセット】500ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【リセット】256ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 480 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【ゾーン】通常C狙い。576天井まで。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【ゾーン】256ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${s.border}あべし</b>${evDisp(s.ev)}</div>`;
+        }
+        
+        let yMsg = "";
+        if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護）</span>";
+        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ。絶対に席を立つな。</span>";
+        else if (s.isValidPremium) yMsg = "①【上位AT後】128まで天国率大幅UP。絶対にヤメるな。";
+        else if (s.lastSt === 'densho') yMsg = "②【伝承モード】ループ抜け確認まで続行。";
+        else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚】有利リセット近接。128ヤメ厳禁。</span>";
+        else yMsg = "④【通常】高確・前兆なしを確認し、1あべし即ヤメ。";
+        res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
+        document.getElementById('result-area-h').innerHTML = res;
+    }
+
+    // ==========================================
+    // カバネリ 海門決戦 期待値・判定ロジック
+    // ==========================================
     function getKabaneriStats() {
         const kg = parseInt(document.getElementById('k_current_g').value) || 0;
         const kcycle = parseInt(document.getElementById('k_current_cycle').value) || 0;
@@ -531,14 +675,7 @@
         const remainCeiling = Math.max(0, maxCeiling - kg);
         const remainCycle = Math.max(0, maxCycle - kcycle);
 
-        const t_rot = parseFloat(document.getElementById('total_rot').value) || 0;
-        const a_cnt = parseFloat(document.getElementById('at_count').value) || 0;
-        const isEnoughSample = (t_rot >= 2000);
-        let realProb = (t_rot > 0 && a_cnt > 0) ? Math.floor(t_rot / a_cnt) : 999;
-        let isHighSettingProb = (isEnoughSample && realProb <= 245); 
-
         const EV_NONE = -600;
-
         let evCeilN = (!isShort && kg >= 700) ? 3500 : (!isShort && kg >= 650) ? 1500 : EV_NONE;
         let wageCeilN = (!isShort && kg >= 700) ? 4500 : (!isShort && kg >= 650) ? 2500 : 800;
         let evCeilS = (isShort && kg >= 400) ? 2500 : (isShort && kg >= 350) ? 1000 : EV_NONE;
@@ -563,132 +700,28 @@
         let baseWage = Math.max(wageCeilN, wageCeilS, 800) + bonusWage;
         if (isKage) baseWage = Math.max(baseWage, 5000);
 
-        if (trophy === 'rainbow' || isHighSettingProb) { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
+        if (trophy === 'rainbow') { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
         else if (trophy === 'gold') { baseWage = Math.max(baseWage, 5000); baseEV = Math.max(baseEV, 3000); }
 
-        let finalEV = baseEV;
-        let finalWage = baseWage;
-
+        let finalEV = baseEV; let finalWage = baseWage;
         if (time >= 18) { let hp = (time - 17); finalWage -= (hp * 700); finalEV -= (hp * 400); }
         if (inv === 'cash' && rate !== '5.0') { finalWage -= 2500; if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); }
 
         let baseBorder = isShort ? 350 : 650; 
         let isAbsoluteGo = false; 
-        
-        if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb) { baseBorder = 0; isAbsoluteGo = true; } 
-        else if (isKage || pts === '2' || ai === 'super' || kg <= 20) { baseBorder = 0; isAbsoluteGo = true; } 
+        if (trophy === 'rainbow' || trophy === 'gold' || isKage || pts === '2' || ai === 'super' || kg <= 20) { baseBorder = 0; isAbsoluteGo = true; } 
         
         if (time >= 18 && !isAbsoluteGo) { baseBorder += 50; if (time >= 21) baseBorder += 100; }
         if (inv === 'cash' && rate !== '5.0' && !isAbsoluteGo) baseBorder += 100;
 
         return { 
-            kg: kg, kcycle: kcycle, inv: inv, rate: rate, time: time, trophy: trophy, isHighSetting: isHighSettingProb,
+            kg: kg, kcycle: kcycle, inv: inv, rate: rate, time: time, trophy: trophy,
             isShort: isShort, isKage: isKage, pts: pts, ai: ai, isTimeOver: false, 
             remainCeiling: remainCeiling, remainCycle: remainCycle,
             border: isAbsoluteGo ? 0 : Math.max(0, baseBorder + adj), wage: Math.floor(finalWage), ev: Math.floor(finalEV)
         };
     }
 
-    // --- UI連動ロジック ---
-    function updateGuideTable() {
-        const inv = document.getElementById('invest_type').value;
-        const rate = document.getElementById('rate').value;
-        const isPenalty = (inv === 'cash' && rate !== '5.0');
-        
-        // 北斗の動的連動
-        document.getElementById('g-150-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">B:特攻</span>';
-        document.getElementById('g-200-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('g-200-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('g-350-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">C:特攻</span>';
-        document.getElementById('g-450-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('g-480-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('g-700-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 特攻</span>';
-        document.getElementById('g-750-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-go">〇 ゾーン</span>';
-        document.getElementById('g-750-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
-        document.getElementById('g-950-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
-        document.getElementById('g-950-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
-
-        // カバネリの動的連動
-        document.getElementById('kg-100-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
-        document.getElementById('kg-100-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
-        document.getElementById('kg-250-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 2周期</span>';
-        document.getElementById('kg-250-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 2周期</span>';
-        document.getElementById('kg-350-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
-        document.getElementById('kg-450-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 慎重</span>';
-        document.getElementById('kg-650-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
-    }
-
-    function updateUI() { 
-        if(!isVip) return; 
-        updateGuideTable();
-
-        if (currentMachine === 'hokuto') {
-            const stats = getLogicStats();
-            const wageElem = document.getElementById('wage-display-h');
-            wageElem.innerText = `想定時給: ￥${stats.wage}`; 
-            wageElem.style.color = stats.wage >= 0 ? "var(--success)" : "var(--danger)"; 
-        } else {
-            const statsK = getKabaneriStats();
-            const wageElemK = document.getElementById('wage-display-k');
-            wageElemK.innerText = `想定時給: ￥${statsK.wage}`; 
-            wageElemK.style.color = statsK.wage >= 0 ? "var(--kabaneri)" : "var(--danger)"; 
-        }
-    }
-
-    // --- 北斗 判定出力ロジック ---
-    function executeAnalysis() {
-        const s = getLogicStats();
-        let res = `<h3>📊 北斗 最終戦略分析</h3>`;
-        if (s.isTimeOver) { document.getElementById('result-area-h').innerHTML = res + `<div class="alert alert-error">🚨 【致命的警告】22時を過ぎています。即時帰宅してください。</div>`; return; }
-
-        const evColor = s.ev > 0 ? "var(--success)" : "var(--danger)";
-        const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:${evColor};">💰期待値: ￥${val}前後</span><br><span style="font-size:0.85em; color:#8b949e;">🎯最大天井まで残り: <b>${s.remainCeiling}</b> あべし</span>`;
-
-        if (s.ev < 0 && s.abe < 1100) {
-            let nt = s.border;
-            if (s.mode === 'mode_c' && s.border > 350) nt = Math.min(s.border, 350); 
-            else if ((s.mode === 'shutter' || s.aiConsult === 'char') && s.border > 150) nt = Math.min(s.border, 150);
-            res += `<div class="alert alert-error">❄️ 【絶対撤収命令】<br>環境ペナルティにより期待値が赤字（￥${s.ev}）です。撤収してください。<br>🎯 待機目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
-        } 
-        else {
-            if (s.abe >= 1473) res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵確定！${evDisp(s.ev)}<br><span style="color:var(--danger); text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
-            else if (s.abe >= 1100) res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値極限。${evDisp(s.ev)}<br><span style="text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
-            else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー!! 設定6確定。閉店まで全ツッパ。${evDisp(s.ev)}</div>`;
-            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ!! 設定6濃厚。全ツッパ推奨。${evDisp(s.ev)}</div>`;
-            else if (s.trophy === 'gold') res += `<div class="alert alert-success">🏅 金トロフィー!! 設定4-5確定。粘り。${evDisp(s.ev)}</div>`;
-            else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') res += `<div class="alert alert-success">🔥 【前兆特攻】激アツ。即確保！${evDisp(s.ev)}</div>`;
-            else if (s.isValidPremium) res += `<div class="alert alert-success">🔥 【上位AT後・特攻】天国期待度極大。128まで。${evDisp(s.ev)}</div>`;
-            else if (s.lastSt === 'densho') res += `<div class="alert alert-success">🔥 【伝承モード中】天破ループ。${evDisp(s.ev)}</div>`;
-            else if (s.isValidTsuranuki) res += `<div class="alert alert-success">💎 【VIP特攻】差枚恩恵。128までフォロー。${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'heaven') res += `<div class="alert alert-success">✨ 【天国濃厚】128当選濃厚。${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'shutter' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】896天井狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット×通常C：特攻GO】${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】576天井狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット天井：特攻GO】1280天井狙い。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= s.border) res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破。期待値十分。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 750 && s.abe <= 896) res += `<div class="alert alert-info">⚡ 【ゾーン】通常B狙い。896天井まで。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= 450 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【リセット】500ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【リセット】256ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 480 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【ゾーン】通常C狙い。576天井まで。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【ゾーン】256ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else {
-                let nt = s.border; 
-                res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
-            }
-        }
-        
-        let yMsg = "";
-        if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護）</span>";
-        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ。絶対に席を立つな。</span>";
-        else if (s.isValidPremium) yMsg = "①【上位AT後】128まで天国率大幅UP。絶対にヤメるな。";
-        else if (s.lastSt === 'densho') yMsg = "②【伝承モード】ループ抜け確認まで続行。";
-        else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚】有利リセット近接。128ヤメ厳禁。</span>";
-        else yMsg = "④【通常】高確・前兆なしを確認し、1あべし即ヤメ。";
-        res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
-        document.getElementById('result-area-h').innerHTML = res;
-    }
-
-    // --- カバネリ 判定出力ロジック (海門決戦・解像度MAX版) ---
     function executeKabaneriAnalysis() {
         const s = getKabaneriStats();
         let res = `<h3 style="color:var(--kabaneri);">📊 海門 最終戦略分析</h3>`;
@@ -698,29 +731,25 @@
         const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:${evColor};">💰期待値: ￥${val}前後</span><br><span style="font-size:0.85em; color:#8b949e;">🎯天井まで残り: <b>${s.remainCeiling}G / ${s.remainCycle}周期</b></span>`;
 
         if (s.ev < 0) {
-            res += `<div class="alert alert-error">❄️ 【絶対撤収命令】<br>環境ペナルティにより期待値が赤字（￥${s.ev}）です。撤収してください。<br>🎯 待機目安: <b>${s.border}G</b>${evDisp(s.ev)}</div>`;
-        } 
-        else {
+            res += `<div class="alert alert-error">❄️ 【絶対撤収命令】<br>期待値が赤字（￥${s.ev}）です。撤収してください。<br>🎯 待機目安: <b>${s.border}G</b>${evDisp(s.ev)}</div>`;
+        } else {
             if (s.isKage) res += `<div class="alert alert-warning" style="border-color:var(--kabaneri); color:white;">⚠️ 景之(かげゆき)ループ発動中<br>次回STも景之が濃厚な極限状態です。絶対に捨てないでください。${evDisp(s.ev)}</div>`;
             else if (s.remainCeiling <= 150) res += `<div class="alert alert-ceiling" style="background:var(--kabaneri);">🚂 【天井到達圏内】<br>ST当選まで一直線です。${evDisp(s.ev)}</div>`;
             else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー!! 設定6確定。閉店まで全ツッパ。${evDisp(s.ev)}</div>`;
-            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ!! 設定6濃厚。全ツッパ推奨。${evDisp(s.ev)}</div>`;
-            else if (s.ai === 'super') res += `<div class="alert alert-success">🔥 【千本鳥居 本前兆】<br>当選濃厚です。即座に確保してください！${evDisp(s.ev)}</div>`;
+            else if (s.ai === 'super') res += `<div class="alert alert-success">🔥 【本前兆濃厚】<br>当選濃厚です。即座に確保してください！${evDisp(s.ev)}</div>`;
             else if (s.pts === '2') res += `<div class="alert alert-success">🔥 【ポイント激熱】<br>無名/生駒ポイントが2つ発光。即CZに期待できます。${evDisp(s.ev)}</div>`;
             else if (s.kg <= 20) res += `<div class="alert alert-success">✨ 【ST後 高確】<br>20G間はカバネチャンス目高確です。必ずフォロー。${evDisp(s.ev)}</div>`;
             else if (s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【短縮天井 狙い】<br>596天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
             else if (!s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【通常天井 狙い】<br>996天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
             else if (s.kg >= 100 && s.kg <= 150) res += `<div class="alert alert-info">⚡ 【1周期目 ゾーン狙い】<br>150Gの周期到達（カバネ最終防衛区域）を狙います。${evDisp(s.ev)}</div>`;
             else if (s.kg >= 250 && s.kg <= 300) res += `<div class="alert alert-info">⚡ 【2周期目 ゾーン狙い】<br>300Gの周期到達（カバネ最終防衛区域）を狙います。${evDisp(s.ev)}</div>`;
-            else {
-                res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${s.border}G</b>${evDisp(s.ev)}</div>`;
-            }
+            else res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${s.border}G</b>${evDisp(s.ev)}</div>`;
         }
 
         let yMsg = "";
         if (s.isKage) yMsg = "<span class='highlight-text'>①【景之ST後】次回STまで絶対にヤメ厳禁（ループフォロー）</span>";
         else if (s.kg >= 400 && s.isShort) yMsg = "<span class='highlight-text'>②【短縮天井手前】596天井まで絶対にヤメ厳禁</span>";
-        else if (s.pts === '2' || s.ai === 'super') yMsg = "③【ポイント/前兆】現在走っている周期・前兆（カバネ最終防衛区域）がハズレるまで続行。";
+        else if (s.pts === '2' || s.ai === 'super') yMsg = "③【ポイント/前兆】現在走っている前兆（カバネ最終防衛区域等）がハズレるまで続行。";
         else yMsg = "④【通常】ST終了後、20G間の高確を回し、ポイント発光がなければ即ヤメ。";
         res += `<div class="alert alert-warning" style="border-color:var(--kabaneri);">🛑 海門ヤメ時ナビ：<br>${yMsg}</div>`;
 
@@ -734,13 +763,53 @@
         document.getElementById('result-area-k').innerHTML = res;
     }
 
-    // --- データ保存・復元・カレンダーロジック ---
+    // --- 共通UI連動ロジック ---
+    function updateGuideTable() {
+        const inv = document.getElementById('invest_type').value;
+        const rate = document.getElementById('rate').value;
+        const isPenalty = (inv === 'cash' && rate !== '5.0');
+        
+        document.getElementById('g-150-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">B:特攻</span>';
+        document.getElementById('g-200-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-200-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-350-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">C:特攻</span>';
+        document.getElementById('g-450-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-480-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
+        document.getElementById('g-700-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 特攻</span>';
+        document.getElementById('g-750-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-go">〇 ゾーン</span>';
+        document.getElementById('g-750-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        document.getElementById('g-950-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        document.getElementById('g-950-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+
+        document.getElementById('kg-100-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
+        document.getElementById('kg-100-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
+        document.getElementById('kg-250-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 2周期</span>';
+        document.getElementById('kg-250-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 2周期</span>';
+        document.getElementById('kg-350-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        document.getElementById('kg-450-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 慎重</span>';
+        document.getElementById('kg-650-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+    }
+
+    function updateUI() { 
+        if(!isVip) return; 
+        updateGuideTable();
+        if (currentMachine === 'hokuto') {
+            const stats = getLogicStats();
+            document.getElementById('wage-display-h').innerText = `想定時給: ￥${stats.wage}`; 
+            document.getElementById('wage-display-h').style.color = stats.wage >= 0 ? "var(--success)" : "var(--danger)"; 
+        } else {
+            const statsK = getKabaneriStats();
+            document.getElementById('wage-display-k').innerText = `想定時給: ￥${statsK.wage}`; 
+            document.getElementById('wage-display-k').style.color = statsK.wage >= 0 ? "var(--kabaneri)" : "var(--danger)"; 
+        }
+    }
+
+    // --- カレンダー・データ保存ロジック (共通) ---
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
         const p = o-i; 
-        const d = new Date();
-        const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+        const d = new Date(); const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
         h.unshift({date: dateStr, profit: p}); 
         localStorage.setItem('zero_h', JSON.stringify(h.slice(0,100))); 
@@ -749,19 +818,17 @@
     }
     function clearHistory() { if(confirm('🚨 全ての収支データを消去しますか？')) { localStorage.removeItem('zero_h'); renderCalendar(); } }
     function changeMonth(diff) { displayMonth += diff; if(displayMonth > 12) { displayMonth = 1; displayYear++; } else if(displayMonth < 1) { displayMonth = 12; displayYear--; } renderCalendar(); }
-    
     function renderCalendar() {
         document.getElementById('cal-month-title').innerText = `${displayYear}年 ${displayMonth}月`;
         const grid = document.getElementById('calendar-grid'); grid.innerHTML = '';
-        const firstDay = new Date(displayYear, displayMonth - 1, 1).getDay();
-        const lastDate = new Date(displayYear, displayMonth, 0).getDate();
+        const firstDay = new Date(displayYear, displayMonth - 1, 1).getDay(); const lastDate = new Date(displayYear, displayMonth, 0).getDate();
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
         let dailyProfits = {}; let monthTotal = 0; let annualTotal = 0; 
         h.forEach(item => {
             let parts = item.date.split('/');
             if(parts.length >= 3) {
                 let itemY = parseInt(parts[0]); let itemM = parseInt(parts[1]); let itemD = parseInt(parts[2]);
-                if(itemY === displayYear) { annualTotal += item.profit; }
+                if(itemY === displayYear) annualTotal += item.profit; 
                 if(itemY === displayYear && itemM === displayMonth) { if(!dailyProfits[itemD]) dailyProfits[itemD] = 0; dailyProfits[itemD] += item.profit; monthTotal += item.profit; }
             }
         });
@@ -769,10 +836,10 @@
         for(let d in dailyProfits) { if(dailyProfits[d] > 0) winDays++; }
         let winRate = workDays > 0 ? Math.floor((winDays / workDays) * 100) : 0;
         
-        const sumProfitElem = document.getElementById('cal-summary-profit');
-        sumProfitElem.innerText = `${monthTotal > 0 ? '+' : ''}${monthTotal}`; sumProfitElem.style.color = monthTotal >= 0 ? "var(--success)" : "var(--danger)";
-        const annProfitElem = document.getElementById('cal-annual-profit');
-        annProfitElem.innerText = `${annualTotal > 0 ? '+' : ''}${annualTotal}`; annProfitElem.style.color = annualTotal >= 0 ? "var(--success)" : "var(--danger)";
+        document.getElementById('cal-summary-profit').innerText = `${monthTotal > 0 ? '+' : ''}${monthTotal}`; 
+        document.getElementById('cal-summary-profit').style.color = monthTotal >= 0 ? "var(--success)" : "var(--danger)";
+        document.getElementById('cal-annual-profit').innerText = `${annualTotal > 0 ? '+' : ''}${annualTotal}`; 
+        document.getElementById('cal-annual-profit').style.color = annualTotal >= 0 ? "var(--success)" : "var(--danger)";
         document.getElementById('cal-summary-rate').innerText = `稼働: ${workDays}日 / 勝率: ${winRate}%`;
 
         for(let i = 0; i < firstDay; i++) { grid.innerHTML += `<div class="cal-day empty"></div>`; }
@@ -784,7 +851,6 @@
             grid.innerHTML += `<div class="cal-day ${isToday}"><div class="cal-date">${i}</div><div class="cal-profit" style="color:${color};">${profitStr}</div></div>`;
         }
     }
-
     function exportData() {
         try {
             let data = { history: JSON.parse(localStorage.getItem('zero_h') || "[]"), memo: localStorage.getItem('zero_memo') || "" };
@@ -805,21 +871,21 @@
         }
     }
 
-    // --- カウンター＆推測ロジック ---
-    function changeCounter(type, val) {
+    // --- 推測ロジック (機種別・完全分離) ---
+    function changeHCounter(type, val) {
         if (type === 'suika') countSuika = Math.max(0, countSuika + val);
         if (type === 'wcherry') countWCherry = Math.max(0, countWCherry + val);
         if (type === 'scherry') countSCherry = Math.max(0, countSCherry + val);
-        updateCounterDisplay();
+        updateHokutoCounter();
     }
-    function updateCounterDisplay() {
+    function updateHokutoCounter() {
         document.getElementById('val_suika').innerText = countSuika; document.getElementById('val_wcherry').innerText = countWCherry; document.getElementById('val_scherry').innerText = countSCherry;
         const t = parseFloat(document.getElementById('total_rot').value) || 0;
         document.getElementById('prob_suika').innerText = (countSuika > 0 && t > 0) ? `1/${Math.floor(t/countSuika)}` : "---";
         document.getElementById('prob_wcherry').innerText = (countWCherry > 0 && t > 0) ? `1/${Math.floor(t/countWCherry)}` : "---";
         document.getElementById('prob_scherry').innerText = (countSCherry > 0 && t > 0) ? `1/${Math.floor(t/countSCherry)}` : "---";
     }
-    function executeSettingGuess() {
+    function executeHokutoGuess() {
         const t = parseFloat(document.getElementById('total_rot').value); const a = parseFloat(document.getElementById('at_count').value);
         if(t > 0 && a > 0) {
             const p = Math.floor(t/a); const trophy = document.getElementById('hidden_trophy').value;
@@ -830,8 +896,40 @@
             else if (p <= 275) { m = "【設定4-5濃厚】優秀な数値。粘る価値大。"; cls = "alert-success"; }
             else if (p <= 320) { m = "【設定3付近】中間設定。慎重に。"; cls = "alert-warning"; }
             else { m = "【低設定濃厚】危険。ボーダーを厳守。"; cls = "alert-error"; }
-            document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 初当たり: 1/${p}${sw}<br>🤖 AI診断: ${m}</div>`;
-        } else { document.getElementById('setting-result').innerHTML = `<div class="alert alert-info">📊 初当たり: ---<br>🤖 AI診断: データを入力してください。</div>`; }
+            document.getElementById('setting-result-h').innerHTML = `<div class="alert ${cls}">📊 初当たり: 1/${p}${sw}<br>🤖 AI診断: ${m}</div>`;
+        } else { document.getElementById('setting-result-h').innerHTML = `<div class="alert alert-info">📊 初当たり: ---<br>🤖 AI診断: データを入力してください。</div>`; }
+    }
+
+    // カバネリ用 (突破率)
+    function changeKCounter(type, kind, val) {
+        k_cnt[type][kind] = Math.max(0, k_cnt[type][kind] + val);
+        updateKabaneriCounter();
+    }
+    function updateKabaneriCounter() {
+        document.getElementById('val_mumei_tot').innerText = k_cnt.mumei.tot; document.getElementById('val_mumei_win').innerText = k_cnt.mumei.win;
+        document.getElementById('val_ikoma_tot').innerText = k_cnt.ikoma.tot; document.getElementById('val_ikoma_win').innerText = k_cnt.ikoma.win;
+        document.getElementById('val_kaba_tot').innerText = k_cnt.kaba.tot;  document.getElementById('val_kaba_win').innerText = k_cnt.kaba.win;
+        
+        document.getElementById('rate_mumei').innerText = k_cnt.mumei.tot > 0 ? `突破率: ${Math.floor((k_cnt.mumei.win / k_cnt.mumei.tot)*100)}%` : "突破率: ---%";
+        document.getElementById('rate_ikoma').innerText = k_cnt.ikoma.tot > 0 ? `突破率: ${Math.floor((k_cnt.ikoma.win / k_cnt.ikoma.tot)*100)}%` : "突破率: ---%";
+        document.getElementById('rate_kaba').innerText = k_cnt.kaba.tot > 0 ? `前兆移行率: ${Math.floor((k_cnt.kaba.win / k_cnt.kaba.tot)*100)}%` : "前兆移行率: ---%";
+    }
+    function executeKabaneriGuess() {
+        const trophy = document.getElementById('hidden_trophy').value;
+        let m = ""; let cls = "alert-info";
+        let totalWin = k_cnt.mumei.win + k_cnt.ikoma.win;
+        let totalTot = k_cnt.mumei.tot + k_cnt.ikoma.tot;
+        let rate = totalTot > 0 ? Math.floor((totalWin / totalTot) * 100) : 0;
+        let sw = (totalTot < 10) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※サンプル不足。</span>" : "";
+
+        if (trophy === 'rainbow') { m = "【設定6確定】虹トロ。閉店まで全ツッパ。"; cls = "alert-success"; }
+        else if (trophy === 'gold') { m = "【設定4-5確定】金トロ。粘る価値大。"; cls = "alert-success"; }
+        else if (totalTot >= 10 && rate >= 40) { m = "【高設定挙動】CZ突破率が極めて優秀です。"; cls = "alert-success"; }
+        else if (totalTot >= 10 && rate <= 25) { m = "【低設定挙動】CZ突破率が弱いです。注意。"; cls = "alert-error"; }
+        else { m = "【推測中】さらにサンプルを集めてください。"; }
+
+        let rateStr = totalTot > 0 ? `${rate}%` : "---";
+        document.getElementById('setting-result-k').innerHTML = `<div class="alert ${cls}">📊 無名/生駒 総合突破率: ${rateStr}${sw}<br>🤖 AI診断: ${m}</div>`;
     }
 </script>
 </body>
