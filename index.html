@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v25.1.0 THE DUAL CORE PERFECT</title>
+    <title>Protocol ZERO v25.2.0 THE TRUE DUAL CORE</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --kabaneri: #ff7b72; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -77,8 +77,8 @@
     </div>
 
     <div style="text-align: center; margin: 15px 0;">
-        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.1.0</div>
-        <div id="title-accent" style="font-size: 0.7em; color: var(--accent); letter-spacing: 2px;">THE DUAL CORE PERFECT</div>
+        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.2.0</div>
+        <div id="title-accent" style="font-size: 0.7em; color: var(--accent); letter-spacing: 2px;">THE TRUE DUAL CORE</div>
     </div>
 
     <div class="card">
@@ -154,8 +154,9 @@
 
         <div id="kabaneri-inputs" style="display:none;">
             <div class="card" style="border-top: 3px solid var(--kabaneri);">
-                <label>現在のゲーム数 (G)</label>
+                <label>現在のST間ゲーム数 (G) <br><span style="font-size:0.8em; font-weight:normal; color:#8b949e;">※駿城ボーナス(REG)ではG数リセット無効</span></label>
                 <input type="number" id="k_current_g" value="0" oninput="updateUI()">
+                
                 <label>現在の消化周期数 (アイコン)</label>
                 <select id="k_current_cycle" onchange="updateUI()">
                     <option value="0">0周期目</option>
@@ -188,9 +189,9 @@
                     <label style="color:var(--warning);">🤖 AI Bro コンサル (カバネリ専用)</label>
                     <select id="k_ai_consult" onchange="updateUI()">
                         <option value="none">選択なし</option>
-                        <option value="weak">ざわざわのみ (千本鳥居フェイク)</option>
+                        <option value="weak">ざわざわのみ (前兆フェイク)</option>
                         <option value="chance">カバネチャンス目直後</option>
-                        <option value="super">千本鳥居 本前兆濃厚</option>
+                        <option value="super">本前兆濃厚 (激熱)</option>
                     </select>
                 </div>
             </div>
@@ -234,19 +235,18 @@
                 <table class="guide-table">
                     <tr><th>ゲーム数</th><th>通常天井</th><th>短縮天井</th><th>景之ST後</th></tr>
                     <tr><td>0〜20G</td><td class="mark-star">★ 追行</td><td class="mark-star">★ 追行</td><td class="mark-star">★ 追行</td></tr>
-                    <tr><td>50G〜</td><td class="mark-ng">✕ スルー</td><td class="mark-ng">✕ スルー</td><td class="mark-go">〇 特攻</td></tr>
-                    <tr><td>100G〜</td><td id="kg-100-n" class="mark-warn">△ ゾーン</td><td id="kg-100-r" class="mark-warn">△ ゾーン</td><td class="mark-go">◎ 特攻</td></tr>
-                    <tr><td>200G〜</td><td class="mark-ng">✕ スルー</td><td id="kg-200-r" class="mark-go">〇 特攻</td><td class="mark-star">★ ツッパ</td></tr>
-                    <tr><td>250G〜</td><td id="kg-250-n" class="mark-warn">△ ゾーン</td><td id="kg-250-r" class="mark-go">◎ 特攻</td><td class="mark-star">★ ツッパ</td></tr>
-                    <tr><td>450G〜</td><td id="kg-450-n" class="mark-go">〇 超高確</td><td class="mark-star">★ 極限</td><td class="mark-star">★ ツッパ</td></tr>
-                    <tr><td>600G〜</td><td id="kg-600-n" class="mark-go">◎ 特攻</td><td class="mark-ng">到達済</td><td class="mark-ng">到達済</td></tr>
-                    <tr><td>650G〜</td><td class="mark-star">★ 極限</td><td class="mark-ng">-</td><td class="mark-ng">-</td></tr>
+                    <tr><td>100G〜</td><td id="kg-100-n" class="mark-warn">△ 1周期</td><td id="kg-100-r" class="mark-warn">△ 1周期</td><td class="mark-go">〇 特攻</td></tr>
+                    <tr><td>250G〜</td><td id="kg-250-n" class="mark-warn">△ 2周期</td><td id="kg-250-r" class="mark-go">〇 2周期</td><td class="mark-star">★ ツッパ</td></tr>
+                    <tr><td>350G〜</td><td class="mark-ng">✕ スルー</td><td id="kg-350-r" class="mark-go">◎ 特攻</td><td class="mark-star">★ ツッパ</td></tr>
+                    <tr><td>450G〜</td><td id="kg-450-n" class="mark-warn">△ 慎重</td><td class="mark-star">★ 極限</td><td class="mark-star">★ ツッパ</td></tr>
+                    <tr><td>650G〜</td><td id="kg-650-n" class="mark-go">◎ 特攻</td><td class="mark-ng">到達済</td><td class="mark-ng">到達済</td></tr>
+                    <tr><td>800G〜</td><td class="mark-star">★ 極限</td><td class="mark-ng">-</td><td class="mark-ng">-</td></tr>
                 </table>
                 <div style="margin-top:15px; padding:10px; background:#21262d; border-radius:8px; font-size:0.8em;">
                     <span style="color:var(--kabaneri); font-weight:bold;">💡 周期・ポイント狙い目</span><br>
                     ・【短縮×3周期】G数不問でツッパ<br>
                     ・【通常×5周期】G数不問でツッパ<br>
-                    ・【ポイント2つ発光】即CZの期待大。当選まで追行推奨。
+                    ・【ポイント2つ発光】即CZの期待大。当選まで追行。
                 </div>
             </div>
         </div>
@@ -385,7 +385,7 @@
         
         if (machine === 'hokuto') {
             document.getElementById('btn-hokuto').classList.add('active-h');
-            document.getElementById('title-accent').innerText = "THE DUAL CORE PERFECT";
+            document.getElementById('title-accent').innerText = "THE TRUE DUAL CORE";
             document.getElementById('title-accent').style.color = "var(--accent)";
             
             document.getElementById('hokuto-inputs').style.display = 'block';
@@ -394,7 +394,7 @@
             document.getElementById('kabaneri-guide').style.display = 'none';
         } else {
             document.getElementById('btn-kabaneri').classList.add('active-k');
-            document.getElementById('title-accent').innerText = "THE DUAL CORE : KABANERI";
+            document.getElementById('title-accent').innerText = "THE TRUE DUAL CORE : KABANERI";
             document.getElementById('title-accent').style.color = "var(--kabaneri)";
             
             document.getElementById('hokuto-inputs').style.display = 'none';
@@ -509,7 +509,7 @@
         };
     }
 
-    // --- 【修正済み完全版】カバネリ 海門決戦 ロジック ---
+    // --- 【修正版】カバネリ 海門決戦 周期依存ロジック ---
     function getKabaneriStats() {
         const kg = parseInt(document.getElementById('k_current_g').value) || 0;
         const kcycle = parseInt(document.getElementById('k_current_cycle').value) || 0;
@@ -539,18 +539,21 @@
 
         const EV_NONE = -600;
 
-        let evCeilN = (!isShort && kg >= 650) ? 3500 : (!isShort && kg >= 600) ? 1500 : EV_NONE;
-        let wageCeilN = (!isShort && kg >= 650) ? 4500 : (!isShort && kg >= 600) ? 2500 : 800;
-        let evCeilS = (isShort && kg >= 250) ? 2500 : (isShort && kg >= 200) ? 1000 : EV_NONE;
-        let wageCeilS = (isShort && kg >= 250) ? 3500 : (isShort && kg >= 200) ? 2000 : 800;
+        // 1. G数天井依存EV (短縮のベースを350G〜へ適正化)
+        let evCeilN = (!isShort && kg >= 700) ? 3500 : (!isShort && kg >= 650) ? 1500 : EV_NONE;
+        let wageCeilN = (!isShort && kg >= 700) ? 4500 : (!isShort && kg >= 650) ? 2500 : 800;
+        let evCeilS = (isShort && kg >= 400) ? 2500 : (isShort && kg >= 350) ? 1000 : EV_NONE;
+        let wageCeilS = (isShort && kg >= 400) ? 3500 : (isShort && kg >= 350) ? 2000 : 800;
 
+        // 2. 周期依存EV
         let evCycN = (!isShort && kcycle >= 5) ? 2500 : (!isShort && kcycle >= 4) ? 1200 : EV_NONE;
         let evCycS = (isShort && kcycle >= 3) ? 2000 : EV_NONE;
 
-        let evZ100 = (kg >= 50 && kg <= 100) ? 600 : EV_NONE;
-        let evZ250 = (kg >= 200 && kg <= 250) ? 1500 : EV_NONE;
-        let evZ450 = (kg >= 400 && kg <= 450) ? 1200 : EV_NONE;
+        // 3. 周期G数天井ゾーン依存EV (海門決戦 専用150G/300G狙い)
+        let evZ150 = (kg >= 100 && kg <= 150) ? 1000 : EV_NONE;
+        let evZ300 = (kg >= 250 && kg <= 300) ? 1500 : EV_NONE;
 
+        // 4. 状態依存EV
         let evKage = isKage ? 4000 : EV_NONE;
         let evPts = (pts === '2') ? 2500 : (pts === '1') ? 800 : EV_NONE;
         let evPost = (kg <= 20) ? 1000 : EV_NONE;
@@ -560,7 +563,7 @@
         else if (ai === 'chance') { bonusEV += 1000; bonusWage += 1200; }
         else if (ai === 'weak') { bonusEV -= 500; bonusWage -= 1500; }
 
-        let baseEV = Math.max(evCeilN, evCeilS, evCycN, evCycS, evZ100, evZ250, evZ450, evKage, evPts, evPost) + bonusEV;
+        let baseEV = Math.max(evCeilN, evCeilS, evCycN, evCycS, evZ150, evZ300, evKage, evPts, evPost) + bonusEV;
         let baseWage = Math.max(wageCeilN, wageCeilS, 800) + bonusWage;
         if (isKage) baseWage = Math.max(baseWage, 5000);
 
@@ -573,10 +576,10 @@
         if (time >= 18) { let hp = (time - 17); finalWage -= (hp * 700); finalEV -= (hp * 400); }
         if (inv === 'cash' && rate !== '5.0') { finalWage -= 2500; if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); }
 
-        let baseBorder = isShort ? 250 : 650; 
+        let baseBorder = isShort ? 350 : 650; 
         let isAbsoluteGo = false; 
         
-        // 【バグ修正完了】： kg <= 20 の絶対特攻フラグを付与
+        // 修正：kg <= 20 も絶対特攻フラグに含む
         if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb) { baseBorder = 0; isAbsoluteGo = true; } 
         else if (isKage || pts === '2' || ai === 'super' || kg <= 20) { baseBorder = 0; isAbsoluteGo = true; } 
         
@@ -591,12 +594,13 @@
         };
     }
 
-    // --- UI連動ロジック ---
+    // --- UI連動ロジック (早見表修正版) ---
     function updateGuideTable() {
         const inv = document.getElementById('invest_type').value;
         const rate = document.getElementById('rate').value;
         const isPenalty = (inv === 'cash' && rate !== '5.0');
         
+        // 北斗の動的連動
         document.getElementById('g-150-m').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">B:特攻</span>';
         document.getElementById('g-200-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
         document.getElementById('g-200-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
@@ -609,13 +613,14 @@
         document.getElementById('g-950-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
         document.getElementById('g-950-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
 
-        document.getElementById('kg-100-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('kg-100-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('kg-200-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 特攻</span>';
-        document.getElementById('kg-250-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ ゾーン</span>';
-        document.getElementById('kg-250-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
-        document.getElementById('kg-450-n').innerHTML = isPenalty ? '<span class="mark-warn">△ ゾーン</span>' : '<span class="mark-go">〇 超高確</span>';
-        document.getElementById('kg-600-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        // カバネリの動的連動 (周期G数天井対応)
+        document.getElementById('kg-100-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
+        document.getElementById('kg-100-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
+        document.getElementById('kg-250-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 2周期</span>';
+        document.getElementById('kg-250-r').innerHTML = isPenalty ? '<span class="mark-warn">△ 慎重</span>' : '<span class="mark-go">〇 2周期</span>';
+        document.getElementById('kg-350-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
+        document.getElementById('kg-450-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 慎重</span>';
+        document.getElementById('kg-650-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
     }
 
     function updateUI() { 
@@ -688,7 +693,7 @@
         document.getElementById('result-area-h').innerHTML = res;
     }
 
-    // --- カバネリ 判定出力ロジック ---
+    // --- カバネリ 判定出力ロジック (海門決戦仕様) ---
     function executeKabaneriAnalysis() {
         const s = getKabaneriStats();
         let res = `<h3 style="color:var(--kabaneri);">📊 海門 最終戦略分析</h3>`;
@@ -710,8 +715,8 @@
             else if (s.kg <= 20) res += `<div class="alert alert-success">✨ 【ST後 高確】<br>20G間はカバネチャンス目高確です。必ずフォロー。${evDisp(s.ev)}</div>`;
             else if (s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【短縮天井 狙い】<br>596天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
             else if (!s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【通常天井 狙い】<br>996天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
-            else if (s.kg >= 200 && s.kg <= 250) res += `<div class="alert alert-info">⚡ 【250G ゾーン狙い】<br>高確移行による周期到達を狙います。${evDisp(s.ev)}</div>`;
-            else if (s.kg >= 400 && s.kg <= 450) res += `<div class="alert alert-info">⚡ 【450G 超高確狙い】<br>チャンス目1発で周期到達の激熱ゾーンです。${evDisp(s.ev)}</div>`;
+            else if (s.kg >= 100 && s.kg <= 150) res += `<div class="alert alert-info">⚡ 【1周期目 ゾーン狙い】<br>150Gの周期天井到達を狙います。${evDisp(s.ev)}</div>`;
+            else if (s.kg >= 250 && s.kg <= 300) res += `<div class="alert alert-info">⚡ 【2周期目 ゾーン狙い】<br>300Gの周期天井到達を狙います。${evDisp(s.ev)}</div>`;
             else {
                 res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${s.border}G</b>${evDisp(s.ev)}</div>`;
             }
