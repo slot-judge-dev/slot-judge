@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v9.4.0</title>
+    <title>Protocol ZERO v10.9.0 THE TRUE PERFECT</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -25,6 +25,9 @@
         .legal-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,12,16,0.98); padding: 15px; font-size: 0.65em; color: #484f58; text-align: center; border-top: 1px solid #30363d; z-index: 2000; pointer-events: none; }
         .live-wage { font-size: 2.4em; font-weight: bold; color: var(--success); text-align: center; margin: 10px 0; text-shadow: 0 0 20px rgba(63, 185, 80, 0.4); }
         .highlight-text { color: var(--danger); font-weight: bold; font-size: 1.1em; text-decoration: underline; }
+        .highlight-tsuranuki { color: var(--warning); font-weight: bold; font-size: 1.05em; text-decoration: underline; }
+        .clear-btn { background: transparent; color: #8b949e; border: 1px solid #30363d; padding: 10px; font-size: 0.8em; margin-top: 15px; box-shadow: none; cursor: pointer; width: 100%; }
+        .clear-btn:hover { background: rgba(248, 81, 73, 0.1); color: #ffa198; border-color: #f85149; }
     </style>
 </head>
 <body>
@@ -32,13 +35,13 @@
     <div class="sticky-header">
         <div class="tabs">
             <div class="tab active">👊 北斗の拳 転生2</div>
-            <div class="tab" onclick="alert('甲鉄城のカバネリ：v9.5 拡張アップデートにて解放')">🚂 カバネリ</div>
+            <div class="tab" onclick="alert('甲鉄城のカバネリ：本システムのロジックを完全応用し次回実装')">🚂 カバネリ</div>
         </div>
     </div>
 
     <div style="text-align: center; margin: 20px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v9.4.0 THE BEYOND</div>
+        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v10.9.0 PERFECT</div>
     </div>
 
     <div class="card">
@@ -53,7 +56,7 @@
             </select>
             <select id="invest_type" onchange="updateUI()">
                 <option value="medal">持ちメダル</option>
-                <option value="cash">現金投資（ギャップ補正適用）</option>
+                <option value="cash">現金投資（ギャップペナルティ完全適用）</option>
             </select>
         </div>
     </div>
@@ -72,7 +75,7 @@
             <label><input type="checkbox" id="is_reset" onchange="updateUI()"> 朝イチ（設定変更/リセット天井1280）</label>
             
             <label>前回AT終了後の状態</label>
-            <select id="last_status">
+            <select id="last_status" onchange="updateUI()">
                 <option value="none">通常</option>
                 <option value="densho">伝承モード示唆</option>
                 <option value="premium">★上位AT(天撃)後</option>
@@ -95,7 +98,7 @@
             <div class="card" style="border: 2px solid var(--warning);">
                 <div id="wage-display" class="live-wage">￥---</div>
                 
-                <label style="color:var(--warning);">💎 差枚数スライダー (+1000枚超でボーダー-150)</label>
+                <label style="color:var(--warning);">💎 差枚数スライダー (+1000枚超でボーダー優遇)</label>
                 <input type="range" id="diff_coins" min="-3000" max="3000" step="100" value="0" oninput="document.getElementById('diff_val').innerText = this.value + '枚'; updateUI();">
                 <div id="diff_val" style="text-align:right; font-size:0.9em; color:var(--accent); font-weight:bold;">0枚</div>
                 
@@ -103,12 +106,12 @@
                 <input type="range" id="border_adj" min="-100" max="100" step="10" value="0" oninput="document.getElementById('adj_val').innerText = this.value + 'あべし'; updateUI();">
                 <div id="adj_val" style="text-align:right; font-size:0.9em; color:var(--accent); font-weight:bold;">0あべし</div>
                 
-                <label style="color:var(--warning);">🤖 AI Bro コンサル (現場の違和感分析)</label>
-                <select id="ai_consult">
+                <label style="color:var(--warning);">🤖 AI Bro コンサル (全変数が計算式に完全連動)</label>
+                <select id="ai_consult" onchange="updateUI()">
                     <option value="none">選択なし</option>
                     <option value="weak">ざわざわのみ（弱前兆）</option>
                     <option value="strong">天命の刻移行（強前兆）</option>
-                    <option value="char">特定キャラの頻出</option>
+                    <option value="char">特定キャラの頻出（通常B以上示唆）</option>
                     <option value="rare">レア役直後（中チェ等）</option>
                 </select>
 
@@ -130,6 +133,7 @@
             </div>
             <button onclick="saveProfit()">収支データを保存する</button>
             <div id="history-list" style="margin-top:15px; font-size:0.85em; max-height:250px; overflow-y:auto;"></div>
+            <button class="clear-btn" onclick="clearHistory()">🚨 全履歴データを完全に消去する</button>
         </div>
     </div>
 
@@ -138,19 +142,21 @@
             <h3>🔍 精密設定推測プロトコル</h3>
             <label>総回転数 (G) / 初当たり(AT)回数</label>
             <div style="display:flex;gap:8px;">
-                <input type="number" id="total_rot" placeholder="総回転数">
-                <input type="number" id="at_count" placeholder="AT初当回数">
+                <input type="number" id="total_rot" placeholder="総回転数" oninput="updateUI(); executeSettingGuess();">
+                <input type="number" id="at_count" placeholder="AT初当回数" oninput="updateUI(); executeSettingGuess();">
             </div>
-            <label>サミートロフィー確認状況</label>
-            <select id="trophy">
+            <label>サミートロフィー確認状況 (メイン判定に連動)</label>
+            <select id="trophy" onchange="document.getElementById('hidden_trophy').value = this.value; updateUI(); executeSettingGuess();">
                 <option value="none">示唆なし</option>
-                <option value="gold">金以上確認</option>
-                <option value="rainbow">虹/キリン確認</option>
+                <option value="gold">金以上確認 (設定4-5確定)</option>
+                <option value="rainbow">虹/キリン確認 (設定6確定)</option>
             </select>
             <button onclick="executeSettingGuess()" style="background:var(--success);">AI推測プロトコルを実行</button>
             <div id="setting-result"></div>
         </div>
     </div>
+
+    <input type="hidden" id="hidden_trophy" value="none">
 
     <div class="legal-footer">
         ※本アプリは独自解析データに基づく期待値シミュレーターであり、収益を完全に保証するものではありません。投資判断は自己責任でお願いします。法的リスク回避：遊技機メーカー様・版権元様とは一切関係ありません。© 2026 Protocol ZERO
@@ -162,6 +168,7 @@
         renderHistory(); 
         document.getElementById('vip_memo').value = localStorage.getItem('zero_memo') || ""; 
         updateUI(); 
+        executeSettingGuess();
     };
 
     function checkVIP() { 
@@ -183,58 +190,126 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // --- 真・完全統合ロジック：一切の漏れ・簡略化・ハードコードを排除 ---
+    // --- THE TRUE PERFECT：全ての「丸め込み」と「先祖返り」を完全に破壊した絶対数式 ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
         const rate = document.getElementById('rate').value;
         const mode = document.getElementById('mode_hint').value;
+        const lastSt = document.getElementById('last_status').value;
         const time = parseInt(document.getElementById('time_slider').value);
         const reset = document.getElementById('is_reset').checked;
         const diff = isVip ? parseInt(document.getElementById('diff_coins').value) : 0;
         const adj = isVip ? parseInt(document.getElementById('border_adj').value) : 0;
+        const trophy = document.getElementById('hidden_trophy').value;
+        const aiConsult = isVip ? document.getElementById('ai_consult').value : "none";
 
-        // 1. ライブ時給算出 (Python v7.5.3 準拠 + 閉店欠損非線形補正)
-        let baseWage = 800;
-        if (abe >= 1100 || mode === 'heaven') baseWage = 5200;
-        else if (mode === 'mode_c' || mode === 'shutter') baseWage = 3900;
-        else if (reset && abe >= 400) baseWage = 3300;
-        else if (abe > 700) baseWage = 3100;
-        else if (abe > 400) baseWage = 1600;
+        // 状態異常の「賞味期限」チェック (128あべしを超えたら無効化)
+        const isValidPremium = (lastSt === 'premium' && abe <= 128);
+        const isValidTsuranuki = (isVip && diff >= 1000 && abe <= 128);
+
+        const t_rot = parseFloat(document.getElementById('total_rot').value) || 0;
+        const a_cnt = parseFloat(document.getElementById('at_count').value) || 0;
+        const isEnoughSample = (t_rot >= 2000);
+        let realProb = (t_rot > 0 && a_cnt > 0) ? Math.floor(t_rot / a_cnt) : 999;
         
-        // 2. 基本期待値 (漏れていた「通常モードC」等、全条件をMECE網羅)
-        let baseEV = -600;
-        if (abe >= 1473) baseEV = 6500;
-        else if (abe >= 1100) baseEV = 4300;
-        else if (mode === 'heaven') baseEV = 650;
-        else if (mode === 'shutter' && abe >= 150) baseEV = 1400;
-        else if (reset && abe >= 700) baseEV = 1900;
-        else if (reset && mode === 'mode_c' && abe >= 350) baseEV = 1100;
-        else if (mode === 'mode_c' && abe >= 350) baseEV = 1200; // 欠落修正：通常時のモードC固有期待値
-        else if (abe >= 750) baseEV = 1600;
-        else if (abe >= 480) baseEV = 1150;
-        else if (abe >= 200) baseEV = 900;
+        let isHighSettingProb = (isEnoughSample && realProb <= 245); 
+        let isMidSettingProb = (!isHighSettingProb && isEnoughSample && realProb <= 275); 
 
-        // 3. 環境ペナルティ (閉店欠損 ＋ 現金投資ギャップ)
+        // 欠陥修正：最大天井の動的逆算 (キャラ頻出をシャッターから完全に分離)
+        let maxCeiling = 1536; 
+        if (mode === 'heaven') maxCeiling = 128;
+        else if (mode === 'mode_c') maxCeiling = 576;
+        else if (mode === 'shutter') maxCeiling = 896; // シャッターのみ天井短縮確定
+        else if (reset) maxCeiling = 1280;
+        let remainCeiling = Math.max(0, maxCeiling - abe);
+
+        // 1. ライブ時給算出 (モード計算からキャラ頻出を分離)
+        let evAbe = (abe >= 1473) ? 6500 : (abe >= 1100) ? 4300 : (abe >= 750) ? 1600 : (abe >= 480) ? 1150 : (abe >= 200 && abe <= 256) ? 900 : -600;
+        let wageAbe = (abe >= 1100) ? 5500 : (abe > 700) ? 3100 : (abe > 400) ? 1600 : 800;
+
+        let evReset = reset ? ((abe >= 700) ? 1900 : (mode === 'mode_c' && abe >= 350) ? 1350 : (abe >= 450 && abe <= 576) ? 800 : (abe >= 200 && abe <= 256) ? 400 : -600) : -600;
+        let wageReset = reset ? ((abe >= 400) ? 3300 : 800) : 800;
+
+        // 欠陥修正：シャッター（1400円）とキャラ頻出の期待値を完全に分離
+        let evMode = (mode === 'heaven') ? 650 : (mode === 'shutter' && abe >= 150) ? 1400 : (mode === 'mode_c' && abe >= 350) ? 1200 : -600;
+        let wageMode = (mode === 'heaven') ? 5500 : (mode === 'mode_c' || mode === 'shutter') ? 3900 : 800;
+
+        let evState = isValidPremium ? 2500 : (lastSt === 'densho') ? 1500 : -600;
+        let wageState = isValidPremium ? 5500 : (lastSt === 'densho') ? 4000 : 800;
+
+        // 独立加算要素 (キャラ頻出はここで純粋なボーナスとしてのみ機能する)
+        let bonusEV = 0; let bonusWage = 0;
+        if (aiConsult === 'strong' || aiConsult === 'rare') { bonusEV += 2500; bonusWage += 3000; }
+        else if (aiConsult === 'weak') { bonusEV -= 500; }
+        else if (aiConsult === 'char') { bonusEV += 300; bonusWage += 500; } 
+
+        if (isValidTsuranuki) { bonusEV += 1000; bonusWage += 1000; }
+
+        let baseEV = Math.max(evAbe, evReset, evMode, evState) + bonusEV;
+        let baseWage = Math.max(wageAbe, wageReset, wageMode, wageState) + bonusWage;
+
+        if (trophy === 'rainbow' || isHighSettingProb) { 
+            baseWage = Math.max(baseWage, 8000); 
+            baseEV = Math.max(baseEV, 6500); 
+        } else if (trophy === 'gold' || isMidSettingProb) { 
+            baseWage = Math.max(baseWage, 5000); 
+            baseEV = Math.max(baseEV, 3000); 
+        }
+
+        // 3. ボーダー算出プロトコル
+        let baseBorder = 950; 
+        let isAbsoluteGo = false; 
+
+        if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb || isMidSettingProb) {
+            baseBorder = 0; isAbsoluteGo = true;
+        } else if (isValidPremium || lastSt === 'densho') { 
+            baseBorder = 0; isAbsoluteGo = true;
+        } else if (aiConsult === 'strong' || aiConsult === 'rare' || mode === 'heaven') {
+            baseBorder = 0; isAbsoluteGo = true;
+        } else if (mode === 'shutter') {
+            baseBorder = 150; 
+        } else if (mode === 'mode_c') {
+            baseBorder = 350; 
+        } else if (reset) {
+            baseBorder = 700; 
+        }
+        
+        if (aiConsult === 'char' && mode !== 'shutter' && !isAbsoluteGo) baseBorder = Math.max(0, baseBorder - 100);
+
+        // 4. 環境ペナルティ
         if (time >= 18) {
             let hourPenalty = (time - 17);
             baseWage -= (hourPenalty * 400) + (Math.pow(hourPenalty, 2) * 20);
+            baseEV -= (hourPenalty * 300) + (Math.pow(hourPenalty, 2) * 80); 
+            
+            if (!isAbsoluteGo) {
+                baseBorder += 100; 
+                if (time >= 21) baseBorder += 100; 
+            }
+        }
+
+        let isTimeOver = false;
+        if (time >= 22) {
+            baseEV = -2000; 
+            baseWage = 0;
+            isTimeOver = true;
+            baseBorder = 9999; 
+            isAbsoluteGo = false; 
         }
         
         if (inv === 'cash' && rate !== '5.0') {
             baseWage -= 1400;
-            baseEV = Math.floor(baseEV * 0.62); // 換金ギャップによる期待値の物理的低下
+            if (baseEV > 0) baseEV = Math.floor(baseEV * 0.65); 
+            if (!isAbsoluteGo) baseBorder += 150; 
+        }
+        
+        if (isValidTsuranuki && !isAbsoluteGo) {
+            baseBorder = Math.max(0, baseBorder - 150); 
         }
 
-        // 4. ボーダー算出プロトコル
-        let baseBorder = 950;
-        if (mode === 'mode_c') baseBorder = 350;
-        else if (reset) baseBorder = 700;
-        
-        if (time >= 18) baseBorder += 120;
-        if (time >= 21) baseBorder += 280;
-        if (isVip && diff >= 1000) baseBorder -= 150;
-        if (inv === 'cash' && rate !== '5.0') baseBorder += 150;
+        let finalBorder = isAbsoluteGo ? 0 : Math.max(0, baseBorder + adj);
+        if (isTimeOver) finalBorder = 9999;
 
         return { 
             abe: abe, 
@@ -243,7 +318,17 @@
             mode: mode, 
             time: time, 
             diff: diff, 
-            border: baseBorder + adj, 
+            trophy: trophy,
+            isHighSetting: isHighSettingProb,
+            isMidSetting: isMidSettingProb,
+            lastSt: lastSt,
+            isValidPremium: isValidPremium,
+            isValidTsuranuki: isValidTsuranuki,
+            reset: reset,
+            aiConsult: aiConsult,
+            isTimeOver: isTimeOver,
+            remainCeiling: remainCeiling, 
+            border: finalBorder, 
             wage: Math.max(0, baseWage), 
             ev: baseEV 
         };
@@ -257,90 +342,140 @@
 
     function executeAnalysis() {
         const s = getLogicStats();
-        const lastSt = document.getElementById('last_status').value;
-        const trophy = document.getElementById('trophy').value;
-        const aiConsult = isVip ? document.getElementById('ai_consult').value : "none";
-        const isTsuranuki = (isVip && s.diff >= 1000);
-
         let res = `<h3>📊 最終戦略分析報告</h3>`;
         
-        if (s.time >= 21) {
+        if (s.isTimeOver) {
+            res += `<div class="alert alert-error" style="background:#ff4b4b; color:white;">🚨 【致命的警告】22時を過ぎています。いかなるお宝台でも取り切れません。直ちに帰宅してください。</div>`;
+            document.getElementById('result-area').innerHTML = res;
+            return; 
+        } else if (s.time >= 21) {
             res += `<div class="alert alert-error">🚨 【極限警告】閉店欠損リスクが最高潮です。即時撤収を強く推奨します。</div>`;
         }
 
-        const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:var(--success);">💰期待値: ￥${val}前後</span>`;
+        const evColor = s.ev > 0 ? "var(--success)" : "var(--danger)";
+        const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:${evColor};">💰期待値: ￥${val}前後</span><br><span style="font-size:0.85em; color:#8b949e;">🎯最大天井まで残り: <b>${s.remainCeiling}</b> あべし</span>`;
 
-        // 期待値・判定マトリクス (MECEの徹底、ハードコードの完全排除、全条件出力)
+        // --- 判定マトリクス (キャラ頻出の表示バグを完全に修正) ---
         if (s.abe >= 1100) {
             res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値が極限まで高まっています。${evDisp(s.ev)}<br><span style="font-size:1.2em; text-decoration:underline;">🚨 当選まで絶対にヤメないでください。</span></div>`;
         } 
-        else if (trophy === 'rainbow') {
-            let trophyEV = (s.inv === 'cash' && s.rate !== '5.0') ? Math.floor(6500 * 0.62) : 6500;
-            res += `<div class="alert alert-success">🏆 RAINBOW DETECTED!!<br>設定5・6が確定しました。全ツッパを推奨します。${evDisp(trophyEV)}</div>`;
-        } 
+        else if (s.trophy === 'rainbow') {
+            res += `<div class="alert alert-success">🏆 虹トロフィー出現!!<br>設定6が【確定】しました。閉店時間まで全ツッパを強く推奨します。${evDisp(s.ev)}</div>`;
+        }
+        else if (s.isHighSetting) {
+            res += `<div class="alert alert-success">📈 優秀台データ検出!!<br>初当たり確率から設定6が【濃厚】です。全ツッパを推奨します。${evDisp(s.ev)}</div>`;
+        }
+        else if (s.trophy === 'gold') {
+            res += `<div class="alert alert-success">🏅 金トロフィー出現!!<br>設定4-5が【確定】しました。ボーダー不問で特攻してください。${evDisp(s.ev)}</div>`;
+        }
+        else if (s.isMidSetting) {
+            res += `<div class="alert alert-success">📈 高設定挙動データ検出!!<br>設定4-5が【濃厚】です。積極的に攻めてください。${evDisp(s.ev)}</div>`;
+        }
+        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') {
+            res += `<div class="alert alert-success">🔥 【前兆特攻】<br>本前兆または激アツ状態です。即座に確保してください。${evDisp(s.ev)}</div>`;
+        }
         else if (s.abe >= 1473) {
             res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵が確定しています。${evDisp(s.ev)}</div>`;
         } 
-        else if (isTsuranuki && s.abe >= 100) {
-            let tsuranukiEV = (s.inv === 'cash' && s.rate !== '5.0') ? Math.floor(1500 * 0.62) : 1500;
-            res += `<div class="alert alert-success">💎 【VIP指示：特攻】差枚プラス恩恵圏内<br>有利区間リセットの恩恵が強いため、128あべしまでフォロー必須です。${evDisp(tsuranukiEV)}</div>`;
+        else if (s.isValidPremium) { 
+            res += `<div class="alert alert-success">🔥 【上位AT(天撃)後・特攻】<br>天国期待度が極めて高い状態です。128まで全ツッパ。${evDisp(s.ev)}</div>`;
+        }
+        else if (s.lastSt === 'densho') {
+            res += `<div class="alert alert-success">🔥 【伝承ループ中・特攻】<br>天破の刻ループによる期待値の塊です。${evDisp(s.ev)}</div>`;
+        }
+        else if (s.isValidTsuranuki) { 
+            res += `<div class="alert alert-success">💎 【VIP指示：特攻】差枚プラス恩恵圏内<br>有利区間リセットの恩恵が強いため、128あべしまでフォロー必須です。${evDisp(s.ev)}</div>`;
         } 
         else if (s.mode === 'heaven') {
             res += `<div class="alert alert-success">✨ 【天国濃厚】<br>128あべし以内の当選が濃厚です。${evDisp(s.ev)}</div>`;
         } 
-        else if (s.mode === 'shutter' && s.abe >= 150) {
-            res += `<div class="alert alert-success">🔥 【通常B以上濃厚】<br>896天井をターゲットに特攻してください。${evDisp(s.ev)}</div>`;
-        } 
         else if (s.abe >= s.border) {
-            let borderEV = (s.ev > 2000) ? s.ev : ((s.inv === 'cash' && s.rate !== '5.0') ? Math.floor(2200 * 0.62) : 2200);
-            res += `<div class="alert alert-success">🔥 【判定：GO】ボーダーライン突破<br>十分な期待値があります。特攻してください。${evDisp(borderEV)}</div>`;
+            // 欠陥修正：キャラ頻出(char)がシャッターの判定文をハイジャックするバグを排除
+            if (s.mode === 'shutter') {
+                res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】<br>条件をクリアしました。896天井をターゲットに特攻してください。${evDisp(s.ev)}</div>`;
+            } else if (s.reset && s.mode === 'mode_c') {
+                res += `<div class="alert alert-success">🔥 【リセット×通常C濃厚：特攻GO】<br>朝イチ恩恵とモードCが重なる極上台です。576天井ターゲット。${evDisp(s.ev)}</div>`;
+            } else if (s.mode === 'mode_c') {
+                res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】<br>条件をクリアしました。576天井ターゲット。${evDisp(s.ev)}</div>`;
+            } else if (s.reset) {
+                res += `<div class="alert alert-success">🔥 【リセット天井狙い：特攻GO】<br>条件をクリアしました。1280天井ターゲット。${evDisp(s.ev)}</div>`;
+            } else {
+                res += `<div class="alert alert-success">🔥 【判定：GO】ボーダーライン突破<br>十分な期待値があります。特攻してください。${evDisp(s.ev)}</div>`;
+            }
         } 
-        else if (s.abe >= 750 && s.abe <= 896) {
-            res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常B狙い(896天井ターゲット)${evDisp(s.ev)}</div>`;
-        } 
-        else if (s.mode === 'mode_c' && s.abe >= 350) { // 欠落修正：Cモード時の個別特攻
-            res += `<div class="alert alert-success">🔥 【通常C濃厚：GO】<br>350あべしから期待値プラスです。576天井ターゲット。${evDisp(s.ev)}</div>`;
-        }
-        else if (s.abe >= 480 && s.abe <= 576) {
-            res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常C狙い(576天井ターゲット)${evDisp(s.ev)}</div>`;
-        } 
-        else if (s.abe >= 200 && s.abe <= 256) {
-            res += `<div class="alert alert-info">⚡ 【ゾーン狙い】256ゾーン狙い${evDisp(s.ev)}</div>`;
+        else if (s.ev > 0) {
+            if (s.abe >= 750 && s.abe <= 896) {
+                res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常B狙い(896天井ターゲット)${evDisp(s.ev)}</div>`;
+            } 
+            else if (s.reset && s.abe >= 450 && s.abe <= 576) {
+                res += `<div class="alert alert-info">⚡ 【リセット特化】500ゾーン狙い${evDisp(s.ev)}</div>`;
+            }
+            else if (s.reset && s.abe >= 200 && s.abe <= 256) {
+                res += `<div class="alert alert-info">⚡ 【リセット特化】256ゾーン狙い${evDisp(s.ev)}</div>`;
+            }
+            else if (s.abe >= 480 && s.abe <= 576) {
+                res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常C狙い(576天井ターゲット)${evDisp(s.ev)}</div>`;
+            } 
+            else if (s.abe >= 200 && s.abe <= 256) {
+                res += `<div class="alert alert-info">⚡ 【ゾーン狙い】256ゾーン狙い${evDisp(s.ev)}</div>`;
+            }
+            else {
+                // 欠陥修正：キャラ頻出(char)がシャッターの待機目安(150)をハイジャックするバグを排除
+                let nextTarget = s.border; 
+                if (s.mode === 'mode_c' && s.border > 350) nextTarget = Math.min(s.border, 350); 
+                else if (s.mode === 'shutter' && s.border > 150) nextTarget = Math.min(s.border, 150);
+                else if (s.abe < 100) nextTarget = 100;
+                else if (s.abe < 200) nextTarget = 200;
+                else if (s.reset && s.abe < 450) nextTarget = 450;
+                else if (!s.reset && s.abe < 480) nextTarget = 480;
+                else if (s.abe < 750) nextTarget = 750;
+
+                res += `<div class="alert alert-error">❄️ 【判定：撤収】<br>現状の投資環境では期待値がマイナス、またはリスクが高すぎます。<br>🎯 待機目安: <b>${nextTarget}あべし</b>${evDisp(s.ev)}</div>`;
+            }
         } 
         else {
-            let nextTarget = s.abe < 100 ? "100" : (s.abe < 150 && s.mode==='shutter' ? "150" : (s.abe < 200 ? "200" : (s.abe < 350 && s.mode==='mode_c' ? "350" : (s.abe < 480 ? "480" : (s.abe < 750 ? "750" : s.border)))));
-            res += `<div class="alert alert-error">❄️ 【判定：撤収】<br>現状では期待値がマイナスです。投資を控え、次の狙い目まで待機してください。<br>🎯 待機目安: <b>${nextTarget}あべし</b></div>`;
+            let nextTarget = s.border; 
+            if (s.mode === 'mode_c' && s.border > 350) nextTarget = Math.min(s.border, 350); 
+            else if (s.mode === 'shutter' && s.border > 150) nextTarget = Math.min(s.border, 150);
+            else if (s.abe < 100) nextTarget = 100;
+            else if (s.abe < 200) nextTarget = 200;
+            else if (s.reset && s.abe < 450) nextTarget = 450;
+            else if (!s.reset && s.abe < 480) nextTarget = 480;
+            else if (s.abe < 750) nextTarget = 750;
+
+            res += `<div class="alert alert-error">❄️ 【判定：撤収】<br>現状の投資環境では期待値がマイナス、またはリスクが高すぎます。<br>🎯 待機目安: <b>${nextTarget}あべし</b>${evDisp(s.ev)}</div>`;
         }
 
-        // --- 聖域：ヤメ時4分岐プロトコル (優先順位の完全固定と表現の強化) ---
+        // --- 聖域：ヤメ時4分岐プロトコル ---
         let yameMsg = "";
         if (s.abe >= 1100) {
             yameMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護：全ての条件を無視した強制拘束）</span>";
-        } else if (lastSt === 'premium') {
+        } else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') {
+            yameMsg = "<span class='highlight-text'>本前兆・激アツ状態です。絶対に席を立たないでください。</span>";
+        } else if (s.isValidPremium) { 
             yameMsg = "①【上位AT(天撃)後】128あべしまで天国当選率が大幅にUPしています。絶対にヤメてはいけません。";
-        } else if (lastSt === 'densho') {
+        } else if (s.lastSt === 'densho') {
             yameMsg = "②【伝承モード示唆】天破の刻がループする限り続行してください。ループ抜け確認後にヤメ。";
-        } else if (isTsuranuki) {
-            yameMsg = "③【VIP差枚プラス】有利区間リセット恩恵が近接しています。128あべしまでヤメ厳禁です。";
+        } else if (s.isValidTsuranuki) { 
+            yameMsg = "③<span class='highlight-tsuranuki'>【VIP差枚プラス】有利区間リセット恩恵が近接しています。128あべしまでヤメ厳禁です。</span>";
         } else {
             yameMsg = "④【通常】AT終了後、高確・前兆がないことを確認して、1あべしで即ヤメしてください。";
         }
         res += `<div class="alert alert-warning">🛑 ヤメ時ナビゲーション：<br>${yameMsg}</div>`;
 
-        // --- 欠落修正：AIコンサル（現場の違和感分析）の完全復旧 ---
-        if (aiConsult !== "none") {
+        // --- AIコンサル ---
+        if (s.aiConsult !== "none") {
             let aiAdvice = "";
-            if (aiConsult === "weak") aiAdvice = "フェイク前兆の可能性が高いです。規定あべし到達後の発展ハズレで即ヤメを推奨します。";
-            else if (aiConsult === "strong") aiAdvice = "本前兆期待度が大幅にアップしています。演出失敗後も復活や即引き戻しに備え様子を見てください。";
-            else if (aiConsult === "char") aiAdvice = "通常B以上の滞在を示唆しています。次回ゾーンまで追うか、現在あべし数と相談してください。";
-            else if (aiConsult === "rare") aiAdvice = "絶対にヤメてはいけません。32あべし間は完全フォローし、天破の刻やAT直撃を確認してください。";
+            if (s.aiConsult === "weak") aiAdvice = "フェイク前兆の可能性が高いです。規定あべし到達後の発展ハズレで即ヤメを推奨します。";
+            else if (s.aiConsult === "strong") aiAdvice = "本前兆期待度が大幅にアップしています。演出失敗後も復活や即引き戻しに備え様子を見てください。";
+            else if (s.aiConsult === "char") aiAdvice = "通常B以上の滞在を示唆しています。次回ゾーンまで追うか、現在あべし数と相談してください。";
+            else if (s.aiConsult === "rare") aiAdvice = "32あべし間は完全フォローし、天破の刻やAT直撃を確認してください。";
             res += `<div class="alert alert-info">🤖 AI Bro コンサル：<br>💡 ${aiAdvice}</div>`;
         }
 
         document.getElementById('result-area').innerHTML = res;
     }
 
-    // 保存・履歴プロトコル (完全継承)
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
@@ -358,29 +493,45 @@
         document.getElementById('history-list').innerHTML = html || "履歴データはありません"; 
     }
 
-    // 精密設定推測プロトコル (プロの言語化の完全継承)
+    function clearHistory() {
+        if(confirm('🚨 全ての収支データを完全に消去します。よろしいですか？')) {
+            localStorage.removeItem('zero_h');
+            renderHistory();
+        }
+    }
+
     function executeSettingGuess() {
         const t = parseFloat(document.getElementById('total_rot').value);
         const a = parseFloat(document.getElementById('at_count').value);
-        if(!t||!a) return;
-        const p = Math.floor(t/a);
-        const trophy = document.getElementById('trophy').value;
-        let m = ""; let cls = "alert-info";
         
-        if(p <= 245 || trophy === 'rainbow') { 
-            m = "【設定6以上】の近似値です。全ツッパを強く推奨します。勝利は目前です。"; 
-            cls="alert-success"; 
-        } else if(p <= 275 || trophy === 'gold') { 
-            m = "【設定4-5】高設定濃厚の数値です。粘る価値が非常に高いです。"; 
-            cls="alert-success"; 
-        } else if(p <= 320) { 
-            m = "【設定3付近】中間設定の数値です。期待値を優先し、夜間は慎重な撤収判断を。"; 
-            cls="alert-warning"; 
-        } else { 
-            m = "【低設定濃厚】危険な数値です。期待値ボーダーを厳守し、深追いは避けてください。"; 
-            cls="alert-error"; 
+        let m = "データを入力してください。"; 
+        let cls = "alert-info";
+        let probDisplay = "---";
+
+        if(t > 0 && a > 0) {
+            const p = Math.floor(t/a);
+            probDisplay = `1/${p}`;
+            const trophy = document.getElementById('hidden_trophy').value;
+            
+            let sampleWarning = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※総回転2000G未満のため確率は参考値です（特攻は自己責任で）</span>" : "";
+            
+            if(p <= 245 || trophy === 'rainbow') { 
+                m = "【設定6以上】の近似値です。全ツッパを強く推奨します。勝利は目前です。"; 
+                cls="alert-success"; 
+            } else if(p <= 275 || trophy === 'gold') { 
+                m = "【設定4-5】高設定濃厚の数値です。粘る価値が非常に高いです。"; 
+                cls="alert-success"; 
+            } else if(p <= 320) { 
+                m = "【設定3付近】中間設定の数値です。期待値を優先し、夜間は慎重な撤収判断を。"; 
+                cls="alert-warning"; 
+            } else { 
+                m = "【低設定濃厚】危険な数値です。期待値ボーダーを厳守し、深追いは避けてください。"; 
+                cls="alert-error"; 
+            }
+            document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 初当たり確率: ${probDisplay}${sampleWarning}<br>🤖 AI診断: ${m}</div>`;
+        } else {
+            document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 初当たり確率: ${probDisplay}<br>🤖 AI診断: ${m}</div>`;
         }
-        document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 初当たり確率: 1/${p}<br>🤖 AI診断: ${m}</div>`;
     }
 </script>
 </body>
