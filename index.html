@@ -144,7 +144,7 @@
                 </select>
 
                 <label style="color:var(--warning); margin-top:10px;">💬 現場メモ (自動保存)</label>
-                <textarea id="vip_memo" oninput="saveMemo()" placeholder="台番号や詳細な違全面をメモ..."></textarea>
+                <textarea id="vip_memo" oninput="saveMemo()" placeholder="台番号や詳細な違和感をメモ..."></textarea>
             </div>
         </div>
 
@@ -380,7 +380,6 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // --- 完全保護：期待値算出ロジック ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -551,7 +550,7 @@
         else if (s.isValidPremium) yMsg = "①【上位AT後】128まで天国率大幅UP。絶対にヤメるな。";
         else if (s.lastSt === 'densho') yMsg = "②【伝承モード】ループ抜け確認まで続行。";
         else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚】有利リセット近接。128ヤメ厳禁。</span>";
-        else yMsg = "④【通常】高確・前兆なしを確認し、1あべし即ヤメ。";
+        else yMsg = "④【通常】高確・前兆なしを確認し、1あべしで即ヤメ。";
         res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
 
         if (s.aiConsult !== "none") {
@@ -565,7 +564,6 @@
         document.getElementById('result-area').innerHTML = res;
     }
 
-    // --- 完全保護：カレンダー表示ロジック ---
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
@@ -668,7 +666,6 @@
         }
     }
 
-    // --- 完全保護：デジタル小役カウンター＆設定推測ロジック ---
     function changeCounter(type, val) {
         if (type === 'suika') countSuika = Math.max(0, countSuika + val);
         if (type === 'wcherry') countWCherry = Math.max(0, countWCherry + val);
