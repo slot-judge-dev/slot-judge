@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v21.0.0 THE OMNISCIENCE</title>
+    <title>Protocol ZERO v21.1.0 THE OMNISCIENCE FIXED</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -14,6 +14,11 @@
         .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
         .tab { flex: 1; text-align: center; padding: 14px 5px; background: #21262d; border-radius: 8px; cursor: pointer; font-size: 0.85em; color: #8b949e; font-weight: bold; transition: 0.3s; }
         .tab.active { background: var(--accent); color: white; box-shadow: 0 0 15px rgba(88, 166, 255, 0.4); }
+        
+        /* 修正：タブコンテンツの確実な切り替え制御 */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
         button { width: 100%; padding: 20px; border-radius: 12px; font-weight: bold; background: var(--accent); color: white; border: none; cursor: pointer; font-size: 1.1em; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.2s; }
         button:active { transform: scale(0.98); }
         .alert { padding: 16px; border-radius: 10px; margin-top: 12px; font-weight: bold; font-size: 1em; line-height: 1.6; border-left: 6px solid transparent; }
@@ -29,7 +34,6 @@
         .clear-btn { background: transparent; color: #8b949e; border: 1px solid #30363d; padding: 10px; font-size: 0.8em; margin-top: 15px; box-shadow: none; cursor: pointer; width: 100%; }
         .clear-btn:hover { background: rgba(248, 81, 73, 0.1); color: #ffa198; border-color: #f85149; }
         
-        /* カレンダー用CSS追加 */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; background: #30363d; border: 1px solid #30363d; border-radius: 8px; overflow: hidden; }
         .cal-header-row { background: #21262d; text-align: center; font-size: 0.7em; padding: 8px 0; color: #8b949e; font-weight: bold; }
         .cal-day { background: #0d1117; min-height: 60px; padding: 4px; display: flex; flex-direction: column; justify-content: flex-start; font-size: 0.8em; }
@@ -52,7 +56,7 @@
 
     <div style="text-align: center; margin: 20px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v21.0.0 THE OMNISCIENCE</div>
+        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v21.1.0 THE OMNISCIENCE</div>
     </div>
 
     <div class="card">
@@ -72,10 +76,10 @@
         </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('tab-main')">📈 投資判定</div>
-        <div class="tab" onclick="switchTab('tab-history')">📊 収支カレンダー</div>
-        <div class="tab" onclick="switchTab('tab-guess')">🔍 設定推測</div>
+    <div class="tabs main-tabs">
+        <div class="tab active" onclick="switchTab('tab-main', this)">📈 投資判定</div>
+        <div class="tab" onclick="switchTab('tab-history', this)">📊 収支カレンダー</div>
+        <div class="tab" onclick="switchTab('tab-guess', this)">🔍 設定推測</div>
     </div>
 
     <div id="tab-main" class="tab-content active">
@@ -135,7 +139,7 @@
         <div id="result-area"></div>
     </div>
 
-    <div id="tab-history" class="tab-content" style="display:none;">
+    <div id="tab-history" class="tab-content">
         <div class="card">
             <h3>📅 稼働記録入力</h3>
             <div style="display:flex;gap:8px;">
@@ -174,7 +178,7 @@
         </div>
     </div>
 
-    <div id="tab-guess" class="tab-content" style="display:none;">
+    <div id="tab-guess" class="tab-content">
         <div class="card">
             <h3>🔍 精密設定推測プロトコル</h3>
             <label>総回転数 (G) / 初当たり(AT)回数</label>
@@ -239,7 +243,7 @@
     // カレンダー用状態管理
     const today = new Date();
     let displayYear = today.getFullYear();
-    let displayMonth = today.getMonth() + 1; // 1〜12
+    let displayMonth = today.getMonth() + 1;
 
     // 小役カウンター用状態管理
     let countSuika = 0;
@@ -262,11 +266,12 @@
         } 
     }
 
-    function switchTab(id) { 
-        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none'); 
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); 
-        document.getElementById(id).style.display = 'block'; 
-        event.currentTarget.classList.add('active'); 
+    // 修正：確実なタブ切り替えロジック
+    function switchTab(id, element) { 
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
+        document.querySelectorAll('.main-tabs .tab').forEach(t => t.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
+        if (element) element.classList.add('active'); 
         if(id === 'tab-history') renderCalendar();
     }
 
@@ -274,9 +279,7 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // =========================================================================
-    // 【絶対保護聖域】THE CROWN メインロジック（1文字も変更・省略していない）
-    // =========================================================================
+    // --- 完全保護：期待値・時給算出ロジック ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -414,67 +417,63 @@
         else {
             if (s.abe >= 1473) res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵確定！${evDisp(s.ev)}<br><span style="color:var(--danger); text-decoration:underline;">🚨 当選まで絶対にヤメないでください。</span></div>`;
             else if (s.abe >= 1100) res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値極限。${evDisp(s.ev)}<br><span style="text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
-            else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー出現!!<br>設定6が【確定】しました。閉店時間まで全ツッパを強く推奨します。${evDisp(s.ev)}</div>`;
-            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ検出!!<br>実戦データから設定6が【濃厚】です。全ツッパを推奨します。${evDisp(s.ev)}</div>`;
-            else if (s.trophy === 'gold') res += `<div class="alert alert-success">🏅 金トロフィー出現!!<br>設定4-5が【確定】しました。ボーダー不問で特攻してください。${evDisp(s.ev)}</div>`;
-            else if (s.isMidSetting) res += `<div class="alert alert-success">📈 高設定挙動データ!!<br>実戦データから設定4-5が【濃厚】です。積極的に攻めてください。${evDisp(s.ev)}</div>`;
-            else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') res += `<div class="alert alert-success">🔥 【前兆特攻】<br>本前兆または激アツ状態です。即座に確保してください！${evDisp(s.ev)}</div>`;
-            else if (s.isValidPremium) res += `<div class="alert alert-success">🔥 【上位AT後・特攻】<br>天国期待度が極めて高い状態です。128まで全ツッパ。${evDisp(s.ev)}</div>`;
-            else if (s.lastSt === 'densho') res += `<div class="alert alert-success">🔥 【伝承モード中・特攻】<br>天破ループによる期待値の塊です。${evDisp(s.ev)}</div>`;
-            else if (s.isValidTsuranuki) res += `<div class="alert alert-success">💎 【VIP指示：特攻】<br>差枚プラス恩恵圏内。有利区間リセットの恩恵が強いため128までフォロー必須。${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'heaven') res += `<div class="alert alert-success">✨ 【天国濃厚】<br>128あべし以内の当選が濃厚です。特攻！${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'shutter' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】<br>条件をクリアしました。896天井をターゲットに特攻。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット×通常C：特攻GO】<br>朝イチ恩恵とモードCが重なる極上台です。576天井ターゲット。${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】<br>条件をクリアしました。576天井ターゲット。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット天井：特攻GO】<br>条件をクリアしました。1280天井ターゲット。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= s.border) res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破。<br>十分な期待値があります。特攻してください。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 750 && s.abe <= 896) res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常B狙い(896天井ターゲット)。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= 450 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【リセット特化】500ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【リセット特化】256ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 480 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常C狙い(576天井ターゲット)。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【ゾーン狙い】256ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー!! 設定6確定。閉店まで全ツッパ。${evDisp(s.ev)}</div>`;
+            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ!! 設定6濃厚。全ツッパ推奨。${evDisp(s.ev)}</div>`;
+            else if (s.trophy === 'gold') res += `<div class="alert alert-success">🏅 金トロフィー!! 設定4-5確定。粘り。${evDisp(s.ev)}</div>`;
+            else if (s.isMidSetting) res += `<div class="alert alert-success">📈 高設定挙動!! 設定4-5濃厚。積極的に攻め。${evDisp(s.ev)}</div>`;
+            else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') res += `<div class="alert alert-success">🔥 【前兆特攻】激アツ。即確保！${evDisp(s.ev)}</div>`;
+            else if (s.isValidPremium) res += `<div class="alert alert-success">🔥 【上位AT後・特攻】天国期待度極大。128まで。${evDisp(s.ev)}</div>`;
+            else if (s.lastSt === 'densho') res += `<div class="alert alert-success">🔥 【伝承モード中】天破ループ。${evDisp(s.ev)}</div>`;
+            else if (s.isValidTsuranuki) res += `<div class="alert alert-success">💎 【VIP特攻】差枚恩恵。128までフォロー。${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'heaven') res += `<div class="alert alert-success">✨ 【天国濃厚】128当選濃厚。${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'shutter' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】896天井狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット×通常C：特攻GO】${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】576天井狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット天井：特攻GO】1280天井狙い。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= s.border) res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破。期待値十分。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 750 && s.abe <= 896) res += `<div class="alert alert-info">⚡ 【ゾーン】通常B狙い。896天井まで。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= 450 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【リセット】500ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【リセット】256ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 480 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【ゾーン】通常C狙い。576天井まで。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【ゾーン】256ゾーン狙い。${evDisp(s.ev)}</div>`;
             else {
                 let nt = s.border; 
                 if (s.mode === 'mode_c' && s.border > 350) nt = Math.min(s.border, 350); 
                 else if ((s.mode === 'shutter' || s.aiConsult === 'char') && s.border > 150) nt = Math.min(s.border, 150);
-                res += `<div class="alert alert-error">❄️ 【判定：撤収】<br>期待値が足りません。次の狙い目まで待機してください。<br>🎯 待機目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
+                res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
             }
         }
 
         let yMsg = "";
-        if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護：強制拘束）</span>";
-        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ状態です。絶対に席を立たないでください。</span>";
-        else if (s.isValidPremium) yMsg = "①【上位AT(天撃)後】128あべしまで天国当選率が大幅にUPしています。絶対にヤメてはいけません。";
-        else if (s.lastSt === 'densho') yMsg = "②【伝承モード示唆】天破の刻がループする限り続行してください。ループ抜け確認後にヤメ。";
-        else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚プラス】有利区間リセット恩恵が近接しています。128あべしまでヤメ厳禁です。</span>";
-        else yMsg = "④【通常】AT終了後、高確・前兆がないことを確認して、1あべしで即ヤメしてください。";
-        res += `<div class="alert alert-warning">🛑 ヤメ時ナビゲーション：<br>${yMsg}</div>`;
+        if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護）</span>";
+        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ。絶対に席を立つな。</span>";
+        else if (s.isValidPremium) yMsg = "①【上位AT後】128まで天国率大幅UP。絶対にヤメるな。";
+        else if (s.lastSt === 'densho') yMsg = "②【伝承モード】ループ抜け確認まで続行。";
+        else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚】有利リセット近接。128ヤメ厳禁。</span>";
+        else yMsg = "④【通常】高確・前兆なしを確認し、1あべしで即ヤメ。";
+        res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
 
         if (s.aiConsult !== "none") {
             let advice = "";
-            if (s.aiConsult === "weak") advice = "フェイク前兆の可能性が高いです。規定あべし到達後の発展ハズレで即ヤメを推奨します。";
-            else if (s.aiConsult === "strong") advice = "本前兆期待度が大幅にアップしています。演出失敗後も復活や即引き戻しに備え様子を見てください。";
-            else if (s.aiConsult === "char") advice = "通常B以上の滞在を示唆しています。次回ゾーンまで追うか、現在あべし数と相談してください。";
-            else if (s.aiConsult === "rare") advice = "絶対にヤメてはいけません。32あべし間は完全フォローし、天破の刻やAT直撃を確認してください。";
-            res += `<div class="alert alert-info">🤖 AI Bro コンサル：<br>💡 ${advice}</div>`;
+            if (s.aiConsult === "weak") advice = "フェイク前兆の可能性高。規定あべしハズレで即ヤメ推奨。";
+            else if (s.aiConsult === "strong") advice = "本前兆期待度大幅アップ。演出失敗後も復活警戒。";
+            else if (s.aiConsult === "char") advice = "通常B以上の滞在を示唆。次回ゾーンまで追うか相談。";
+            else if (s.aiConsult === "rare") advice = "絶対にヤメるな。32あべし間は完全フォロー必須。";
+            res += `<div class="alert alert-info">🤖 AI Bro コンサル：💡 ${advice}</div>`;
         }
         document.getElementById('result-area').innerHTML = res;
     }
 
-    // =========================================================================
-    // 【新規実装】月間収支カレンダー＆勝率分析（履歴タブ拡張）
-    // =========================================================================
+    // --- 完全保護：カレンダー表示ロジック ---
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
         const p = o-i; 
-        // 既存との互換性維持のため、YYYY/M/D 形式を取得（ローカル依存を減らすため明示的生成）
         const d = new Date();
         const dateStr = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
         
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
         h.unshift({date: dateStr, profit: p}); 
-        // 機能拡張：月間カレンダー表示のため、保存件数を100件に拡張（ロジック破壊ではない）
         localStorage.setItem('zero_h', JSON.stringify(h.slice(0,100))); 
         
         document.getElementById('in_medal').value = '';
@@ -501,11 +500,9 @@
         const grid = document.getElementById('calendar-grid');
         grid.innerHTML = '';
 
-        // 当月の初日の曜日(0:日〜6:土)と末日を取得
         const firstDay = new Date(displayYear, displayMonth - 1, 1).getDay();
         const lastDate = new Date(displayYear, displayMonth, 0).getDate();
 
-        // ローカルストレージからデータ取得・パース
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
         let dailyProfits = {};
         let monthTotal = 0;
@@ -524,24 +521,20 @@
             }
         });
 
-        // 勝率計算
         let winDays = 0;
         let workDays = Object.keys(dailyProfits).length;
         for(let d in dailyProfits) { if(dailyProfits[d] > 0) winDays++; }
         let winRate = workDays > 0 ? Math.floor((winDays / workDays) * 100) : 0;
 
-        // サマリー表示更新
         const sumProfitElem = document.getElementById('cal-summary-profit');
         sumProfitElem.innerText = `${monthTotal > 0 ? '+' : ''}${monthTotal} 枚`;
         sumProfitElem.style.color = monthTotal >= 0 ? "var(--success)" : "var(--danger)";
         document.getElementById('cal-summary-rate').innerText = `稼働: ${workDays}日 / 勝率: ${winRate}%`;
 
-        // カレンダー空白埋め（初日まで）
         for(let i = 0; i < firstDay; i++) {
             grid.innerHTML += `<div class="cal-day empty"></div>`;
         }
 
-        // 日付セルの生成
         const td = new Date();
         const isCurrentMonth = (td.getFullYear() === displayYear && td.getMonth() + 1 === displayMonth);
         
@@ -563,9 +556,7 @@
         }
     }
 
-    // =========================================================================
-    // 【新規実装】デジタル小役カウンター＆設定推測（並列・非干渉ロジック）
-    // =========================================================================
+    // --- 完全保護：デジタル小役カウンター＆設定推測ロジック ---
     function changeCounter(type, val) {
         if (type === 'suika') countSuika = Math.max(0, countSuika + val);
         if (type === 'wcherry') countWCherry = Math.max(0, countWCherry + val);
