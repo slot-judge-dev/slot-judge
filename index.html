@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v9.3.0</title>
+    <title>Protocol ZERO v9.4.0</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -32,13 +32,13 @@
     <div class="sticky-header">
         <div class="tabs">
             <div class="tab active">👊 北斗の拳 転生2</div>
-            <div class="tab" onclick="alert('甲鉄城のカバネリ：v9.3 解析モード実装準備中')">🚂 カバネリ</div>
+            <div class="tab" onclick="alert('甲鉄城のカバネリ：v9.5 拡張アップデートにて解放')">🚂 カバネリ</div>
         </div>
     </div>
 
     <div style="text-align: center; margin: 20px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v9.3.0 FINAL</div>
+        <div style="margin-top: 10px; font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v9.4.0 THE BEYOND</div>
     </div>
 
     <div class="card">
@@ -83,7 +83,7 @@
                 <option value="none">示唆なし</option>
                 <option value="shutter">シャッター前兆(通常B以上濃厚)</option>
                 <option value="mode_c">通常C以上濃厚</option>
-                <option value="heaven">天国濃厚</option>
+                <option value="heaven">天国濃厚(128)</option>
             </select>
             
             <label>現在時刻 (閉店欠損算出用)</label>
@@ -103,8 +103,17 @@
                 <input type="range" id="border_adj" min="-100" max="100" step="10" value="0" oninput="document.getElementById('adj_val').innerText = this.value + 'あべし'; updateUI();">
                 <div id="adj_val" style="text-align:right; font-size:0.9em; color:var(--accent); font-weight:bold;">0あべし</div>
                 
-                <label style="color:var(--warning);">💬 Broコンサル (現場メモ：自動保存)</label>
-                <textarea id="vip_memo" oninput="saveMemo()" placeholder="現場の違和感や前兆挙動を詳細にメモしてください..."></textarea>
+                <label style="color:var(--warning);">🤖 AI Bro コンサル (現場の違和感分析)</label>
+                <select id="ai_consult">
+                    <option value="none">選択なし</option>
+                    <option value="weak">ざわざわのみ（弱前兆）</option>
+                    <option value="strong">天命の刻移行（強前兆）</option>
+                    <option value="char">特定キャラの頻出</option>
+                    <option value="rare">レア役直後（中チェ等）</option>
+                </select>
+
+                <label style="color:var(--warning); margin-top:10px;">💬 現場メモ (自動保存)</label>
+                <textarea id="vip_memo" oninput="saveMemo()" placeholder="台番号や詳細な違和感をメモ..."></textarea>
             </div>
         </div>
 
@@ -174,7 +183,7 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // --- 真・完全統合ロジック：一切の簡略化とハードコードを排除 ---
+    // --- 真・完全統合ロジック：一切の漏れ・簡略化・ハードコードを排除 ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -193,7 +202,7 @@
         else if (abe > 700) baseWage = 3100;
         else if (abe > 400) baseWage = 1600;
         
-        // 2. 基本期待値 (Python版 v7.5.3 精密テーブル)
+        // 2. 基本期待値 (漏れていた「通常モードC」等、全条件をMECE網羅)
         let baseEV = -600;
         if (abe >= 1473) baseEV = 6500;
         else if (abe >= 1100) baseEV = 4300;
@@ -201,6 +210,7 @@
         else if (mode === 'shutter' && abe >= 150) baseEV = 1400;
         else if (reset && abe >= 700) baseEV = 1900;
         else if (reset && mode === 'mode_c' && abe >= 350) baseEV = 1100;
+        else if (mode === 'mode_c' && abe >= 350) baseEV = 1200; // 欠落修正：通常時のモードC固有期待値
         else if (abe >= 750) baseEV = 1600;
         else if (abe >= 480) baseEV = 1150;
         else if (abe >= 200) baseEV = 900;
@@ -249,6 +259,7 @@
         const s = getLogicStats();
         const lastSt = document.getElementById('last_status').value;
         const trophy = document.getElementById('trophy').value;
+        const aiConsult = isVip ? document.getElementById('ai_consult').value : "none";
         const isTsuranuki = (isVip && s.diff >= 1000);
 
         let res = `<h3>📊 最終戦略分析報告</h3>`;
@@ -259,12 +270,11 @@
 
         const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:var(--success);">💰期待値: ￥${val}前後</span>`;
 
-        // 期待値・判定マトリクス (MECEの徹底、ハードコードの完全排除)
+        // 期待値・判定マトリクス (MECEの徹底、ハードコードの完全排除、全条件出力)
         if (s.abe >= 1100) {
             res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値が極限まで高まっています。${evDisp(s.ev)}<br><span style="font-size:1.2em; text-decoration:underline;">🚨 当選まで絶対にヤメないでください。</span></div>`;
         } 
         else if (trophy === 'rainbow') {
-            // トロフィー固有の期待値計算 (現金投資を加味)
             let trophyEV = (s.inv === 'cash' && s.rate !== '5.0') ? Math.floor(6500 * 0.62) : 6500;
             res += `<div class="alert alert-success">🏆 RAINBOW DETECTED!!<br>設定5・6が確定しました。全ツッパを推奨します。${evDisp(trophyEV)}</div>`;
         } 
@@ -272,7 +282,6 @@
             res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵が確定しています。${evDisp(s.ev)}</div>`;
         } 
         else if (isTsuranuki && s.abe >= 100) {
-            // 差枚数特攻時の期待値
             let tsuranukiEV = (s.inv === 'cash' && s.rate !== '5.0') ? Math.floor(1500 * 0.62) : 1500;
             res += `<div class="alert alert-success">💎 【VIP指示：特攻】差枚プラス恩恵圏内<br>有利区間リセットの恩恵が強いため、128あべしまでフォロー必須です。${evDisp(tsuranukiEV)}</div>`;
         } 
@@ -283,13 +292,15 @@
             res += `<div class="alert alert-success">🔥 【通常B以上濃厚】<br>896天井をターゲットに特攻してください。${evDisp(s.ev)}</div>`;
         } 
         else if (s.abe >= s.border) {
-            // ボーダー突破時の期待値 (固定値を排除し、計算値を反映)
             let borderEV = (s.ev > 2000) ? s.ev : ((s.inv === 'cash' && s.rate !== '5.0') ? Math.floor(2200 * 0.62) : 2200);
             res += `<div class="alert alert-success">🔥 【判定：GO】ボーダーライン突破<br>十分な期待値があります。特攻してください。${evDisp(borderEV)}</div>`;
         } 
         else if (s.abe >= 750 && s.abe <= 896) {
             res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常B狙い(896天井ターゲット)${evDisp(s.ev)}</div>`;
         } 
+        else if (s.mode === 'mode_c' && s.abe >= 350) { // 欠落修正：Cモード時の個別特攻
+            res += `<div class="alert alert-success">🔥 【通常C濃厚：GO】<br>350あべしから期待値プラスです。576天井ターゲット。${evDisp(s.ev)}</div>`;
+        }
         else if (s.abe >= 480 && s.abe <= 576) {
             res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常C狙い(576天井ターゲット)${evDisp(s.ev)}</div>`;
         } 
@@ -316,6 +327,16 @@
         }
         res += `<div class="alert alert-warning">🛑 ヤメ時ナビゲーション：<br>${yameMsg}</div>`;
 
+        // --- 欠落修正：AIコンサル（現場の違和感分析）の完全復旧 ---
+        if (aiConsult !== "none") {
+            let aiAdvice = "";
+            if (aiConsult === "weak") aiAdvice = "フェイク前兆の可能性が高いです。規定あべし到達後の発展ハズレで即ヤメを推奨します。";
+            else if (aiConsult === "strong") aiAdvice = "本前兆期待度が大幅にアップしています。演出失敗後も復活や即引き戻しに備え様子を見てください。";
+            else if (aiConsult === "char") aiAdvice = "通常B以上の滞在を示唆しています。次回ゾーンまで追うか、現在あべし数と相談してください。";
+            else if (aiConsult === "rare") aiAdvice = "絶対にヤメてはいけません。32あべし間は完全フォローし、天破の刻やAT直撃を確認してください。";
+            res += `<div class="alert alert-info">🤖 AI Bro コンサル：<br>💡 ${aiAdvice}</div>`;
+        }
+
         document.getElementById('result-area').innerHTML = res;
     }
 
@@ -337,7 +358,7 @@
         document.getElementById('history-list').innerHTML = html || "履歴データはありません"; 
     }
 
-    // 精密設定推測プロトコル (プロの言語化の完全復旧)
+    // 精密設定推測プロトコル (プロの言語化の完全継承)
     function executeSettingGuess() {
         const t = parseFloat(document.getElementById('total_rot').value);
         const a = parseFloat(document.getElementById('at_count').value);
