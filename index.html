@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v25.2.0 THE TRUE DUAL CORE</title>
+    <title>Protocol ZERO v25.3.0 THE TRUE DUAL CORE</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --kabaneri: #ff7b72; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -77,7 +77,7 @@
     </div>
 
     <div style="text-align: center; margin: 15px 0;">
-        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.2.0</div>
+        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.3.0</div>
         <div id="title-accent" style="font-size: 0.7em; color: var(--accent); letter-spacing: 2px;">THE TRUE DUAL CORE</div>
     </div>
 
@@ -509,7 +509,7 @@
         };
     }
 
-    // --- 【修正版】カバネリ 海門決戦 周期依存ロジック ---
+    // --- カバネリ 海門決戦 周期依存ロジック ---
     function getKabaneriStats() {
         const kg = parseInt(document.getElementById('k_current_g').value) || 0;
         const kcycle = parseInt(document.getElementById('k_current_cycle').value) || 0;
@@ -539,21 +539,17 @@
 
         const EV_NONE = -600;
 
-        // 1. G数天井依存EV (短縮のベースを350G〜へ適正化)
         let evCeilN = (!isShort && kg >= 700) ? 3500 : (!isShort && kg >= 650) ? 1500 : EV_NONE;
         let wageCeilN = (!isShort && kg >= 700) ? 4500 : (!isShort && kg >= 650) ? 2500 : 800;
         let evCeilS = (isShort && kg >= 400) ? 2500 : (isShort && kg >= 350) ? 1000 : EV_NONE;
         let wageCeilS = (isShort && kg >= 400) ? 3500 : (isShort && kg >= 350) ? 2000 : 800;
 
-        // 2. 周期依存EV
         let evCycN = (!isShort && kcycle >= 5) ? 2500 : (!isShort && kcycle >= 4) ? 1200 : EV_NONE;
         let evCycS = (isShort && kcycle >= 3) ? 2000 : EV_NONE;
 
-        // 3. 周期G数天井ゾーン依存EV (海門決戦 専用150G/300G狙い)
         let evZ150 = (kg >= 100 && kg <= 150) ? 1000 : EV_NONE;
         let evZ300 = (kg >= 250 && kg <= 300) ? 1500 : EV_NONE;
 
-        // 4. 状態依存EV
         let evKage = isKage ? 4000 : EV_NONE;
         let evPts = (pts === '2') ? 2500 : (pts === '1') ? 800 : EV_NONE;
         let evPost = (kg <= 20) ? 1000 : EV_NONE;
@@ -579,7 +575,6 @@
         let baseBorder = isShort ? 350 : 650; 
         let isAbsoluteGo = false; 
         
-        // 修正：kg <= 20 も絶対特攻フラグに含む
         if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb) { baseBorder = 0; isAbsoluteGo = true; } 
         else if (isKage || pts === '2' || ai === 'super' || kg <= 20) { baseBorder = 0; isAbsoluteGo = true; } 
         
@@ -594,7 +589,7 @@
         };
     }
 
-    // --- UI連動ロジック (早見表修正版) ---
+    // --- UI連動ロジック ---
     function updateGuideTable() {
         const inv = document.getElementById('invest_type').value;
         const rate = document.getElementById('rate').value;
@@ -613,7 +608,7 @@
         document.getElementById('g-950-n').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
         document.getElementById('g-950-r').innerHTML = isPenalty ? '<span class="mark-go">〇 特攻</span>' : '<span class="mark-go">◎ 特攻</span>';
 
-        // カバネリの動的連動 (周期G数天井対応)
+        // カバネリの動的連動
         document.getElementById('kg-100-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
         document.getElementById('kg-100-r').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 1周期</span>';
         document.getElementById('kg-250-n').innerHTML = isPenalty ? '<span class="mark-ng">✕ スルー</span>' : '<span class="mark-warn">△ 2周期</span>';
@@ -693,7 +688,7 @@
         document.getElementById('result-area-h').innerHTML = res;
     }
 
-    // --- カバネリ 判定出力ロジック (海門決戦仕様) ---
+    // --- カバネリ 判定出力ロジック (海門決戦・解像度MAX版) ---
     function executeKabaneriAnalysis() {
         const s = getKabaneriStats();
         let res = `<h3 style="color:var(--kabaneri);">📊 海門 最終戦略分析</h3>`;
@@ -715,8 +710,8 @@
             else if (s.kg <= 20) res += `<div class="alert alert-success">✨ 【ST後 高確】<br>20G間はカバネチャンス目高確です。必ずフォロー。${evDisp(s.ev)}</div>`;
             else if (s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【短縮天井 狙い】<br>596天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
             else if (!s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【通常天井 狙い】<br>996天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
-            else if (s.kg >= 100 && s.kg <= 150) res += `<div class="alert alert-info">⚡ 【1周期目 ゾーン狙い】<br>150Gの周期天井到達を狙います。${evDisp(s.ev)}</div>`;
-            else if (s.kg >= 250 && s.kg <= 300) res += `<div class="alert alert-info">⚡ 【2周期目 ゾーン狙い】<br>300Gの周期天井到達を狙います。${evDisp(s.ev)}</div>`;
+            else if (s.kg >= 100 && s.kg <= 150) res += `<div class="alert alert-info">⚡ 【1周期目 ゾーン狙い】<br>150Gの周期到達（カバネ最終防衛区域）を狙います。${evDisp(s.ev)}</div>`;
+            else if (s.kg >= 250 && s.kg <= 300) res += `<div class="alert alert-info">⚡ 【2周期目 ゾーン狙い】<br>300Gの周期到達（カバネ最終防衛区域）を狙います。${evDisp(s.ev)}</div>`;
             else {
                 res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${s.border}G</b>${evDisp(s.ev)}</div>`;
             }
@@ -725,7 +720,7 @@
         let yMsg = "";
         if (s.isKage) yMsg = "<span class='highlight-text'>①【景之ST後】次回STまで絶対にヤメ厳禁（ループフォロー）</span>";
         else if (s.kg >= 400 && s.isShort) yMsg = "<span class='highlight-text'>②【短縮天井手前】596天井まで絶対にヤメ厳禁</span>";
-        else if (s.pts === '2' || s.ai === 'super') yMsg = "③【ポイント/前兆】現在走っている周期・前兆がハズレるまで続行。";
+        else if (s.pts === '2' || s.ai === 'super') yMsg = "③【ポイント/前兆】現在走っている周期・前兆（カバネ最終防衛区域）がハズレるまで続行。";
         else yMsg = "④【通常】ST終了後、20G間の高確を回し、ポイント発光がなければ即ヤメ。";
         res += `<div class="alert alert-warning" style="border-color:var(--kabaneri);">🛑 海門ヤメ時ナビ：<br>${yMsg}</div>`;
 
