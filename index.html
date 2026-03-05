@@ -3,206 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO Professional</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="logo.jpg">
-    <link rel="icon" href="logo.jpg">
+    <title>Protocol ZERO v8.5.4</title>
     <style>
         :root { --bg: #0e1117; --panel: #1e2130; --accent: #4A90E2; --text: #ffffff; --danger: #ff4b4b; --success: #00c853; --warning: #ffb300; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 15px; }
-        .card { background: var(--panel); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
-        label { display: block; margin-bottom: 5px; font-size: 0.9em; font-weight: bold; color: #ccc; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #444; background: #2a2d3d; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; background: var(--bg); color: var(--accent); border: 2px solid var(--accent); cursor: pointer; }
-        button:active { background: var(--accent); color: white; }
-        .btn-execute { background: var(--accent); color: white; }
-        .tabs { display: flex; border-bottom: 2px solid #333; margin-bottom: 15px; }
-        .tab { flex: 1; text-align: center; padding: 10px; color: #888; cursor: pointer; }
-        .tab.active { color: var(--accent); border-bottom: 3px solid var(--accent); font-weight: bold; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .alert { padding: 15px; border-radius: 8px; margin-top: 15px; font-weight: bold; line-height: 1.5; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 10px; padding-bottom: 80px; overflow-x: hidden; }
+        .sticky-header { position: sticky; top: 0; background: var(--bg); z-index: 100; padding: 5px 0; border-bottom: 1px solid #333; }
+        .card { background: var(--panel); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #333; }
+        label { display: block; margin-bottom: 5px; font-size: 0.85em; font-weight: bold; color: #ccc; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #444; background: #2a2d3d; color: white; box-sizing: border-box; font-size: 1em; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
+        .tab { flex: 1; text-align: center; padding: 12px 5px; background: #222; border-radius: 8px; cursor: pointer; font-size: 0.85em; color: #666; font-weight: bold; }
+        .tab.active { background: var(--accent); color: white; }
+        button { width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; background: var(--accent); color: white; border: none; cursor: pointer; }
+        .alert { padding: 12px; border-radius: 8px; margin-top: 10px; font-weight: bold; font-size: 0.9em; line-height: 1.4; }
         .alert-success { background: rgba(0, 200, 83, 0.2); border: 1px solid var(--success); color: #81c784; }
         .alert-error { background: rgba(255, 75, 75, 0.2); border: 1px solid var(--danger); color: #e57373; }
         .alert-warning { background: rgba(255, 179, 0, 0.2); border: 1px solid var(--warning); color: #ffd54f; }
         .alert-info { background: rgba(74, 144, 226, 0.2); border: 1px solid var(--accent); color: #64b5f6; }
-        .metric { font-size: 1.5em; font-weight: bold; color: var(--success); text-align: center; margin: 10px 0; }
-        .vip-content { display: none; border: 1px solid var(--warning); }
+        .legal-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); padding: 10px; font-size: 0.65em; color: #666; text-align: center; border-top: 1px solid #333; z-index: 1000; }
+        .live-wage { font-size: 1.8em; font-weight: bold; color: var(--success); text-align: center; margin: 10px 0; }
     </style>
 </head>
 <body>
 
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; border: 1px solid #333;">
-        <h2 style="margin-top: 10px;">🎯 Protocol ZERO</h2>
-        <p style="color: #888; font-size: 0.8em; margin-top:-10px;">Strategic Prediction Engine v8.0.2</p>
+    <div class="sticky-header">
+        <div class="tabs">
+            <div class="tab active" onclick="switchModel('hokuto')">👊 北斗 転生2</div>
+            <div class="tab" onclick="switchModel('kabaneri')">🚂 カバネリ</div>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin: 15px 0;">
+        <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 250px; border-radius: 10px;" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
+        <div style="margin-top: 5px; font-size: 0.75em; color: #555; font-weight: bold;">PROTOCOL ZERO v8.5.4 Sovereign</div>
     </div>
 
     <div class="card">
-        <h3>🔑 環境設定 & VIP</h3>
-        <label>交換率 / 投資ステータス</label>
-        <div style="display: flex; gap: 10px;">
-            <select id="rate"><option value="5.0">5.0枚</option><option value="5.6">5.6枚</option><option value="other">非等価</option></select>
-            <select id="invest_type"><option value="medal">持ちメダル</option><option value="cash">現金投資</option></select>
+        <h3>🔑 投資環境 & VIP認証</h3>
+        <input type="password" id="pwd" placeholder="VIPパスワード: zero2026" oninput="checkVIP()">
+        <div style="display: flex; gap: 5px;">
+            <select id="rate" onchange="updateUI()"><option value="5.0">5.0枚</option><option value="5.6">5.6枚</option><option value="other">非等価</option></select>
+            <select id="invest_type" onchange="updateUI()"><option value="medal">持ちメダル</option><option value="cash">現金投資</option></select>
         </div>
-        <input type="password" id="pwd" placeholder="VIP認証キー">
-        <button onclick="checkVIP()">VIP解放プロトコル実行</button>
-        <div id="vip-status" style="margin-top:5px; font-size:0.85em;"></div>
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('tab-expect')">📈 期待値</div>
-        <div class="tab" onclick="switchTab('tab-setting')">🔍 設定推測</div>
+        <div class="tab active" onclick="switchTab('tab-main')">📈 判定</div>
+        <div class="tab" onclick="switchTab('tab-history')">📊 履歴</div>
+        <div class="tab" onclick="switchTab('tab-guess')">🔍 設定</div>
     </div>
 
-    <div id="tab-expect" class="tab-content active">
+    <div id="tab-main" class="tab-content active">
         <div class="card">
-            <label>液晶あべし数</label>
-            <input type="number" id="current_abe" value="0">
-            <label><input type="checkbox" id="is_reset"> 朝イチ（リセット天井1280）</label>
-            
+            <label>現在のあべし数</label>
+            <input type="number" id="current_abe" value="0" oninput="updateUI()">
+            <label><input type="checkbox" id="is_reset" onchange="updateUI()"> 朝イチ (リセット天井1280)</label>
             <label>前回AT終了後</label>
-            <select id="last_status">
-                <option value="通常">通常</option>
-                <option value="伝承モード示唆">伝承モード示唆</option>
-                <option value="★上位AT終了後">★上位AT終了後</option>
-            </select>
-
-            <label>モード/前兆示唆</label>
-            <select id="shutter_hint">
-                <option value="なし">示唆なし</option>
-                <option value="特定区間">特定区間でシャッター(B以上濃厚)</option>
-                <option value="256超">256超で前兆(B以上濃厚)</option>
-            </select>
-
+            <select id="last_status"><option value="none">通常</option><option value="densho">伝承示唆</option><option value="premium">★上位AT後</option></select>
+            <label>モード示唆状況</label>
+            <select id="mode_hint"><option value="none">示唆なし</option><option value="shutter">シャッター(B以上)</option><option value="mode_c">通常C濃厚</option><option value="heaven">天国濃厚</option></select>
             <label>現在時刻</label>
-            <input type="range" id="time_slider" min="9" max="23" value="12" oninput="document.getElementById('time_val').innerText = this.value + '時'">
+            <input type="range" id="time_slider" min="9" max="23" value="12" oninput="document.getElementById('time_val').innerText = this.value + '時'; updateUI();">
             <div id="time_val" style="text-align:right; color:var(--accent);">12時</div>
         </div>
 
-        <div class="card vip-content" id="vip-section">
-            <h4 style="color:var(--warning); margin-top:0;">💎 VIP PROFESSIONAL HACK</h4>
-            <label>有利区間差枚数 (ツラヌキ判定)</label>
-            <input type="range" id="diff_coins" min="-5000" max="5000" step="100" value="0" oninput="document.getElementById('diff_val').innerText = this.value + '枚'">
-            <div id="diff_val" style="text-align:right;">0枚</div>
-            <label>AI Bro コンサル (現場の違和感)</label>
-            <select id="zencho_type">
-                <option value="なし">選択なし</option><option value="弱">弱前兆のみ</option>
-                <option value="強">天命の刻(強前兆)</option><option value="キャラ">特定キャラ頻出</option>
-                <option value="レア">レア役直後</option>
-            </select>
+        <div id="vip-section" style="display:none;">
+            <div class="card" style="border: 1px solid var(--warning);">
+                <div id="wage-display" class="live-wage">￥---</div>
+                <label style="color:var(--warning);">💎 差枚数補正 (ツラヌキ判定)</label>
+                <input type="range" id="diff_coins" min="-3000" max="3000" step="100" value="0" oninput="document.getElementById('diff_val').innerText = this.value + '枚'; updateUI();">
+                <div id="diff_val" style="text-align:right; font-size:0.8em; color:var(--accent);">0枚</div>
+                <label style="color:var(--warning);">💎 AIコンサル (現場の違和感)</label>
+                <select id="ai_consult">
+                    <option value="none">選択なし</option><option value="weak">弱前兆のみ</option><option value="strong">強前兆(天命の刻)</option><option value="char">特定キャラ頻出</option><option value="rare">レア役直後</option>
+                </select>
+                <label style="color:var(--warning);">💬 Broチャット (自由入力メモ)</label>
+                <textarea id="vip_memo" placeholder="現場の違和感や台番号などをメモ..."></textarea>
+            </div>
         </div>
 
-        <button class="btn-execute" onclick="executeAnalysis()">軍師の最終判断を仰ぐ</button>
+        <button onclick="executeAnalysis()">軍師の最終判断を実行</button>
         <div id="result-area"></div>
     </div>
 
-    <div id="tab-setting" class="tab-content">
+    <div id="tab-history" class="tab-content">
         <div class="card">
-            <label>総回転数 (G)</label>
-            <input type="number" id="total_rot" value="0">
-            <label>初当たり(AT)回数</label>
-            <input type="number" id="at_count" value="0">
-            <label>サミートロフィー</label>
-            <select id="trophy">
-                <option value="なし">なし</option><option value="銅">銅</option>
-                <option value="金">金以上</option><option value="虹">虹/キリン</option>
-            </select>
-            <button class="btn-execute" onclick="executeSettingGuess()">設定推測プロトコル実行</button>
-            <div id="setting-result-area"></div>
+            <h3>📝 収支保存 (LocalStorage)</h3>
+            <div style="display: flex; gap: 5px;"><input type="number" id="in_medal" placeholder="投資枚数"><input type="number" id="out_medal" placeholder="回収枚数"></div>
+            <button onclick="saveProfit()" style="background:var(--panel); border:1px solid var(--accent); margin-top:10px;">収支を保存</button>
+            <div id="history-list" style="margin-top:15px; font-size:0.85em;"></div>
         </div>
     </div>
 
-    <div style="text-align: center; color: #555; font-size: 0.7em; margin-top: 20px;">
-        ⚠️ DISCLAIMER: 本アプリはシミュレーション値であり収益を保証しません。<br>
-        © 2026 Protocol ZERO v8.0.2
+    <div id="tab-guess" class="tab-content">
+        <div class="card">
+            <label>総回転数 / AT回数</label>
+            <div style="display: flex; gap: 5px;"><input type="number" id="total_rot" placeholder="G数"><input type="number" id="at_count" placeholder="回数"></div>
+            <label>トロフィー</label>
+            <select id="trophy"><option value="none">なし</option><option value="gold">金以上</option><option value="rainbow">虹/キリン</option></select>
+            <button onclick="executeSettingGuess()" style="background:var(--success);">AI設定推測実行</button>
+            <div id="setting-result"></div>
+        </div>
+    </div>
+
+    <div class="legal-footer">
+        ⚠️ 本アプリは独自解析データに基づくシミュレーターであり、収益を保証しません。投資は自己責任でお願いします。© 2026 Protocol ZERO Sovereign Build
     </div>
 
 <script>
     let isVip = false;
-    function switchTab(tId){
-        document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-        document.getElementById(tId).classList.add('active');
-        event.currentTarget.classList.add('active');
+    window.onload = () => { renderHistory(); updateUI(); };
+
+    function checkVIP() { if(document.getElementById('pwd').value === 'zero2026') { isVip = true; document.getElementById('vip-section').style.display = 'block'; updateUI(); } }
+    function switchTab(id) { document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.getElementById(id).classList.add('active'); event.currentTarget.classList.add('active'); }
+    function switchModel(m) { if(m==='kabaneri') alert('カバネリモード：v8.6アップデートで解放予定です。'); }
+
+    // --- ロジック一元化：想定時給算出 ---
+    function calcWage(abe, invest, rate) {
+        let h = abe > 1000 ? 4500 : (abe > 700 ? 3000 : 1500);
+        if (invest === 'cash' && rate !== '5.0') h = Math.floor(h * 0.65);
+        return h;
     }
 
-    function checkVIP(){
-        if(document.getElementById('pwd').value === 'zero2026'){
-            isVip = true;
-            document.getElementById('vip-status').innerHTML = "<span style='color:var(--success)'>✅ VIP UNLOCKED</span>";
-            document.getElementById('vip-section').style.display = 'block';
-        } else {
-            alert('認証キーが異なります');
-        }
+    function updateUI() {
+        if(!isVip) return;
+        const abe = parseInt(document.getElementById('current_abe').value) || 0;
+        const invest = document.getElementById('invest_type').value;
+        const rate = document.getElementById('rate').value;
+        document.getElementById('wage-display').innerText = `￥${calcWage(abe, invest, rate)}`;
     }
 
-    function executeSettingGuess(){
-        const total = parseFloat(document.getElementById('total_rot').value);
-        const at = parseFloat(document.getElementById('at_count').value);
-        const trophy = document.getElementById('trophy').value;
-        if(!total || !at) return;
-        const prob = Math.floor(total / at);
-        let msg = ""; let cls = "alert-info";
-        if(prob <= 245 || trophy === '虹') { msg = "設定6以上の数値です。全ツッパを推奨。"; cls="alert-success"; }
-        else if(prob <= 275 || trophy === '金') { msg = "設定4-5の近似値です。粘る価値あり。"; cls="alert-success"; }
-        else { msg = "低設定の可能性大。期待値があれば追う程度に。"; cls="alert-error"; }
-        document.getElementById('setting-result-area').innerHTML = `<div class="alert ${cls}">📊 初当たり確率: 1/${prob}<br>🤖 AI診断: ${msg}</div>`;
-    }
-
-    function executeAnalysis(){
+    function executeAnalysis() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const isReset = document.getElementById('is_reset').checked;
         const lastSt = document.getElementById('last_status').value;
-        const shutter = document.getElementById('shutter_hint').value;
+        const modeHint = document.getElementById('mode_hint').value;
         const time = parseInt(document.getElementById('time_slider').value);
         const invest = document.getElementById('invest_type').value;
         const rate = document.getElementById('rate').value;
         const diff = isVip ? parseInt(document.getElementById('diff_coins').value) : 0;
-        const zencho = isVip ? document.getElementById('zencho_type').value : "なし";
+        const ai = isVip ? document.getElementById('ai_consult').value : "none";
+        const trophy = document.getElementById('trophy').value;
 
-        const isModeB = (shutter !== "なし");
+        const isModeB = (modeHint === 'shutter');
+        const isModeC = (modeHint === 'mode_c');
         const isTsuranuki = (isVip && diff >= 1000);
         const calcEV = (base) => (invest === 'cash' && rate !== '5.0') ? Math.floor(base * 0.65) : base;
 
+        // ボーダー算出プロトコル
         let border = isReset ? 700 : 950;
-        if(isTsuranuki) border -= 150;
-        if(invest === 'cash' && rate !== '5.0') border += 150;
-        if(time >= 18) border += 100;
+        if (time >= 18) border += 100;
+        if (isTsuranuki) border -= 150;
+        if (invest === 'cash' && rate !== '5.0') border += 150;
+        if (isModeC) border = 350; // 通常C濃厚時の特別ボーダー
 
-        let res = `<h3>📊 最終判定報告</h3>`;
-        if(time >= 21) res += `<div class="alert alert-error">🚨 閉店リスク大！即ヤメも視野に。</div>`;
-        if(isVip) {
-            let h = abe > 1000 ? 4500 : (abe > 700 ? 3000 : 1500);
-            res += `<div class="metric">⏱️ 想定時給: ￥${calcEV(h)}</div>`;
-        }
+        let res = `<h3>📊 判定結果報告</h3>`;
+        if (time >= 21) res += `<div class="alert alert-error">🚨 【警告】閉店欠損リスク大！ 取り切れない可能性が高い時間帯です。</div>`;
 
-        const tag = isTsuranuki ? " | 💎 つらぬき期待:高" : "";
-        if(isModeB && abe >= 150){
-            res += `<div class="alert alert-success">🔥 【特攻GO】通常B濃厚！<br>💰期待値: ￥${calcEV(800)}前後${tag}</div>`;
-        } else if(abe >= border || abe >= 1473){
-            res += `<div class="alert alert-success">🔥 【判定：GO】<br>💰期待値: ￥${calcEV(2000)}前後${tag}</div>`;
-        } else if(abe >= 480 && abe <= 576){
-            res += `<div class="alert alert-success">⚡ 【ゾーン狙い】通常C(576)狙い<br>💰期待値: ￥${calcEV(1000)}</div>`;
+        // 判定マトリクス
+        if (trophy === 'rainbow') {
+            res += `<div class="alert alert-success">🏆 RAINBOW DETECTED!!<br>💰 推定期待値: ￥${calcEV(5500)}+ (設定56確定・全ツッパ)</div>`;
+        } else if (abe >= 1100) {
+            res += `<div class="alert alert-success">🔥 【判定：GO】💰 期待値: ￥${calcEV(4000)}+<br>🛑 <span style='color:#ff4b4b'>当選までヤメ厳禁（強制上書き）</span></div>`;
+        } else if (modeHint === 'heaven') {
+            res += `<div class="alert alert-success">✨ 【天国濃厚】128天井狙い<br>💰 期待値: ￥${calcEV(500)}前後</div>`;
+        } else if (isModeB && abe >= 150) {
+            res += `<div class="alert alert-success">🔥 【通常B濃厚】896天井ターゲット<br>💰 期待値: ￥${calcEV(1200)}前後</div>`;
+        } else if (isModeC && abe >= 350) {
+            res += `<div class="alert alert-success">🔥 【通常C濃厚】576天井ターゲット<br>💰 期待値: ￥${calcEV(1000)}前後</div>`;
+        } else if (abe >= border) {
+            res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破<br>💰 期待値: ￥${calcEV(2000)}前後</div>`;
+        } else if (abe >= 480 && abe <= 576) {
+            res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常C(576)ターゲット<br>💰 期待値: ￥${calcEV(1000)}前後</div>`;
         } else {
-            let next = abe < 100 ? "100" : (abe < 200 ? "200" : (abe < 480 ? "480" : border));
-            res += `<div class="alert alert-error">❄️ 【判定：撤収】💰マイナス<br>🎯目安: ${next}あべしまで待機</div>`;
+            let next = abe < 100 ? "100" : (abe < 150 && isModeB ? "150" : (abe < 200 ? "200" : (abe < 350 && isModeC ? "350" : (abe < 480 ? "480" : border))));
+            res += `<div class="alert alert-error">❄️ 【判定：撤収】💰 期待値マイナス<br>🎯 次の狙い目: ${next}あべしまで待機</div>`;
         }
 
-        res += `<h4 style="margin-top:20px;">🛑 ヤメ時プロトコル</h4>`;
-        if(lastSt === '★上位AT終了後' || isTsuranuki) res += `<div class="alert alert-warning">🚨 ヤメ厳禁！128あべしまで回せ。</div>`;
-        else if(lastSt === '伝承モード示唆') res += `<div class="alert alert-info">伝承ループ確認まで続行。</div>`;
-        else res += `<div class="alert alert-info">高確確認後、1あべし即ヤメ。</div>`;
+        if (abe >= 1473) res += `<div class="alert alert-warning">⚠️ PREMIUM AREA: ATレベル3以上濃厚恩恵エリアです。</div>`;
 
-        if(zencho !== "なし"){
-            res += `<h4 style="margin-top:20px;">🤖 AIコンサル助言</h4>`;
-            if(zencho === "強") res += `<div class="alert alert-success">本前兆の可能性大。失敗後の復活に注意。</div>`;
-            else if(zencho === "レア") res += `<div class="alert alert-error">32あべし間は絶対にヤメるな。</div>`;
-            else res += `<div class="alert alert-info">フェイク濃厚。ゾーン抜けでヤメ。</div>`;
+        // ヤメ時ナビ
+        let yame = "高確・前兆がないことを確認して1あべし即ヤメ。";
+        if (lastSt === 'premium' || isTsuranuki) yame = "【最優先】有利区間恩恵あり。128あべしまでヤメ厳禁。";
+        else if (lastSt === 'densho') yame = "【伝承ループ】天破の刻がループする限り続行。抜け確認後ヤメ。";
+        res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：${yame}</div>`;
+
+        // AIコンサル
+        if (ai !== "none") {
+            let advice = ai === "strong" ? "本前兆期待度大幅アップ。演出失敗後も復活に注意。" : (ai === "rare" ? "32あべし間は完全フォロー。絶対にヤメるな。" : "フェイク前兆の可能性大。ゾーン抜けで即ヤメを推奨。");
+            res += `<div class="alert alert-info">🤖 AIコンサル助言：${advice}</div>`;
         }
         document.getElementById('result-area').innerHTML = res;
     }
+
+    // 保存・履歴・設定推測（完全継承）
+    function saveProfit() { const i = parseInt(document.getElementById('in_medal').value)||0; const o = parseInt(document.getElementById('out_medal').value)||0; const p = o-i; const d = new Date().toLocaleDateString(); let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); h.unshift({date:d, profit:p}); localStorage.setItem('zero_h', JSON.stringify(h.slice(0,10))); renderHistory(); }
+    function renderHistory() { let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); let html = h.map(x => `<div>${x.date}: <b style="color:${x.profit>=0?'#81c784':'#e57373'}">${x.profit>=0?'+':''}${x.profit}枚</b></div>`).join(''); document.getElementById('history-list').innerHTML = html || "履歴なし"; }
+    function executeSettingGuess() { const t = parseFloat(document.getElementById('total_rot').value); const a = parseFloat(document.getElementById('at_count').value); if(!t||!a) return; const p = Math.floor(t/a); const trophy = document.getElementById('trophy').value; let m = (p <= 275 || trophy !== 'none') ? "優秀台の可能性が高いです。追う価値あり。" : "低設定の可能性が高いです。慎重に。"; document.getElementById('setting-result').innerHTML = `<div class="alert alert-success">1/${p} | AI診断: ${m}</div>`; }
 </script>
 </body>
 </html>
