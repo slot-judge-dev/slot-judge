@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v25.8.0 THE TRUE DUAL CORE</title>
+    <title>Protocol ZERO v25.10.0 THE TRUE DUAL CORE</title>
+    
+    <link rel="icon" href="logo.jpg">
+    <link rel="apple-touch-icon" href="logo.jpg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Proto ZERO">
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --kabaneri: #ff7b72; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -78,8 +84,8 @@
     </div>
 
     <div style="text-align: center; margin: 15px 0;">
-        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.8.0</div>
-        <div id="title-accent" style="font-size: 0.7em; color: var(--accent); letter-spacing: 2px;">THE TRUE DUAL CORE (AWAKEN)</div>
+        <div style="font-size: 0.85em; color: white; font-weight: bold; letter-spacing: 3px;">PROTOCOL ZERO v25.10.0</div>
+        <div id="title-accent" style="font-size: 0.7em; color: var(--accent); letter-spacing: 2px;">THE TRUE DUAL CORE (PWA READY)</div>
     </div>
 
     <div class="card">
@@ -155,7 +161,7 @@
 
         <div id="kabaneri-inputs" style="display:none;">
             <div class="card" style="border-top: 3px solid var(--kabaneri);">
-                <label>現在のST間ゲーム数 (G) <br><span style="font-size:0.8em; font-weight:normal; color:#8b949e;">※駿城ボーナス(REG)ではG数リセット無効</span></label>
+                <label>現在のゲーム数 (G)</label>
                 <input type="number" id="k_current_g" value="0" oninput="updateUI()">
                 
                 <label>現在の消化周期数 (アイコン)</label>
@@ -168,18 +174,9 @@
                     <option value="5">5周期目</option>
                 </select>
                 
-                <label style="color:var(--kabaneri); margin-top:15px;">🚂 駿城ボーナス スルー回数</label>
-                <select id="k_surpass_count" onchange="updateUI()">
-                    <option value="0">0回 (ボーナス未当選)</option>
-                    <option value="1">1スルー</option>
-                    <option value="2">2スルー</option>
-                    <option value="3">3スルー (激熱)</option>
-                    <option value="4">4スルー以上 (エピボ濃厚)</option>
-                </select>
-
                 <div style="margin: 15px 0; padding: 10px; background: #0d1117; border-radius: 8px; border: 1px solid #30363d;">
-                    <label style="color:var(--kabaneri);">▼ 天井短縮・状態条件</label>
-                    <label><input type="checkbox" id="k_is_reset" onchange="updateUI()"> 朝イチ・ST駆け抜け後 (596短縮)</label>
+                    <label style="color:var(--kabaneri);">▼ 天井短縮・状態条件 (596G / 4周期)</label>
+                    <label><input type="checkbox" id="k_is_reset" onchange="updateUI()"> 朝イチ・ST駆け抜け後</label>
                     <label><input type="checkbox" id="k_is_kageyuki" onchange="updateUI()"> 景之(かげゆき)ST終了後 (ループ濃厚)</label>
                     <label><input type="checkbox" id="k_is_ending" onchange="updateUI()"> エンディング(ツラヌキ)終了直後</label>
                 </div>
@@ -258,8 +255,7 @@
                     <span style="color:var(--kabaneri); font-weight:bold;">💡 周期・ポイント狙い目</span><br>
                     ・【短縮×3周期】G数不問でツッパ<br>
                     ・【通常×5周期】G数不問でツッパ<br>
-                    ・【駿城3スルー以上】G数不問でツッパ<br>
-                    ・【ポイント2つ発光】即CZの期待大。当選まで追行。
+                    ・【ポイント2つ発光】即周期到達の期待大。当選まで追行。
                 </div>
             </div>
         </div>
