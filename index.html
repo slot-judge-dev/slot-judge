@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v21.1.0 THE OMNISCIENCE FIXED</title>
+    <title>Protocol ZERO v22.0.0 THE GUIDANCE</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -11,11 +11,12 @@
         .card { background: var(--panel); padding: 18px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #30363d; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
         label { display: block; margin-bottom: 6px; font-size: 0.85em; font-weight: bold; color: #8b949e; }
         input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; font-size: 1em; }
-        .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
-        .tab { flex: 1; text-align: center; padding: 14px 5px; background: #21262d; border-radius: 8px; cursor: pointer; font-size: 0.85em; color: #8b949e; font-weight: bold; transition: 0.3s; }
+        
+        /* タブのスタイル調整（4分割対応） */
+        .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+        .tab { flex: 1; text-align: center; padding: 12px 2px; background: #21262d; border-radius: 8px; cursor: pointer; font-size: 0.75em; color: #8b949e; font-weight: bold; transition: 0.3s; white-space: nowrap; }
         .tab.active { background: var(--accent); color: white; box-shadow: 0 0 15px rgba(88, 166, 255, 0.4); }
         
-        /* 修正：タブコンテンツの確実な切り替え制御 */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
@@ -25,6 +26,7 @@
         .alert-success { background: rgba(63, 185, 80, 0.1); border-left-color: var(--success); color: #56d364; }
         .alert-error { background: rgba(248, 81, 73, 0.1); border-left-color: var(--danger); color: #ffa198; }
         .alert-warning { background: rgba(210, 153, 34, 0.1); border-left-color: var(--warning); color: #e3b341; }
+        .alert-info { background: rgba(88, 166, 255, 0.1); border-left-color: var(--accent); color: #79c0ff; }
         .alert-ceiling { background: #f85149; color: white; border: 2px solid white; animation: blink 0.8s infinite; text-align: center; font-size: 1.2em; box-shadow: 0 0 20px rgba(248, 81, 73, 0.6); }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         .legal-footer { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,12,16,0.98); padding: 15px; font-size: 0.65em; color: #484f58; text-align: center; border-top: 1px solid #30363d; z-index: 2000; pointer-events: none; }
@@ -43,20 +45,30 @@
         .cal-day.empty { background: #0a0c10; }
         .counter-btn { width:40px; padding:8px 0; background:#21262d; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1.2em; box-shadow:none; }
         .counter-btn.plus { background: var(--accent); }
+        
+        /* 早見表用テーブルスタイル */
+        .guide-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; text-align: center; }
+        .guide-table th { background: #21262d; color: #8b949e; padding: 10px 5px; border: 1px solid #30363d; }
+        .guide-table td { padding: 12px 5px; border: 1px solid #30363d; background: #0d1117; }
+        .guide-table tr:nth-child(even) td { background: #161b22; }
+        .mark-go { color: var(--success); font-weight: bold; }
+        .mark-warn { color: var(--warning); font-weight: bold; }
+        .mark-ng { color: #8b949e; }
+        .mark-star { color: #d29922; font-weight: bold; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
     <div class="sticky-header">
-        <div class="tabs">
-            <div class="tab active">👊 北斗の拳 転生2</div>
-            <div class="tab" onclick="alert('甲鉄城のカバネリ：OMNISCIENCEロジック適用完了。次回完全開放')">🚂 カバネリ</div>
+        <div class="tabs" style="margin-bottom:0; gap:8px; padding:0 10px;">
+            <div class="tab active" style="padding:10px;">👊 北斗の拳 転生2</div>
+            <div class="tab" style="padding:10px;" onclick="alert('甲鉄城のカバネリ：GUIDANCEロジック実装待機中')">🚂 カバネリ</div>
         </div>
     </div>
 
-    <div style="text-align: center; margin: 20px 0;">
+    <div style="text-align: center; margin: 15px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v21.1.0 THE OMNISCIENCE</div>
+        <div style="margin-top: 10px; font-size: 0.8em; color: var(--accent); font-weight: bold; letter-spacing: 4px;">PROTOCOL ZERO v22.0.0 GUIDANCE</div>
     </div>
 
     <div class="card">
@@ -77,9 +89,10 @@
     </div>
 
     <div class="tabs main-tabs">
-        <div class="tab active" onclick="switchTab('tab-main', this)">📈 投資判定</div>
-        <div class="tab" onclick="switchTab('tab-history', this)">📊 収支カレンダー</div>
-        <div class="tab" onclick="switchTab('tab-guess', this)">🔍 設定推測</div>
+        <div class="tab active" onclick="switchTab('tab-main', this)">📈 判定</div>
+        <div class="tab" onclick="switchTab('tab-guide', this)">📋 早見表</div>
+        <div class="tab" onclick="switchTab('tab-history', this)">📊 収支</div>
+        <div class="tab" onclick="switchTab('tab-guess', this)">🔍 推測</div>
     </div>
 
     <div id="tab-main" class="tab-content active">
@@ -139,6 +152,89 @@
         <div id="result-area"></div>
     </div>
 
+    <div id="tab-guide" class="tab-content">
+        <div class="card">
+            <h3>📋 徘徊用 期待値カンペ</h3>
+            <p style="font-size:0.8em; color:#8b949e; line-height:1.4;">※等価・持ちメダル・時間不問のベース目安です。現場では必ず「判定」タブで正確な数値を算出してください。</p>
+            
+            <table class="guide-table">
+                <tr>
+                    <th>あべし</th>
+                    <th>通常</th>
+                    <th>リセット</th>
+                    <th>モードB/C</th>
+                </tr>
+                <tr>
+                    <td>150〜</td>
+                    <td class="mark-ng">スルー</td>
+                    <td class="mark-ng">スルー</td>
+                    <td class="mark-go">B:特攻</td>
+                </tr>
+                <tr>
+                    <td>200〜</td>
+                    <td class="mark-warn">△ ゾーン</td>
+                    <td class="mark-warn">△ ゾーン</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>350〜</td>
+                    <td class="mark-ng">スルー</td>
+                    <td class="mark-ng">スルー</td>
+                    <td class="mark-go">C:特攻</td>
+                </tr>
+                <tr>
+                    <td>450〜</td>
+                    <td class="mark-ng">スルー</td>
+                    <td class="mark-warn">△ ゾーン</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>480〜</td>
+                    <td class="mark-warn">△ ゾーン</td>
+                    <td class="mark-ng">-</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>700〜</td>
+                    <td class="mark-ng">スルー</td>
+                    <td class="mark-go">〇 特攻</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>750〜</td>
+                    <td class="mark-go">〇 ゾーン</td>
+                    <td class="mark-go">◎</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>950〜</td>
+                    <td class="mark-go">◎ 特攻</td>
+                    <td class="mark-go">◎</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>1100〜</td>
+                    <td class="mark-star">★ 極限</td>
+                    <td class="mark-star">★</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+                <tr>
+                    <td>1473〜</td>
+                    <td class="mark-star" style="color:var(--danger);">👑 PREM</td>
+                    <td class="mark-ng">-</td>
+                    <td class="mark-ng">-</td>
+                </tr>
+            </table>
+            
+            <div style="margin-top:15px; padding:10px; background:#21262d; border-radius:8px; font-size:0.8em;">
+                <span style="color:var(--success); font-weight:bold;">💡 特殊狙い目</span><br>
+                ・【天国】128あべしまで絶対フォロー<br>
+                ・【伝承】天破ループ中はヤメ厳禁<br>
+                ・【上位AT後】128あべしまで絶対フォロー
+            </div>
+        </div>
+    </div>
+
     <div id="tab-history" class="tab-content">
         <div class="card">
             <h3>📅 稼働記録入力</h3>
@@ -157,9 +253,17 @@
             </div>
             
             <div style="text-align:center; margin-bottom:15px; background:#0d1117; padding:10px; border-radius:8px; border:1px solid #30363d;">
-                <div style="font-size:0.85em; color:#8b949e;">月間トータル収支 / 勝率</div>
-                <div id="cal-summary-profit" style="font-size:1.8em; font-weight:bold; margin:5px 0;">---</div>
-                <div id="cal-summary-rate" style="font-size:1em; font-weight:bold; color:var(--accent);">---</div>
+                <div style="display:flex; justify-content:space-around; margin-bottom:5px;">
+                    <div>
+                        <div style="font-size:0.75em; color:#8b949e;">月間収支</div>
+                        <div id="cal-summary-profit" style="font-size:1.4em; font-weight:bold;">---</div>
+                    </div>
+                    <div style="border-left:1px solid #30363d; padding-left:15px;">
+                        <div style="font-size:0.75em; color:#8b949e;">年間トータル</div>
+                        <div id="cal-annual-profit" style="font-size:1.4em; font-weight:bold;">---</div>
+                    </div>
+                </div>
+                <div id="cal-summary-rate" style="font-size:0.9em; font-weight:bold; color:var(--accent); margin-top:5px;">---</div>
             </div>
             
             <div class="calendar-grid">
@@ -240,12 +344,10 @@
 <script>
     let isVip = false;
     
-    // カレンダー用状態管理
     const today = new Date();
     let displayYear = today.getFullYear();
     let displayMonth = today.getMonth() + 1;
 
-    // 小役カウンター用状態管理
     let countSuika = 0;
     let countWCherry = 0;
     let countSCherry = 0;
@@ -266,7 +368,6 @@
         } 
     }
 
-    // 修正：確実なタブ切り替えロジック
     function switchTab(id, element) { 
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); 
         document.querySelectorAll('.main-tabs .tab').forEach(t => t.classList.remove('active')); 
@@ -279,7 +380,7 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // --- 完全保護：期待値・時給算出ロジック ---
+    // --- 完全保護：期待値算出ロジック (ZERO OVERRIDE 適用済み) ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -450,7 +551,7 @@
         else if (s.isValidPremium) yMsg = "①【上位AT後】128まで天国率大幅UP。絶対にヤメるな。";
         else if (s.lastSt === 'densho') yMsg = "②【伝承モード】ループ抜け確認まで続行。";
         else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚】有利リセット近接。128ヤメ厳禁。</span>";
-        else yMsg = "④【通常】高確・前兆なしを確認し、1あべしで即ヤメ。";
+        else yMsg = "④【通常】高確・前兆なしを確認し、1あべし即ヤメ。";
         res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
 
         if (s.aiConsult !== "none") {
@@ -464,7 +565,7 @@
         document.getElementById('result-area').innerHTML = res;
     }
 
-    // --- 完全保護：カレンダー表示ロジック ---
+    // --- 完全保護：カレンダー表示ロジック（年間収支連動） ---
     function saveProfit() { 
         const i = parseInt(document.getElementById('in_medal').value)||0; 
         const o = parseInt(document.getElementById('out_medal').value)||0; 
@@ -506,6 +607,7 @@
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
         let dailyProfits = {};
         let monthTotal = 0;
+        let annualTotal = 0; // 追加：年間収支計算
         
         h.forEach(item => {
             let parts = item.date.split('/');
@@ -513,6 +615,13 @@
                 let itemY = parseInt(parts[0]);
                 let itemM = parseInt(parts[1]);
                 let itemD = parseInt(parts[2]);
+                
+                // 年間収支の加算
+                if(itemY === displayYear) {
+                    annualTotal += item.profit;
+                }
+
+                // 月間・日別収支の加算
                 if(itemY === displayYear && itemM === displayMonth) {
                     if(!dailyProfits[itemD]) dailyProfits[itemD] = 0;
                     dailyProfits[itemD] += item.profit;
@@ -527,8 +636,13 @@
         let winRate = workDays > 0 ? Math.floor((winDays / workDays) * 100) : 0;
 
         const sumProfitElem = document.getElementById('cal-summary-profit');
-        sumProfitElem.innerText = `${monthTotal > 0 ? '+' : ''}${monthTotal} 枚`;
+        sumProfitElem.innerText = `${monthTotal > 0 ? '+' : ''}${monthTotal}`;
         sumProfitElem.style.color = monthTotal >= 0 ? "var(--success)" : "var(--danger)";
+        
+        const annProfitElem = document.getElementById('cal-annual-profit');
+        annProfitElem.innerText = `${annualTotal > 0 ? '+' : ''}${annualTotal}`;
+        annProfitElem.style.color = annualTotal >= 0 ? "var(--success)" : "var(--danger)";
+
         document.getElementById('cal-summary-rate').innerText = `稼働: ${workDays}日 / 勝率: ${winRate}%`;
 
         for(let i = 0; i < firstDay; i++) {
@@ -582,13 +696,13 @@
         if(t > 0 && a > 0) {
             const p = Math.floor(t/a); const trophy = document.getElementById('hidden_trophy').value;
             let m = ""; let cls = "alert-info";
-            let sw = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※総回転2000G未満のため確率は参考値です。</span>" : "";
-            if (trophy === 'rainbow') { m = "【設定6確定】虹トロフィー出現。閉店まで全ツッパを強く推奨します。"; cls = "alert-success"; }
-            else if (p <= 245) { m = "【設定6濃厚】レベルの極上確率です。全ツッパを推奨します。"; cls = "alert-success"; }
-            else if (trophy === 'gold') { m = "【設定4-5確定】金トロフィー出現。粘る価値が非常に高いです。"; cls = "alert-success"; }
-            else if (p <= 275) { m = "【設定4-5濃厚】の優秀な数値です。粘る価値が非常に高いです。"; cls = "alert-success"; }
-            else if (p <= 320) { m = "【設定3付近】中間設定の数値です。期待値を優先し、夜間は慎重な撤収判断を。"; cls = "alert-warning"; }
-            else { m = "【低設定濃厚】危険な数値です。期待値ボーダーを厳守し、深追いは避けてください。"; cls = "alert-error"; }
+            let sw = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※サンプル不足。確率は参考値です。</span>" : "";
+            if (trophy === 'rainbow') { m = "【設定6確定】虹トロ。閉店まで全ツッパ。"; cls = "alert-success"; }
+            else if (p <= 245) { m = "【設定6濃厚】極上の初当たり確率。全ツッパ推奨。"; cls = "alert-success"; }
+            else if (trophy === 'gold') { m = "【設定4-5確定】金トロ。粘る価値が極めて高いです。"; cls = "alert-success"; }
+            else if (p <= 275) { m = "【設定4-5濃厚】の優秀な数値です。粘る価値大。"; cls = "alert-success"; }
+            else if (p <= 320) { m = "【設定3付近】中間設定。期待値を優先し慎重に。"; cls = "alert-warning"; }
+            else { m = "【低設定濃厚】危険。期待値ボーダーを厳守。"; cls = "alert-error"; }
             document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 初当たり確率: 1/${p}${sw}<br>🤖 AI診断: ${m}</div>`;
         } else {
             document.getElementById('setting-result').innerHTML = `<div class="alert alert-info">📊 初当たり確率: ---<br>🤖 AI診断: データを入力してください。</div>`;
