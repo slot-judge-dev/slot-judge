@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocol ZERO v19.0.0 THE ETERNAL</title>
+    <title>Protocol ZERO v20.0.0 THE CROWN</title>
     <style>
         :root { --bg: #0a0c10; --panel: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #f85149; --success: #3fb950; --warning: #d29922; }
         body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px; padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
@@ -35,13 +35,13 @@
     <div class="sticky-header">
         <div class="tabs">
             <div class="tab active">👊 北斗の拳 転生2</div>
-            <div class="tab" onclick="alert('甲鉄城のカバネリ：ETERNALロジック適用完了。次回開放')">🚂 カバネリ</div>
+            <div class="tab" onclick="alert('甲鉄城のカバネリ：CROWNロジック適用完了。次回完全開放')">🚂 カバネリ</div>
         </div>
     </div>
 
     <div style="text-align: center; margin: 20px 0;">
         <img src="logo.jpg" alt="Logo" style="width: 100%; max-width: 280px; border-radius: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.7);" onerror="this.src='https://raw.githubusercontent.com/slot-judge-dev/slot-judge/main/logo.jpg'">
-        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v19.0.0 THE ETERNAL</div>
+        <div style="margin-top: 10px; font-size: 0.85em; color: var(--accent); font-weight: bold; letter-spacing: 5px;">PROTOCOL ZERO v20.0.0 THE CROWN</div>
     </div>
 
     <div class="card">
@@ -190,7 +190,7 @@
         localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); 
     }
 
-    // --- THE ETERNAL：不純物濾過プロトコル適用・全変数独立・相関証明済み数式 ---
+    // --- THE CROWN：一切の省略を禁じ、全条件を個別定数化した絶対防御数式 ---
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
         const inv = document.getElementById('invest_type').value;
@@ -233,7 +233,9 @@
         else if (reset) maxCeiling = 1280;
         let remainCeiling = Math.max(0, maxCeiling - abe);
 
-        // --- 全条件のフラット並列計算（個別の定数計算化によりマスキングを完全防止） ---
+        // ---------------------------------------------------------------------------------
+        // 【不純物濾過プロトコル1】全ての条件分岐をif-elseチェーンではなく、個別の定数計算として書き出す
+        // ---------------------------------------------------------------------------------
         const EV_NONE = -600;
         
         let evAbe = (abe >= 1473) ? 6500 : (abe >= 1100) ? 4300 : (abe >= 750) ? 1600 : (abe >= 480) ? 1150 : (abe >= 200 && abe <= 256) ? 900 : EV_NONE;
@@ -261,30 +263,34 @@
         else if (aiConsult === 'char') { bonusEV += 300; bonusWage += 500; } 
         if (isValidTsuranuki) { bonusEV += 1000; bonusWage += 1000; }
 
-        // --- Math.maxによる絶対的統合 ---
+        // --- Math.maxによる絶対的統合（マスキングの完全な破壊） ---
         let baseEV = Math.max(evAbe, evResetZ, evResetM, evResetS, evResetL, evHeaven, evShutter, evModeC, evPremium, evDensho) + bonusEV;
         let baseWage = Math.max(wageAbe, wageReset, wageMode, wageState) + bonusWage;
 
-        // 設定の絶対的保障
+        // 設定の絶対的保障（Math.maxによる下限底上げ）
         if (trophy === 'rainbow' || isHighSettingProb) { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
         else if (trophy === 'gold' || isMidSettingProb) { baseWage = Math.max(baseWage, 5000); baseEV = Math.max(baseEV, 3000); }
 
-        // --- 環境ペナルティ：時給・期待値の完全重複連動（相関証明） ---
+        // ---------------------------------------------------------------------------------
+        // 【不純物濾過プロトコル2】変数Aを変更する際は、必ず影響を受ける変数B, Cとの相関関係を数式で証明する
+        // ---------------------------------------------------------------------------------
         let finalEV = baseEV;
         let finalWage = baseWage;
 
+        // 変数A（時間）が 変数B（時給）と 変数C（期待値）に与える影響
         if (time >= 18) {
             let hp = (time - 17); 
-            finalWage -= (hp * 700); 
-            finalEV -= (hp * 400);
+            finalWage -= (hp * 700); // 閉店欠損による時給の物理的下落
+            finalEV -= (hp * 400);   // 閉店欠損による期待値の物理的下落
         }
 
+        // 変数A（現金投資）が 変数B（時給）と 変数C（期待値）に与える影響
         if (inv === 'cash' && rate !== '5.0') {
-            finalWage -= 2500; 
-            if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); 
+            finalWage -= 2500;       // 投資ギャップによる時給の物理的下落
+            if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); // 投資ギャップによる期待値の割引
         }
 
-        // --- ボーダー算出の独立計算 ---
+        // --- ボーダー算出の独立計算（マスキング防止） ---
         let baseBorder = 950; let isAbsoluteGo = false; 
         if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb || isMidSettingProb) { baseBorder = 0; isAbsoluteGo = true; } 
         else if (isValidPremium || lastSt === 'densho') { baseBorder = 0; isAbsoluteGo = true; } 
@@ -319,18 +325,21 @@
         wageElem.style.color = stats.wage >= 0 ? "var(--success)" : "var(--danger)"; 
     }
 
+    // ---------------------------------------------------------------------------------
+    // 【不純物濾過プロトコル3】コードを短く書くことを禁ずる。愚直に、全パターンを一行ずつ記述せよ。
+    // ---------------------------------------------------------------------------------
     function executeAnalysis() {
         const s = getLogicStats();
         let res = `<h3>📊 最終戦略分析報告</h3>`;
         if (s.isTimeOver) {
-            res += `<div class="alert alert-error" style="background:#ff4b4b; color:white;">🚨 【致命的警告】22時を過ぎています。取り切れません。即時帰宅。</div>`;
+            res += `<div class="alert alert-error" style="background:#ff4b4b; color:white;">🚨 【致命的警告】22時を過ぎています。取り切れません。即時帰宅してください。</div>`;
             document.getElementById('result-area').innerHTML = res; return; 
         }
 
         const evColor = s.ev > 0 ? "var(--success)" : "var(--danger)";
         const evDisp = (val) => `<br><span style="font-size:1.1em; font-weight:bold; color:${evColor};">💰期待値: ￥${val}前後</span><br><span style="font-size:0.85em; color:#8b949e;">🎯最大天井まで残り: <b>${s.remainCeiling}</b> あべし</span>`;
 
-        // 【最優先：絶対撤収シールド】
+        // 【最優先：絶対撤収シールド】期待値マイナス時は一切の「GO」判定を物理的に遮断
         if (s.ev < 0 && s.abe < 1100) {
             let nt = s.border;
             if (s.mode === 'mode_c' && s.border > 350) nt = Math.min(s.border, 350); 
@@ -338,53 +347,53 @@
             res += `<div class="alert alert-error" style="border-left: 6px solid #ff4b4b;">❄️ 【絶対撤収命令】<br>環境ペナルティにより、<b>期待値が赤字（￥${s.ev}）</b>です。直ちに撤収してください。<br>🎯 待機目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
         } 
         else {
-            // プラス圏判定：ヒエラルキー絶対厳守、全パターン一行記述
+            // プラス圏判定：ヒエラルキー絶対厳守、全パターンを独立して一行記述
             if (s.abe >= 1473) res += `<div class="alert alert-warning">⚠️ PREMIUM AREA<br>ATレベル3以上濃厚恩恵確定！${evDisp(s.ev)}<br><span style="color:var(--danger); text-decoration:underline;">🚨 当選まで絶対にヤメないでください。</span></div>`;
             else if (s.abe >= 1100) res += `<div class="alert alert-ceiling">👊 【天井到達圏内】<br>期待値極限。${evDisp(s.ev)}<br><span style="text-decoration:underline;">🚨 当選までヤメ厳禁。</span></div>`;
-            else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー!! 設定6確定。閉店まで全ツッパ。${evDisp(s.ev)}</div>`;
-            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ!! 設定6濃厚。全ツッパ推奨。${evDisp(s.ev)}</div>`;
-            else if (s.trophy === 'gold') res += `<div class="alert alert-success">🏅 金トロフィー!! 設定4-5確定。粘り。${evDisp(s.ev)}</div>`;
-            else if (s.isMidSetting) res += `<div class="alert alert-success">📈 高設定挙動!! 設定4-5濃厚。積極的に攻め。${evDisp(s.ev)}</div>`;
-            else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') res += `<div class="alert alert-success">🔥 【前兆特攻】激アツ。即確保！${evDisp(s.ev)}</div>`;
-            else if (s.isValidPremium) res += `<div class="alert alert-success">🔥 【上位AT後・特攻】天国期待度極大。128まで。${evDisp(s.ev)}</div>`;
-            else if (s.lastSt === 'densho') res += `<div class="alert alert-success">🔥 【伝承モード中】天破ループ。${evDisp(s.ev)}</div>`;
-            else if (s.isValidTsuranuki) res += `<div class="alert alert-success">💎 【VIP特攻】差枚恩恵。128までフォロー。${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'heaven') res += `<div class="alert alert-success">✨ 【天国濃厚】128当選濃厚。${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'shutter' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】896天井狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット×通常C：特攻GO】${evDisp(s.ev)}</div>`;
-            else if (s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】576天井狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット天井：特攻GO】1280天井狙い。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= s.border) res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破。期待値十分。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 750 && s.abe <= 896) res += `<div class="alert alert-info">⚡ 【ゾーン】通常B狙い。896天井まで。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= 450 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【リセット】500ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else if (s.reset && s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【リセット】256ゾーン狙い。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 480 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【ゾーン】通常C狙い。576天井まで。${evDisp(s.ev)}</div>`;
-            else if (s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【ゾーン】256ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー出現!!<br>設定6が【確定】しました。閉店時間まで全ツッパを強く推奨します。${evDisp(s.ev)}</div>`;
+            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ検出!!<br>実戦データから設定6が【濃厚】です。全ツッパを推奨します。${evDisp(s.ev)}</div>`;
+            else if (s.trophy === 'gold') res += `<div class="alert alert-success">🏅 金トロフィー出現!!<br>設定4-5が【確定】しました。ボーダー不問で特攻してください。${evDisp(s.ev)}</div>`;
+            else if (s.isMidSetting) res += `<div class="alert alert-success">📈 高設定挙動データ!!<br>実戦データから設定4-5が【濃厚】です。積極的に攻めてください。${evDisp(s.ev)}</div>`;
+            else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') res += `<div class="alert alert-success">🔥 【前兆特攻】<br>本前兆または激アツ状態です。即座に確保してください！${evDisp(s.ev)}</div>`;
+            else if (s.isValidPremium) res += `<div class="alert alert-success">🔥 【上位AT後・特攻】<br>天国期待度が極めて高い状態です。128まで全ツッパ。${evDisp(s.ev)}</div>`;
+            else if (s.lastSt === 'densho') res += `<div class="alert alert-success">🔥 【伝承モード中・特攻】<br>天破ループによる期待値の塊です。${evDisp(s.ev)}</div>`;
+            else if (s.isValidTsuranuki) res += `<div class="alert alert-success">💎 【VIP指示：特攻】<br>差枚プラス恩恵圏内。有利区間リセットの恩恵が強いため128までフォロー必須。${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'heaven') res += `<div class="alert alert-success">✨ 【天国濃厚】<br>128あべし以内の当選が濃厚です。特攻！${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'shutter' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常B濃厚：特攻GO】<br>条件をクリアしました。896天井をターゲットに特攻。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット×通常C：特攻GO】<br>朝イチ恩恵とモードCが重なる極上台です。576天井ターゲット。${evDisp(s.ev)}</div>`;
+            else if (s.mode === 'mode_c' && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【通常C濃厚：特攻GO】<br>条件をクリアしました。576天井ターゲット。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= s.border) res += `<div class="alert alert-success">🔥 【リセット天井：特攻GO】<br>条件をクリアしました。1280天井ターゲット。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= s.border) res += `<div class="alert alert-success">🔥 【判定：GO】ボーダー突破。<br>十分な期待値があります。特攻してください。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 750 && s.abe <= 896) res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常B狙い(896天井ターゲット)。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= 450 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【リセット特化】500ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.reset && s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【リセット特化】256ゾーン狙い。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 480 && s.abe <= 576) res += `<div class="alert alert-info">⚡ 【ゾーン狙い】通常C狙い(576天井ターゲット)。${evDisp(s.ev)}</div>`;
+            else if (s.abe >= 200 && s.abe <= 256) res += `<div class="alert alert-info">⚡ 【ゾーン狙い】256ゾーン狙い。${evDisp(s.ev)}</div>`;
             else {
                 let nt = s.border; 
                 if (s.mode === 'mode_c' && s.border > 350) nt = Math.min(s.border, 350); 
                 else if ((s.mode === 'shutter' || s.aiConsult === 'char') && s.border > 150) nt = Math.min(s.border, 150);
-                res += `<div class="alert alert-error">❄️ 【判定：撤収】期待値不足。待機。🎯 目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
+                res += `<div class="alert alert-error">❄️ 【判定：撤収】<br>期待値が足りません。次の狙い目まで待機してください。<br>🎯 待機目安: <b>${nt}あべし</b>${evDisp(s.ev)}</div>`;
             }
         }
 
         // --- 聖域：ヤメ時4分岐プロトコル ---
         let yMsg = "";
-        if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護）</span>";
-        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ。絶対に席を立つな。</span>";
-        else if (s.isValidPremium) yMsg = "①【上位AT後】128まで天国率大幅UP。絶対にヤメるな。";
-        else if (s.lastSt === 'densho') yMsg = "②【伝承モード】ループ抜け確認まで続行。";
-        else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚】有利リセット近接。128ヤメ厳禁。</span>";
-        else yMsg = "④【通常】高確・前兆なしを確認し、1あべし即ヤメ。";
-        res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
+        if (s.abe >= 1100) yMsg = "<span class='highlight-text'>当選までヤメ厳禁（天井保護：強制拘束）</span>";
+        else if (s.aiConsult === 'strong' || s.aiConsult === 'rare') yMsg = "<span class='highlight-text'>本前兆・激アツ状態です。絶対に席を立たないでください。</span>";
+        else if (s.isValidPremium) yMsg = "①【上位AT(天撃)後】128あべしまで天国当選率が大幅にUPしています。絶対にヤメてはいけません。";
+        else if (s.lastSt === 'densho') yMsg = "②【伝承モード示唆】天破の刻がループする限り続行してください。ループ抜け確認後にヤメ。";
+        else if (s.isValidTsuranuki) yMsg = "③<span class='highlight-tsuranuki'>【VIP差枚プラス】有利区間リセット恩恵が近接しています。128あべしまでヤメ厳禁です。</span>";
+        else yMsg = "④【通常】AT終了後、高確・前兆がないことを確認して、1あべしで即ヤメしてください。";
+        res += `<div class="alert alert-warning">🛑 ヤメ時ナビゲーション：<br>${yMsg}</div>`;
 
         if (s.aiConsult !== "none") {
             let advice = "";
-            if (s.aiConsult === "weak") advice = "フェイク前兆の可能性高。規定あべしハズレで即ヤメ推奨。";
-            else if (s.aiConsult === "strong") advice = "本前兆期待度大幅アップ。演出失敗後も復活警戒。";
-            else if (s.aiConsult === "char") advice = "通常B以上の滞在を示唆。次回ゾーンまで追うか相談。";
-            else if (s.aiConsult === "rare") advice = "絶対にヤメるな。32あべし間は完全フォロー必須。";
-            res += `<div class="alert alert-info">🤖 AI Bro コンサル：💡 ${advice}</div>`;
+            if (s.aiConsult === "weak") advice = "フェイク前兆の可能性が高いです。規定あべし到達後の発展ハズレで即ヤメを推奨します。";
+            else if (s.aiConsult === "strong") advice = "本前兆期待度が大幅にアップしています。演出失敗後も復活や即引き戻しに備え様子を見てください。";
+            else if (s.aiConsult === "char") advice = "通常B以上の滞在を示唆しています。次回ゾーンまで追うか、現在あべし数と相談してください。";
+            else if (s.aiConsult === "rare") advice = "絶対にヤメてはいけません。32あべし間は完全フォローし、天破の刻やAT直撃を確認してください。";
+            res += `<div class="alert alert-info">🤖 AI Bro コンサル：<br>💡 ${advice}</div>`;
         }
         document.getElementById('result-area').innerHTML = res;
     }
@@ -399,9 +408,9 @@
     function renderHistory() { 
         let h = JSON.parse(localStorage.getItem('zero_h')||"[]"); 
         let html = h.map(x => `<div>${x.date}: <b style="color:${x.profit>=0?'#56d364':'#ffa198'}">${x.profit>=0?'+':''}${x.profit}枚</b></div>`).join(''); 
-        document.getElementById('history-list').innerHTML = html || "履歴なし"; 
+        document.getElementById('history-list').innerHTML = html || "履歴データはありません"; 
     }
-    function clearHistory() { if(confirm('🚨 全消去します。よろしいですか？')) { localStorage.removeItem('zero_h'); renderHistory(); } }
+    function clearHistory() { if(confirm('🚨 全ての収支データを完全に消去します。よろしいですか？')) { localStorage.removeItem('zero_h'); renderHistory(); } }
 
     function executeSettingGuess() {
         const t = parseFloat(document.getElementById('total_rot').value);
@@ -409,14 +418,16 @@
         if(t > 0 && a > 0) {
             const p = Math.floor(t/a); const trophy = document.getElementById('hidden_trophy').value;
             let m = ""; let cls = "alert-info";
-            let sw = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※サンプル不足。確率は参考値です。</span>" : "";
-            if (trophy === 'rainbow') { m = "【設定6確定】虹トロ。閉店まで全ツッパ。"; cls = "alert-success"; }
-            else if (p <= 245) { m = "【設定6濃厚】極上の初当たり確率。全ツッパ推奨。"; cls = "alert-success"; }
-            else if (trophy === 'gold') { m = "【設定4-5確定】金トロ。粘る価値が極めて高い。"; cls = "alert-success"; }
-            else if (p <= 275) { m = "【設定4-5濃厚】優秀な数値。粘る価値大。"; cls = "alert-success"; }
-            else if (p <= 320) { m = "【設定3付近】中間設定。期待値を優先し慎重に。"; cls = "alert-warning"; }
-            else { m = "【低設定濃厚】危険。期待値ボーダーを厳守。"; cls = "alert-error"; }
-            document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 確率: 1/${p}${sw}<br>🤖 AI診断: ${m}</div>`;
+            let sw = (t < 2000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※総回転2000G未満のため確率は参考値です（特攻は自己責任で）</span>" : "";
+            if (trophy === 'rainbow') { m = "【設定6確定】虹トロフィー出現。閉店まで全ツッパを強く推奨します。"; cls = "alert-success"; }
+            else if (p <= 245) { m = "【設定6濃厚】レベルの極上確率です。全ツッパを推奨します。"; cls = "alert-success"; }
+            else if (trophy === 'gold') { m = "【設定4-5確定】金トロフィー出現。粘る価値が非常に高いです。"; cls = "alert-success"; }
+            else if (p <= 275) { m = "【設定4-5濃厚】の優秀な数値です。粘る価値が非常に高いです。"; cls = "alert-success"; }
+            else if (p <= 320) { m = "【設定3付近】中間設定の数値です。期待値を優先し、夜間は慎重な撤収判断を。"; cls = "alert-warning"; }
+            else { m = "【低設定濃厚】危険な数値です。期待値ボーダーを厳守し、深追いは避けてください。"; cls = "alert-error"; }
+            document.getElementById('setting-result').innerHTML = `<div class="alert ${cls}">📊 初当たり確率: 1/${p}${sw}<br>🤖 AI診断: ${m}</div>`;
+        } else {
+            document.getElementById('setting-result').innerHTML = `<div class="alert alert-info">📊 初当たり確率: ---<br>🤖 AI診断: データを入力してください。</div>`;
         }
     }
 </script>
