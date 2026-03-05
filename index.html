@@ -264,7 +264,6 @@
             </div>
         </div>
     </div>
-
     <div id="tab-history" class="tab-content">
         <div class="card">
             <h3>📅 稼働記録入力</h3>
@@ -359,92 +358,23 @@
         <div id="guess-kabaneri" style="display:none;">
             <div class="card" style="border-top: 3px solid var(--kabaneri);">
                 <h3 style="color:var(--kabaneri);">🔍 海門 精密設定推測</h3>
-                <p style="font-size:0.75em; color:#8b949e; line-height:1.4;">※設定差の大きい「下段ベル確率」と、各C目からの「CZ突破率」で複合的に推測します。</p>
+                <p style="font-size:0.75em; color:#8b949e; line-height:1.4;">※今作は「下段ベル確率」と「初当たり確率」のみに設定差が存在します。無駄なカウントは不要です。</p>
                 
+                <label>総回転数 (G) / 初当たり回数</label>
+                <div style="display:flex;gap:8px; margin-bottom: 15px;">
+                    <input type="number" id="total_rot_k" placeholder="総回転数" oninput="updateKabaneriCounter(); updateUI(); executeKabaneriGuess();">
+                    <input type="number" id="at_count_k" placeholder="初当たり回数" oninput="updateUI(); executeKabaneriGuess();">
+                </div>
+
                 <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d; margin-bottom:15px;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span style="color:#e3b341; font-weight:bold; font-size:0.9em;">🔔 下段ベル</span>
                         <span id="prob_k_bell" style="color:var(--warning); font-weight:bold;">確率: ---</span>
                     </div>
                     <div style="display:flex; justify-content:center; align-items:center; margin-top:8px; gap:15px;">
-                        <button class="counter-btn" style="background:#21262d;" onclick="changeKCounter('bell', 'tot', -1)">-</button>
+                        <button class="counter-btn" style="background:#21262d;" onclick="changeKCounter('bell', -1)">-</button>
                         <span id="val_k_bell" style="font-size:1.4em; font-weight:bold; width: 40px; text-align:center;">0</span>
-                        <button class="counter-btn" style="background:#e3b341; color:#000;" onclick="changeKCounter('bell', 'tot', 1)">+</button>
-                    </div>
-                </div>
-
-                <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d; margin-bottom:10px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <span style="color:#8b949e; font-weight:bold; font-size:0.9em;">🔴 無名チャンス目 (左)</span>
-                        <span id="rate_mumei" style="color:var(--kabaneri); font-weight:bold;">突破率: ---%</span>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">成立回数</div>
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="counter-btn" onclick="changeKCounter('mumei', 'tot', -1)">-</button>
-                                <span id="val_mumei_tot" style="font-size:1.2em; font-weight:bold;">0</span>
-                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('mumei', 'tot', 1)">+</button>
-                            </div>
-                        </div>
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-size:0.7em; color:var(--success); margin-bottom:5px;">CZ当選回数</div>
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="counter-btn" onclick="changeKCounter('mumei', 'win', -1)">-</button>
-                                <span id="val_mumei_win" style="font-size:1.2em; font-weight:bold;">0</span>
-                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('mumei', 'win', 1)">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d; margin-bottom:10px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <span style="color:#8b949e; font-weight:bold; font-size:0.9em;">🟢 生駒チャンス目 (右)</span>
-                        <span id="rate_ikoma" style="color:var(--kabaneri); font-weight:bold;">突破率: ---%</span>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">成立回数</div>
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="counter-btn" onclick="changeKCounter('ikoma', 'tot', -1)">-</button>
-                                <span id="val_ikoma_tot" style="font-size:1.2em; font-weight:bold;">0</span>
-                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('ikoma', 'tot', 1)">+</button>
-                            </div>
-                        </div>
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-size:0.7em; color:var(--success); margin-bottom:5px;">CZ当選回数</div>
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="counter-btn" onclick="changeKCounter('ikoma', 'win', -1)">-</button>
-                                <span id="val_ikoma_win" style="font-size:1.2em; font-weight:bold;">0</span>
-                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('ikoma', 'win', 1)">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background:#0d1117; padding:12px; border-radius:8px; border:1px solid #30363d;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <span style="color:#8b949e; font-weight:bold; font-size:0.9em;">🟣 カバネC目 (中)</span>
-                        <span id="rate_kaba" style="color:var(--kabaneri); font-weight:bold;">前兆移行率: ---%</span>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-size:0.7em; color:#8b949e; margin-bottom:5px;">成立回数</div>
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="counter-btn" onclick="changeKCounter('kaba', 'tot', -1)">-</button>
-                                <span id="val_kaba_tot" style="font-size:1.2em; font-weight:bold;">0</span>
-                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('kaba', 'tot', 1)">+</button>
-                            </div>
-                        </div>
-                        <div style="flex:1; text-align:center;">
-                            <div style="font-size:0.7em; color:var(--success); margin-bottom:5px;">前兆移行回数</div>
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <button class="counter-btn" onclick="changeKCounter('kaba', 'win', -1)">-</button>
-                                <span id="val_kaba_win" style="font-size:1.2em; font-weight:bold;">0</span>
-                                <button class="counter-btn btn-k-plus" onclick="changeKCounter('kaba', 'win', 1)">+</button>
-                            </div>
-                        </div>
+                        <button class="counter-btn" style="background:#e3b341; color:#000;" onclick="changeKCounter('bell', 1)">+</button>
                     </div>
                 </div>
 
@@ -475,7 +405,8 @@
     let displayMonth = today.getMonth() + 1;
 
     let countSuika = 0; let countWCherry = 0; let countSCherry = 0;
-    let k_cnt = { mumei:{tot:0, win:0}, ikoma:{tot:0, win:0}, kaba:{tot:0, win:0}, bell: 0 };
+    // カバネリ：架空のCZ突破率をパージ。ベルのみカウント
+    let countKBell = 0;
 
     window.onload = () => { 
         renderCalendar(); 
@@ -502,7 +433,7 @@
         
         if (machine === 'hokuto') {
             document.getElementById('btn-hokuto').classList.add('active-h');
-            document.getElementById('title-accent').innerText = "THE TRUE DUAL CORE (AWAKEN)";
+            document.getElementById('title-accent').innerText = "THE TRUE DUAL CORE";
             document.getElementById('title-accent').style.color = "var(--accent)";
             
             document.getElementById('hokuto-inputs').style.display = 'block';
@@ -514,7 +445,7 @@
             document.getElementById('guess-kabaneri').style.display = 'none';
         } else {
             document.getElementById('btn-kabaneri').classList.add('active-k');
-            document.getElementById('title-accent').innerText = "THE TRUE DUAL CORE : KABANERI";
+            document.getElementById('title-accent').innerText = "ZERO HALLUCINATION (PURGED)";
             document.getElementById('title-accent').style.color = "var(--kabaneri)";
             
             document.getElementById('hokuto-inputs').style.display = 'none';
@@ -539,7 +470,7 @@
     function saveMemo() { localStorage.setItem('zero_memo', document.getElementById('vip_memo').value); }
 
     // ==========================================
-    // 北斗 期待値・判定ロジック (完全保護)
+    // 北斗 期待値・判定ロジック (保護)
     // ==========================================
     function getLogicStats() {
         const abe = parseInt(document.getElementById('current_abe').value) || 0;
@@ -670,16 +601,16 @@
         res += `<div class="alert alert-warning">🛑 ヤメ時ナビ：<br>${yMsg}</div>`;
         document.getElementById('result-area-h').innerHTML = res;
     }
+
     // ==========================================
-    // カバネリ 海門決戦 期待値・判定ロジック (v25.8.0 覚醒版)
+    // カバネリ 海門決戦 期待値・判定ロジック (v25.9.0 捏造パージ・純化版)
     // ==========================================
     function getKabaneriStats() {
         const kg = parseInt(document.getElementById('k_current_g').value) || 0;
         const kcycle = parseInt(document.getElementById('k_current_cycle').value) || 0;
         const isReset = document.getElementById('k_is_reset').checked;
         const isKage = document.getElementById('k_is_kageyuki').checked;
-        const isEnding = document.getElementById('k_is_ending').checked; // 新規：エンディング後
-        const surpass = parseInt(document.getElementById('k_surpass_count').value) || 0; // 新規：スルー回数
+        const isEnding = document.getElementById('k_is_ending').checked;
         const pts = document.getElementById('k_point_state').value; 
         const time = parseInt(document.getElementById('time_slider').value);
         const inv = document.getElementById('invest_type').value;
@@ -695,6 +626,13 @@
         const maxCycle = isShort ? 4 : 6;
         const remainCeiling = Math.max(0, maxCeiling - kg);
         const remainCycle = Math.max(0, maxCycle - kcycle);
+
+        // カバネリの設定推測(初当たり)
+        const t_rot = parseFloat(document.getElementById('total_rot_k').value) || 0;
+        const a_cnt = parseFloat(document.getElementById('at_count_k').value) || 0;
+        const isEnoughSample = (t_rot >= 2000);
+        let realProb = (t_rot > 0 && a_cnt > 0) ? Math.floor(t_rot / a_cnt) : 999;
+        let isHighSettingProb = (isEnoughSample && realProb <= 231); // 設定6: 1/231
 
         const EV_NONE = -600;
         let evCeilN = (!isShort && kg >= 700) ? 3500 : (!isShort && kg >= 650) ? 1500 : EV_NONE;
@@ -716,23 +654,18 @@
 
         let bonusEV = 0; let bonusWage = 0;
         
-        // プレミアム加算（エンディング後・黒煙大）
         if (isEnding) { bonusEV += 3000; bonusWage += 4000; }
         if (ai === 'smoke') { bonusEV += 3000; bonusWage += 3500; }
         
         if (ai === 'super') { bonusEV += 3000; bonusWage += 3500; }
         else if (ai === 'chance') { bonusEV += 1000; bonusWage += 1200; }
         else if (ai === 'weak') { bonusEV -= 500; bonusWage -= 1500; }
-        
-        // スルー回数による恩恵加算 (BBランク昇格示唆)
-        if (surpass === 3) { bonusEV += 1500; bonusWage += 1500; }
-        else if (surpass >= 4) { bonusEV += 3500; bonusWage += 4000; }
 
         let baseEV = Math.max(evCeilN, evCeilS, evCycN, evCycS, evZ150, evZ300, evZ450, evZ650, evKage, evPts, evPost) + bonusEV;
         let baseWage = Math.max(wageCeilN, wageCeilS, 800) + bonusWage;
         if (isKage || ai === 'smoke' || isEnding) baseWage = Math.max(baseWage, 5000);
 
-        if (trophy === 'rainbow') { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
+        if (trophy === 'rainbow' || isHighSettingProb) { baseWage = Math.max(baseWage, 8000); baseEV = Math.max(baseEV, 6500); } 
         else if (trophy === 'gold') { baseWage = Math.max(baseWage, 5000); baseEV = Math.max(baseEV, 3000); }
 
         let finalEV = baseEV; let finalWage = baseWage;
@@ -740,12 +673,9 @@
         if (inv === 'cash' && rate !== '5.0') { finalWage -= 2500; if (finalEV > 0) finalEV = Math.floor(finalEV * 0.60); }
 
         let baseBorder = isShort ? 350 : 650; 
-        if (surpass === 3) baseBorder = Math.max(0, baseBorder - 150); // 3スルーはボーダー優遇
-        
         let isAbsoluteGo = false; 
         
-        // エンディング後、4スルー以上、黒煙大などを絶対特攻フラグに組み込む
-        if (trophy === 'rainbow' || trophy === 'gold' || isKage || isEnding || surpass >= 4 || pts === '2' || ai === 'super' || kg <= 20 || ai === 'smoke') { 
+        if (trophy === 'rainbow' || trophy === 'gold' || isHighSettingProb || isKage || isEnding || pts === '2' || ai === 'super' || kg <= 20 || ai === 'smoke') { 
             baseBorder = 0; isAbsoluteGo = true; 
         }
         
@@ -753,8 +683,8 @@
         if (inv === 'cash' && rate !== '5.0' && !isAbsoluteGo) baseBorder += 100;
 
         return { 
-            kg: kg, kcycle: kcycle, inv: inv, rate: rate, time: time, trophy: trophy,
-            isShort: isShort, isKage: isKage, isEnding: isEnding, surpass: surpass, pts: pts, ai: ai, isTimeOver: false, 
+            kg: kg, kcycle: kcycle, inv: inv, rate: rate, time: time, trophy: trophy, isHighSetting: isHighSettingProb,
+            isShort: isShort, isKage: isKage, isEnding: isEnding, pts: pts, ai: ai, isTimeOver: false, 
             remainCeiling: remainCeiling, remainCycle: remainCycle,
             border: isAbsoluteGo ? 0 : Math.max(0, baseBorder + adj), wage: Math.floor(finalWage), ev: Math.floor(finalEV)
         };
@@ -774,13 +704,12 @@
             if (s.isEnding) res += `<div class="alert alert-warning" style="border-color:var(--danger); color:white; background:rgba(248,81,73,0.2);">👑 【ツラヌキ後 滞在】<br>有利区間リセット恩恵！極限のプレミアム状態です。ST当選まで絶対ツッパ。${evDisp(s.ev)}</div>`;
             else if (s.ai === 'smoke') res += `<div class="alert alert-warning" style="border-color:#fff; color:#fff; background:#000;">🌑 【黒煙(大) 蓄積】<br>裏景之ST濃厚。ST当選まで絶対に捨てないでください。${evDisp(s.ev)}</div>`;
             else if (s.isKage) res += `<div class="alert alert-warning" style="border-color:var(--kabaneri); color:white;">⚠️ 景之(かげゆき)ループ発動中<br>次回STも景之が濃厚な状態です。ヤメ厳禁。${evDisp(s.ev)}</div>`;
-            else if (s.surpass >= 4) res += `<div class="alert alert-ceiling" style="background:var(--kabaneri);">🚂 【駿城4スルー以上】<br>BBランク極大。エピボ(ST)濃厚です。当選まで全ツッパ。${evDisp(s.ev)}</div>`;
             else if (s.remainCeiling <= 150) res += `<div class="alert alert-ceiling" style="background:var(--kabaneri);">🚂 【天井到達圏内】<br>ST当選まで一直線です。${evDisp(s.ev)}</div>`;
             else if (s.trophy === 'rainbow') res += `<div class="alert alert-success">🏆 虹トロフィー!! 設定6確定。閉店まで全ツッパ。${evDisp(s.ev)}</div>`;
+            else if (s.isHighSetting) res += `<div class="alert alert-success">📈 優秀台データ!! 設定6濃厚。全ツッパ推奨。${evDisp(s.ev)}</div>`;
             else if (s.ai === 'super') res += `<div class="alert alert-success">🔥 【本前兆濃厚】<br>当選濃厚です。即座に確保してください！${evDisp(s.ev)}</div>`;
-            else if (s.pts === '2') res += `<div class="alert alert-success">🔥 【ポイント激熱】<br>無名/生駒ポイントが2つ発光。即CZに期待できます。${evDisp(s.ev)}</div>`;
+            else if (s.pts === '2') res += `<div class="alert alert-success">🔥 【ポイント激熱】<br>無名/生駒ポイントが2つ発光。即周期到達に期待できます。${evDisp(s.ev)}</div>`;
             else if (s.kg <= 20) res += `<div class="alert alert-success">✨ 【ST後 高確】<br>20G間はカバネチャンス目高確です。必ずフォロー。${evDisp(s.ev)}</div>`;
-            else if (s.surpass === 3 && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【駿城3スルー 特攻】<br>BBランク高期待度。ST当選までツッパ推奨。${evDisp(s.ev)}</div>`;
             else if (s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【短縮天井 狙い】<br>596天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
             else if (!s.isShort && s.kg >= s.border) res += `<div class="alert alert-success">🔥 【通常天井 狙い】<br>996天井へ向けて特攻してください。${evDisp(s.ev)}</div>`;
             else if (s.kg >= 100 && s.kg <= 150) res += `<div class="alert alert-info">⚡ 【1周期目 ゾーン狙い】<br>150Gの周期到達（カバネ最終防衛区域）を狙います。${evDisp(s.ev)}</div>`;
@@ -791,7 +720,7 @@
         }
 
         let yMsg = "";
-        if (s.isEnding || s.ai === 'smoke' || s.surpass >= 4) yMsg = "<span class='highlight-text'>👑【プレミアム恩恵】ST（KABANERI OF THE IRON FORTRESS）当選まで絶対にヤメ厳禁。</span>";
+        if (s.isEnding || s.ai === 'smoke') yMsg = "<span class='highlight-text'>👑【プレミアム恩恵】ST（KABANERI OF THE IRON FORTRESS）当選まで絶対にヤメ厳禁。</span>";
         else if (s.isKage) yMsg = "<span class='highlight-text'>①【景之ST後】次回STまで絶対にヤメ厳禁（ループフォロー）</span>";
         else if (s.kg >= 400 && s.isShort) yMsg = "<span class='highlight-text'>②【短縮天井手前】596天井まで絶対にヤメ厳禁</span>";
         else if (s.pts === '2' || s.ai === 'super') yMsg = "③【ポイント/前兆】現在走っている前兆（カバネ最終防衛区域等）がハズレるまで続行。";
@@ -948,48 +877,37 @@
         } else { document.getElementById('setting-result-h').innerHTML = `<div class="alert alert-info">📊 初当たり: ---<br>🤖 AI診断: データを入力してください。</div>`; }
     }
 
-    // --- カバネリ 推測ロジック ---
-    function changeKCounter(type, kind, val) {
-        if(type === 'bell') {
-            k_cnt.bell = Math.max(0, k_cnt.bell + val);
-        } else {
-            k_cnt[type][kind] = Math.max(0, k_cnt[type][kind] + val);
-        }
+    // --- カバネリ 推測ロジック (v25.9.0 捏造パージ・純化版) ---
+    function changeKCounter(type, val) {
+        if(type === 'bell') countKBell = Math.max(0, countKBell + val);
         updateKabaneriCounter();
     }
     function updateKabaneriCounter() {
-        document.getElementById('val_k_bell').innerText = k_cnt.bell;
-        document.getElementById('val_mumei_tot').innerText = k_cnt.mumei.tot; document.getElementById('val_mumei_win').innerText = k_cnt.mumei.win;
-        document.getElementById('val_ikoma_tot').innerText = k_cnt.ikoma.tot; document.getElementById('val_ikoma_win').innerText = k_cnt.ikoma.win;
-        document.getElementById('val_kaba_tot').innerText = k_cnt.kaba.tot;  document.getElementById('val_kaba_win').innerText = k_cnt.kaba.win;
-        
-        const t = parseFloat(document.getElementById('total_rot').value) || 0;
-        document.getElementById('prob_k_bell').innerText = (k_cnt.bell > 0 && t > 0) ? `1/${(t/k_cnt.bell).toFixed(1)}` : "確率: ---";
-        document.getElementById('rate_mumei').innerText = k_cnt.mumei.tot > 0 ? `突破率: ${Math.floor((k_cnt.mumei.win / k_cnt.mumei.tot)*100)}%` : "突破率: ---%";
-        document.getElementById('rate_ikoma').innerText = k_cnt.ikoma.tot > 0 ? `突破率: ${Math.floor((k_cnt.ikoma.win / k_cnt.ikoma.tot)*100)}%` : "突破率: ---%";
-        document.getElementById('rate_kaba').innerText = k_cnt.kaba.tot > 0 ? `前兆移行率: ${Math.floor((k_cnt.kaba.win / k_cnt.kaba.tot)*100)}%` : "前兆移行率: ---%";
+        document.getElementById('val_k_bell').innerText = countKBell;
+        const t = parseFloat(document.getElementById('total_rot_k').value) || 0;
+        document.getElementById('prob_k_bell').innerText = (countKBell > 0 && t > 0) ? `1/${(t/countKBell).toFixed(1)}` : "確率: ---";
     }
     function executeKabaneriGuess() {
         const trophy = document.getElementById('hidden_trophy').value;
-        const t = parseFloat(document.getElementById('total_rot').value) || 0;
+        const t = parseFloat(document.getElementById('total_rot_k').value) || 0;
+        const a = parseFloat(document.getElementById('at_count_k').value) || 0;
+        
         let m = ""; let cls = "alert-info";
-        let totalWin = k_cnt.mumei.win + k_cnt.ikoma.win;
-        let totalTot = k_cnt.mumei.tot + k_cnt.ikoma.tot;
-        let rate = totalTot > 0 ? Math.floor((totalWin / totalTot) * 100) : 0;
-        let bellProb = (k_cnt.bell > 0 && t > 0) ? (t / k_cnt.bell) : 999;
-        let sw = (totalTot < 10 || t < 1000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※サンプル不足（C目10回＆1000G推奨）。</span>" : "";
+        let bellProb = (countKBell > 0 && t > 0) ? (t / countKBell) : 999;
+        let atProb = (a > 0 && t > 0) ? (t / a) : 999;
+        let sw = (t < 1000) ? "<br><span style='font-size:0.8em; color:var(--warning);'>※サンプル不足（1000G推奨）。</span>" : "";
 
         if (trophy === 'rainbow') { m = "【設定6確定】虹トロ。閉店まで全ツッパ。"; cls = "alert-success"; }
         else if (trophy === 'gold') { m = "【設定4-5確定】金トロ。粘る価値大。"; cls = "alert-success"; }
-        else if (totalTot >= 10 && rate >= 40 && bellProb <= 105) { m = "【設定6濃厚】ベル・突破率ともに極上。全ツッパ推奨。"; cls = "alert-success"; }
-        else if (totalTot >= 10 && rate >= 35 && bellProb <= 112) { m = "【高設定挙動】設定4-5以上の期待大。"; cls = "alert-success"; }
-        else if (totalTot >= 10 && rate <= 25 && bellProb >= 115) { m = "【低設定濃厚】両要素が弱いです。撤収を視野に。"; cls = "alert-error"; }
-        else if (totalTot >= 10) { m = "【中間設定付近】要素が噛み合いません。慎重に。"; cls = "alert-warning"; }
+        else if (t >= 1000 && atProb <= 235 && bellProb <= 105) { m = "【設定6濃厚】初当たり・ベルともに極上。全ツッパ推奨。"; cls = "alert-success"; }
+        else if (t >= 1000 && atProb <= 250 && bellProb <= 110) { m = "【高設定挙動】設定4-5以上の期待大。"; cls = "alert-success"; }
+        else if (t >= 1000 && atProb >= 270 && bellProb >= 115) { m = "【低設定濃厚】両要素が弱いです。撤収を視野に。"; cls = "alert-error"; }
+        else if (t >= 1000) { m = "【中間設定付近】要素が噛み合いません。慎重に。"; cls = "alert-warning"; }
         else { m = "【推測中】さらにサンプルを集めてください。"; }
 
-        let rateStr = totalTot > 0 ? `${rate}%` : "---";
         let bellStr = bellProb !== 999 ? `1/${bellProb.toFixed(1)}` : "---";
-        document.getElementById('setting-result-k').innerHTML = `<div class="alert ${cls}">📊 総合突破率: ${rateStr} / 🔔 ベル: ${bellStr}${sw}<br>🤖 AI診断: ${m}</div>`;
+        let atStr = atProb !== 999 ? `1/${Math.floor(atProb)}` : "---";
+        document.getElementById('setting-result-k').innerHTML = `<div class="alert ${cls}">📊 初当たり: ${atStr} / 🔔 ベル: ${bellStr}${sw}<br>🤖 AI診断: ${m}</div>`;
     }
 </script>
 </body>
